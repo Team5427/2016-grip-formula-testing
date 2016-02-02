@@ -1,0 +1,4 @@
+===Links for Webcam API===
+- Site: http://webcam-capture.sarxos.pl/
+- GitHub: https://github.com/sarxos/webcam-capture
+- Website I googled: http://www.codeproject.com/Questions/147566/How-to-integrate-webcam-with-java
