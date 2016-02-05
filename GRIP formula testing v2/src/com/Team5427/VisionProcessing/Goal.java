@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class Goal {
 
+	// TODO remove this, for testing purposes only
+
 	public static final double MIN_VERTICAL_SLOPE = -5;
 	public static final double MAX_VERTICAL_SLOPE = 5;
 	public static final double MIN_HORIZONTAL_SLOPE = -1;
@@ -99,7 +101,8 @@ public class Goal {
 			leftLine = vertLines[0];
 			rightLine = vertLines[1];
 
-//			System.out.println(vertLines[0].toString() + "    \n    " + vertLines[1].toString() + "\n\n");
+			// System.out.println(vertLines[0].toString() + " \n " +
+			// vertLines[1].toString() + "\n\n");
 
 			// System.out.println("the left line is: "+
 			// vertLines[0].getSmallestX()+", and the right line is: "+
@@ -107,15 +110,15 @@ public class Goal {
 		} else {
 			leftLine = vertLines[1];
 			rightLine = vertLines[0];
-			
+
 		}
 
 		if (setCenter = false)
 			goalCompleted = false;
 		else
 			goalCompleted = true;
-		
-		area = leftLine.getLength()*centerLine.getLength();
+
+		area = leftLine.getLength() * centerLine.getLength();
 
 		/*
 		 * filterVerticalLines(lines); filterHorizontalLines(lines);
@@ -205,7 +208,7 @@ public class Goal {
 	 *            Lines within the goal
 	 */
 	public void filterVerticalLines(Line[] lineList) {
- 
+
 		ArrayList<Line> verticalLines = new ArrayList<>();
 
 		/* Filters all vertical lines that meets the criteria */
