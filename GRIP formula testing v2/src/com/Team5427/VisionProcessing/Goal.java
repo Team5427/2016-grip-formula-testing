@@ -7,7 +7,8 @@ public class Goal {
 	public static final double MIN_HORIZONTAL_SLOPE = -1;
 	public static final double MAX_HORIZONTAL_SLOPE = 1;
 
-	public static final double FOV = 51.5;
+	public static final boolean ENABLE_FOV_CALIBRATION = true;								// Set this to false if we don't want to calibrate the FOV
+	public static double FOV = 51.5;
 
 	// Measurements are in inches
 	public static final double TRUE_GOAL_WIDTH = 20;
@@ -132,28 +133,39 @@ public class Goal {
 		this.goalCompleted = goalCompleted;
 	}
 
-	public double getDistanceToRobot() {
+	public double getVerticalDistance() {
+		double verticalAvg = (leftLine.getLength() + rightLine.getLength()) / 2;
+		double pixelWidth = verticalAvg * TRUE_GOAL_WIDTH / TRUE_GOAL_HEIGHT;
+		return (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / pixelWidth;
+
+	}
+
+	/**
+	 * Gets the distance from the goal to the robot
+	 * @return distance from robot to goal in inches
+     */
+	public double getDistanceToGoal() {
 
 		if (distanceToGoal > 0)
 			return distanceToGoal;
 
-		double verticalAvg = (leftLine.getLength() + rightLine.getLength()) / 2; // Averages
-																					// vertical
-																					// lengths
 		double radAngle = Math.toRadians(FOV / 2);
-		double pixelWidth = verticalAvg * TRUE_GOAL_WIDTH / TRUE_GOAL_HEIGHT;
-		double verticalDistance = (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / pixelWidth;
+		double verticalDistance = getVerticalDistance();
 
 		distanceToGoal = verticalDistance / Math.tan(radAngle);
 
 		return distanceToGoal;
 	}
 
+	/**
+	 * Gets the horizontal distance to the tower
+	 * @return distance from robot to tower
+     */
 	public double getDistanceToTower() {
 		if (distanceToTower > 0)
 			return distanceToTower;
 
-		distanceToTower = (TOWER_HEIGHT - ROBOT_HEIGHT) / Math.tan(getAngleOfELevationInRadians());
+		distanceToTower = (TOWER_HEIGHT - ROBOT_HEIGHT) / Math.tan(getAngleOfElevationInRadians());
 
 		return distanceToTower;
 	}
@@ -161,12 +173,12 @@ public class Goal {
 	/**
 	 * @return The angle of the robot to the goal in radians
 	 */
-	public double getAngleOfELevationInRadians() {
+	public double getAngleOfElevationInRadians() {
 
 		if (angleOfElevation > 0)
 			return angleOfElevation;
 
-		angleOfElevation = Math.asin((TOWER_HEIGHT - ROBOT_HEIGHT) / getDistanceToRobot());
+		angleOfElevation = Math.asin((TOWER_HEIGHT - ROBOT_HEIGHT) / getDistanceToGoal());
 
 		return angleOfElevation;
 	}
@@ -175,6 +187,6 @@ public class Goal {
 	 * @return the angle of the robot to the goal in degrees
 	 */
 	public double getAngleOfElevationInDegrees() {
-		return Math.toDegrees(getAngleOfELevationInRadians());
+		return Math.toDegrees(getAngleOfElevationInRadians());
 	}
 }
