@@ -264,17 +264,17 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 			
 			  
-			  int x = (int)Main.goals.get(i).getCenterLine().getX1() - 5; int y =
-			  (int)Main.goals.get(i).getCenterLine().getY1() + 15;
+			int x = (int)Main.goals.get(i).getCenterLine().getX1() - 5;
+			int y =	(int)Main.goals.get(i).getCenterLine().getY1() + 15;
 			  
-			  String distance = String.format("%.2f", Main.goals.get(i).getDistanceToGoal());
-			  String towerDistance = String.format("%.2f",
-			  Main.goals.get(i).getDistanceToTower()); String angleDegrees =
-			  String.format("%.2f", Main.goals.get(i).getAngleOfElevationInDegrees());
+			String distance = String.format("%.2f", Main.goals.get(i).getDistanceToGoal());
+			String towerDistance = String.format("%.2f",
+			Main.goals.get(i).getDistanceToTower());
+			String angleDegrees = String.format("%.2f", Main.goals.get(i).getAngleOfElevationInDegrees());
 			  
-			  bg.drawString("Distance: " + distance + "in.", x, y);
-			  bg.drawString("Tower Distance: " + towerDistance + "in.", x, y +=
-			  12); bg.drawString("Angle " + angleDegrees + "°", x, y + 12);
+			bg.drawString("Distance: " + distance + "in.", x, y);
+			bg.drawString("Tower Distance: " + towerDistance + "in.", x, y += 12);
+			bg.drawString("Angle " + angleDegrees + "°", x, y + 12);
 			 
 		}
 

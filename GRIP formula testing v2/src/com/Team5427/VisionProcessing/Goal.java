@@ -11,8 +11,8 @@ public class Goal {
 	public static double FOV = 51.5;
 
 	// Measurements are in inches
-	public static final double TRUE_GOAL_WIDTH = 20;
-	public static final double TRUE_GOAL_HEIGHT = 14;
+	public static final double TRUE_GOAL_WIDTH = 16;
+	public static final double TRUE_GOAL_HEIGHT = 12;
 	// public static final double TOWER_HEIGHT = 97; // TOWER_HEIGHT is actually
 	// the distance from the carpet to the center of the entire target, not the
 	// bottom edge of the tape
@@ -77,14 +77,14 @@ public class Goal {
 	 * the bounds of the left and right lines of the goal that was given to it
 	 * when called.
 	 * 
-	 * @param g
-	 *            The goal which is potentially outside of the current goal.
+	 * @param g The goal which is potentially outside of the current goal.
+	 *
 	 * @return Whether or not the current goal is inside of the goal passed
 	 *         through the parameters.
 	 */
 	public boolean isInsideGoal(Goal g) {
-		if (g.leftLine.getSmallestX() > leftLine.getSmallestX()
-				&& g.rightLine.getLargestY() < rightLine.getLargestX()) {
+		if (g.leftLine.getSmallestX() < leftLine.getSmallestX()
+				&& g.rightLine.getLargestX() > rightLine.getLargestX()) {
 
 			return true;
 
