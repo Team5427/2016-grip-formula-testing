@@ -7,11 +7,12 @@ public class Goal {
 	public static final double MIN_HORIZONTAL_SLOPE = -1;
 	public static final double MAX_HORIZONTAL_SLOPE = 1;
 
-	public static final double FOV = 51.5;
+	public static final boolean ENABLE_FOV_CALIBRATION = true;								// Set this to false if we don't want to calibrate the FOV
+	public static double FOV = 51.5;
 
 	// Measurements are in inches
-	public static final double TRUE_GOAL_WIDTH = 20;
-	public static final double TRUE_GOAL_HEIGHT = 14;
+	public static final double TRUE_GOAL_WIDTH = 16;
+	public static final double TRUE_GOAL_HEIGHT = 12;
 	// public static final double TOWER_HEIGHT = 97; // TOWER_HEIGHT is actually
 	// the distance from the carpet to the center of the entire target, not the
 	// bottom edge of the tape
@@ -76,14 +77,14 @@ public class Goal {
 	 * the bounds of the left and right lines of the goal that was given to it
 	 * when called.
 	 * 
-	 * @param g
-	 *            The goal which is potentially outside of the current goal.
+	 * @param g The goal which is potentially outside of the current goal.
+	 *
 	 * @return Whether or not the current goal is inside of the goal passed
 	 *         through the parameters.
 	 */
 	public boolean isInsideGoal(Goal g) {
-		if (g.leftLine.getSmallestX() > leftLine.getSmallestX()
-				&& g.rightLine.getLargestY() < rightLine.getLargestX()) {
+		if (g.leftLine.getSmallestX() < leftLine.getSmallestX()
+				&& g.rightLine.getLargestX() > rightLine.getLargestX()) {
 
 			return true;
 
@@ -132,28 +133,39 @@ public class Goal {
 		this.goalCompleted = goalCompleted;
 	}
 
-	public double getDistanceToRobot() {
+	public double getVerticalDistance() {
+		double verticalAvg = (leftLine.getLength() + rightLine.getLength()) / 2;
+		double pixelWidth = verticalAvg * TRUE_GOAL_WIDTH / TRUE_GOAL_HEIGHT;
+		return (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / pixelWidth;
+
+	}
+
+	/**
+	 * Gets the distance from the goal to the robot
+	 * @return distance from robot to goal in inches
+     */
+	public double getDistanceToGoal() {
 
 		if (distanceToGoal > 0)
 			return distanceToGoal;
 
-		double verticalAvg = (leftLine.getLength() + rightLine.getLength()) / 2; // Averages
-																					// vertical
-																					// lengths
 		double radAngle = Math.toRadians(FOV / 2);
-		double pixelWidth = verticalAvg * TRUE_GOAL_WIDTH / TRUE_GOAL_HEIGHT;
-		double verticalDistance = (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / pixelWidth;
+		double verticalDistance = getVerticalDistance();
 
 		distanceToGoal = verticalDistance / Math.tan(radAngle);
 
 		return distanceToGoal;
 	}
 
+	/**
+	 * Gets the horizontal distance to the tower
+	 * @return distance from robot to tower
+     */
 	public double getDistanceToTower() {
 		if (distanceToTower > 0)
 			return distanceToTower;
 
-		distanceToTower = (TOWER_HEIGHT - ROBOT_HEIGHT) / Math.tan(getAngleOfELevationInRadians());
+		distanceToTower = (TOWER_HEIGHT - ROBOT_HEIGHT) / Math.tan(getAngleOfElevationInRadians());
 
 		return distanceToTower;
 	}
@@ -161,12 +173,12 @@ public class Goal {
 	/**
 	 * @return The angle of the robot to the goal in radians
 	 */
-	public double getAngleOfELevationInRadians() {
+	public double getAngleOfElevationInRadians() {
 
 		if (angleOfElevation > 0)
 			return angleOfElevation;
 
-		angleOfElevation = Math.asin((TOWER_HEIGHT - ROBOT_HEIGHT) / getDistanceToRobot());
+		angleOfElevation = Math.asin((TOWER_HEIGHT - ROBOT_HEIGHT) / getDistanceToGoal());
 
 		return angleOfElevation;
 	}
@@ -175,6 +187,6 @@ public class Goal {
 	 * @return the angle of the robot to the goal in degrees
 	 */
 	public double getAngleOfElevationInDegrees() {
-		return Math.toDegrees(getAngleOfELevationInRadians());
+		return Math.toDegrees(getAngleOfElevationInRadians());
 	}
 }

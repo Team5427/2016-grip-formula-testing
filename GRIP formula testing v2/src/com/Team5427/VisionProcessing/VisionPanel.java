@@ -2,18 +2,23 @@ package com.Team5427.VisionProcessing;
 
 import com.github.sarxos.webcam.Webcam;
 
+import java.util.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-public class VisionPanel extends JPanel implements Runnable {
+public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 	private int width, height;
 	private BufferedImage buffer;
 
 	private Webcam webcam;
 	private Dimension resolution;
+
+	Scanner scanner;
 
 	private int updatesPerSecond = 30;
 	private long updateCount = 0;
@@ -31,8 +36,11 @@ public class VisionPanel extends JPanel implements Runnable {
 
 		buffer = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
 
+		scanner = new Scanner(System.in);
+
+		addKeyListener(this);
 		// Creates a new webcam
-		enableCamera();
+//		enableCamera();
 
 		// new Thread(this).start();
 	}
@@ -51,6 +59,96 @@ public class VisionPanel extends JPanel implements Runnable {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void addNotify() {
+		super.addNotify();
+		requestFocus();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		char key = Character.toLowerCase(e.getKeyChar());
+
+		if (key == 'c') {
+			initializeCalibration();
+		}
+	}
+
+	/**
+	 * Initialize the calibration sequence
+	 */
+	public void initializeCalibration() {
+		System.out.println("===FOV Calibration===");
+
+
+		if (Main.goals != null && Main.goals.size() == 1) {
+			Goal g = Main.goals.get(0);
+
+			System.out.print("Do you want to calibrate the camera? (y,n): ");
+			char input;
+
+			try {
+				input = scanner.next().charAt(0);
+			} catch (InputMismatchException e) {
+				System.out.println("\nThe selection you entered is invalid.");
+				input = 'n';
+			}
+
+			input = Character.toLowerCase(input);
+
+			if (input == 'y') {
+
+				System.out.print("Enter the distance from the camera to the goal: ");
+				double distance = scanner.nextDouble();
+
+				double FOV = calibrateFOV(g, distance);
+
+				System.out.println("The new FOV is: " + FOV);
+
+			} else
+                System.out.println("\nExiting calibration.");
+
+		} else {
+			System.out.println("Unable to calibrate");
+
+			if (Main.goals == null)
+				System.out.println("Goals is null");
+			else if(Main.goals.size() > 1)
+				System.out.println("There are " + Main.goals.size() + " goals. Only 1 must visible in the camera for calibration.");
+			else if (Main.goals.size() == 0) {
+				System.out.println("There are no goals found.");
+			}
+
+			System.out.println("\nExiting calibration.");
+		}
+	}
+
+
+	/**
+	 * Calibrates the FOV based on goal and distance
+	 * @param goal Reference goal
+	 * @param distance Actual distance between goal to robot
+     * @return
+     */
+	public double calibrateFOV(Goal goal, double distance) {
+		double verticalDistance = goal.getVerticalDistance();
+
+		double FOV = Math.toDegrees(Math.atan(verticalDistance / distance));
+		Goal.FOV = 2 * FOV;
+
+		return Goal.FOV;
 	}
 
 	public void run() {
@@ -91,12 +189,10 @@ public class VisionPanel extends JPanel implements Runnable {
 
 		Graphics bg = buffer.getGraphics();
 
-/*
-
 		bg.setColor(Color.BLACK);
 		bg.fillRect(0, 0, getWidth(), getHeight());
-*/
 
+/*
 		// Gets image from camera, then draws it
 		try {
 			BufferedImage cameraImage = webcam.getImage();
@@ -113,6 +209,7 @@ public class VisionPanel extends JPanel implements Runnable {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+*/
 
 		
 		/*
@@ -167,17 +264,17 @@ public class VisionPanel extends JPanel implements Runnable {
 
 			
 			  
-			  int x = (int)Main.goals.get(i).getCenterLine().getX1() - 5; int y =
-			  (int)Main.goals.get(i).getCenterLine().getY1() + 15;
+			int x = (int)Main.goals.get(i).getCenterLine().getX1() - 5;
+			int y =	(int)Main.goals.get(i).getCenterLine().getY1() + 15;
 			  
-			  String distance = String.format("%.2f", Main.goals.get(i).getDistanceToRobot());
-			  String towerDistance = String.format("%.2f",
-			  Main.goals.get(i).getDistanceToTower()); String angleDegrees =
-			  String.format("%.2f", Main.goals.get(i).getAngleElevationDegrees());
+			String distance = String.format("%.2f", Main.goals.get(i).getDistanceToGoal());
+			String towerDistance = String.format("%.2f",
+			Main.goals.get(i).getDistanceToTower());
+			String angleDegrees = String.format("%.2f", Main.goals.get(i).getAngleOfElevationInDegrees());
 			  
-			  bg.drawString("Distance: " + distance + "in.", x, y);
-			  bg.drawString("Tower Distance: " + towerDistance + "in.", x, y +=
-			  12); bg.drawString("Angle " + angleDegrees + "°", x, y + 12);
+			bg.drawString("Distance: " + distance + "in.", x, y);
+			bg.drawString("Tower Distance: " + towerDistance + "in.", x, y += 12);
+			bg.drawString("Angle " + angleDegrees + "°", x, y + 12);
 			 
 		}
 
