@@ -7,7 +7,11 @@ public class Goal {
 	public static final double MIN_HORIZONTAL_SLOPE = -1;
 	public static final double MAX_HORIZONTAL_SLOPE = 1;
 
-	public static final double FOV = 51.5;
+	/**
+	 * The FOV of the attached webcam. It is used in calculating the distance to
+	 * the goals.
+	 */
+	public static final double FOV = Main.CAMERA_FOV;
 
 	// Measurements are in inches
 	public static final double TRUE_GOAL_WIDTH = 20;
@@ -15,11 +19,16 @@ public class Goal {
 	// public static final double TOWER_HEIGHT = 97; // TOWER_HEIGHT is actually
 	// the distance from the carpet to the center of the entire target, not the
 	// bottom edge of the tape
-	public static final double TOWER_HEIGHT = 83; // TOWER_HEIGHT is distance
-													// from carpet to tape
-	public static final double ROBOT_HEIGHT = 0; // Height of the robot has to
-													// be accounted during angle
-													// of elevation calculation
+	// TODO damn it Charlie, this makes no sense ^^
+	/**
+	 * Distance from the carpet to bottom of the tape on the goal.
+	 */
+	public static final double TOWER_HEIGHT = 83;
+	/**
+	 * Height of the camera on the robot which must be accounted for while
+	 * making calculations.
+	 */
+	public static final double ROBOT_HEIGHT = 0;
 
 	private Line leftLine, centerLine, rightLine;
 
@@ -30,6 +39,19 @@ public class Goal {
 
 	private boolean goalCompleted = false;
 
+	/**
+	 * Receives an Array of three lines, then determines which of the three
+	 * lines is horizontal line, sets it as the horizontal line, and then
+	 * proceeds to remove it from the Array. The remaining two lines then have
+	 * their X values compared in order to determine which of the remaining
+	 * lines is the left and which is the right. By the end of this constructor,
+	 * there is no longer an Array of lines, but instead the left, right, and
+	 * center lines are all set, in addition to the approximate area being
+	 * calculated.
+	 * 
+	 * @param lines
+	 *            An array of three lines that will comprise the goal.
+	 */
 	public Goal(Line[] lines) {
 
 		Line[] vertLines = new Line[2];
@@ -91,11 +113,6 @@ public class Goal {
 		return false;
 	}
 
-	/**
-	 * Method to access the horizontal line in the goal that
-	 * 
-	 * @return The center line of the goal.
-	 */
 	public Line getCenterLine() {
 		return centerLine;
 	}
@@ -132,6 +149,8 @@ public class Goal {
 		this.goalCompleted = goalCompleted;
 	}
 
+	// TODO Charlie, document these two methods properly, i'm not which one is
+	// which. They also have unclear names.
 	public double getDistanceToRobot() {
 
 		if (distanceToGoal > 0)

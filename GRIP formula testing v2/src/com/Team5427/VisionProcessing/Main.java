@@ -6,10 +6,18 @@ import edu.wpi.first.wpilibj.networktables.*;
 
 public class Main {
 
-	// TODO redo documentation when finished and methods have changed.
+	/**
+	 * The FOV of the attached webcam. It is used in calculating the distance to
+	 * the goals.
+	 */
+	public static final double CAMERA_FOV = 59;
 
-	public static final double CAMERA_FOV = 74;
+	/**
+	 * The object from WPILib that allows the program to retrieve all of the
+	 * information that is created by GRIP.
+	 */
 	public static NetworkTable table;
+
 	static double[] x1Values = new double[20];
 	static double[] y1Values = new double[20];
 	static double[] x2Values = new double[20];
@@ -18,12 +26,26 @@ public class Main {
 	static ArrayList<Line> lines = new ArrayList<Line>();
 	static ArrayList<Goal> goals = new ArrayList<Goal>();
 
-	private final static int lowestAcceptableValue = 15; // for determining
-															// which
-															// line is closest
+	/**
+	 * The maximum distance that two lines can be from each other in order to be
+	 * considered as part of the same goal.
+	 */
+	private final static int lowestAcceptableValue = 15;
 
+	/**
+	 * A frame created just to hold a VisionPanel.
+	 */
 	static VisionFrame vf;
 
+	/**
+	 * After initializing several variables, the main method then proceeds to go
+	 * into a while loop which cycles through getting the values from the
+	 * network table, turning all of the arrays full of doubles into a single
+	 * ArrayList full of lines, determining where the goals are out of all of
+	 * those lines, and then removing the goals which are inside of others.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		NetworkTable.setClientMode();
 		NetworkTable.setIPAddress("localhost");
@@ -34,14 +56,14 @@ public class Main {
 
 		while (true) {
 			try {
-				
-				setValues(); // no modifications needed
 
-				createLines(); // no modifications needed
+				setValues();
 
-				findGoals(); // no modifications needed
+				createLines();
 
-				filterGoals(); // major modifications needed (reverse it)
+				findGoals();
+
+				filterGoals();
 
 				Thread.sleep(100);
 
@@ -186,17 +208,29 @@ public class Main {
 		}
 	}
 
+	/**
+	 * Removes any goals from the ArrayList which are inside of another goal by
+	 * calling the isInsideGoal method within the Goal class.
+	 */
 	private synchronized static void filterGoals() {
-	
-			for (int index = 0; index<goals.size();index++) {
-				for (int i = 0; i < goals.size(); i++) {
-					if (goals.get(index).isInsideGoal(goals.get(i)))
-						goals.remove(i);
-				}
+
+		for (int index = 0; index < goals.size(); index++) {
+			for (int i = 0; i < goals.size(); i++) {
+				if (goals.get(index).isInsideGoal(goals.get(i)))
+					goals.remove(i);
 			}
-		
+		}
+
 	}
 
+	/**
+	 * 
+	 * @param d1
+	 *            The first distance.
+	 * @param d2
+	 *            The second distance.
+	 * @return The lowest value given, either d1 or d2.
+	 */
 	private static double returnLowestDouble(double d1, double d2) {
 		if (d1 < d2)
 			return d1;

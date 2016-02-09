@@ -1,6 +1,6 @@
 package com.Team5427.VisionProcessing;
 
-import com.github.sarxos.webcam.Webcam;
+//import com.github.sarxos.webcam.Webcam;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,7 +12,7 @@ public class VisionPanel extends JPanel implements Runnable {
 	private int width, height;
 	private BufferedImage buffer;
 
-	private Webcam webcam;
+//	private Webcam webcam;
 	private Dimension resolution;
 
 	private int updatesPerSecond = 30;
@@ -32,7 +32,7 @@ public class VisionPanel extends JPanel implements Runnable {
 		buffer = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
 
 		// Creates a new webcam
-		enableCamera();
+//		enableCamera();
 
 		// new Thread(this).start();
 	}
@@ -40,6 +40,7 @@ public class VisionPanel extends JPanel implements Runnable {
 	/**
 	 * Enables the usb camera for viewing
 	 */
+	/*
 	public void enableCamera() {
 		try {
 			webcam = Webcam.getWebcams().get(1);			// 1 is a usb camera, 0 is for built-in camera
@@ -52,7 +53,7 @@ public class VisionPanel extends JPanel implements Runnable {
 			e.printStackTrace();
 		}
 	}
-
+*/
 	public void run() {
 		// calculates how many miliseconds to wait for the next update
 		int waitToUpdate = (1000 / updatesPerSecond);
@@ -91,13 +92,14 @@ public class VisionPanel extends JPanel implements Runnable {
 
 		Graphics bg = buffer.getGraphics();
 
-/*
+
 
 		bg.setColor(Color.BLACK);
 		bg.fillRect(0, 0, getWidth(), getHeight());
-*/
+
 
 		// Gets image from camera, then draws it
+		/*
 		try {
 			BufferedImage cameraImage = webcam.getImage();
 			bg.drawImage(cameraImage, 0, 0, null);
@@ -113,7 +115,7 @@ public class VisionPanel extends JPanel implements Runnable {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-
+*/
 		
 		/*
 		// temp for testing the creation of goals
@@ -173,7 +175,7 @@ public class VisionPanel extends JPanel implements Runnable {
 			  String distance = String.format("%.2f", Main.goals.get(i).getDistanceToRobot());
 			  String towerDistance = String.format("%.2f",
 			  Main.goals.get(i).getDistanceToTower()); String angleDegrees =
-			  String.format("%.2f", Main.goals.get(i).getAngleElevationDegrees());
+			  String.format("%.2f", Main.goals.get(i).getAngleOfElevationInDegrees());
 			  
 			  bg.drawString("Distance: " + distance + "in.", x, y);
 			  bg.drawString("Tower Distance: " + towerDistance + "in.", x, y +=

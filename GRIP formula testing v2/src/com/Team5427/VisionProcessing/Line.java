@@ -2,12 +2,10 @@ package com.Team5427.VisionProcessing;
 
 /**
  * 
- * @author Andrew Kennedy
- * 
- *         A simple class that is used to store all of the data from a line,
- *         including the points of both of the ends, as well as the length of
- *         the line. It also includes a built in method to determine whether or
- *         not two lines are close to each other.
+ * A simple class that is used to store all of the data from a line, including
+ * the points of both of the ends, as well as the length of the line. It also
+ * includes a built in method to determine whether or not two lines are close to
+ * each other.
  *
  */
 public class Line {
@@ -16,6 +14,21 @@ public class Line {
 	private double length;
 	private boolean horizontal, vertical;
 
+	/**
+	 * Creates a Line using the x and y values of the endpoints of a line in
+	 * addition to the length of the aforementioned line.
+	 * 
+	 * @param x1
+	 *            The X-value of the first point.
+	 * @param y1
+	 *            The Y-value of the first point.
+	 * @param x2
+	 *            The X-value of the second point.
+	 * @param y2
+	 *            The Y-Value of the second point.
+	 * @param length
+	 *            The length of the line.
+	 */
 	public Line(double x1, double y1, double x2, double y2, double length) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -30,6 +43,13 @@ public class Line {
 
 	}
 
+	/**
+	 * Calculates the shortest distance between the ends of two lines.
+	 * 
+	 * @param l
+	 *            The line that it will be compared with
+	 * @return The shortest distance between the endpoints of the two lines.
+	 */
 	public double compareTo(Line l) {
 		double[] d = new double[4];
 		double lowestDistance = 500;
