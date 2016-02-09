@@ -174,6 +174,12 @@ public class Main {
 		x2Values = table.getNumberArray("x2", x2Values);
 		y2Values = table.getNumberArray("y2", y2Values);
 		lengthValues = table.getNumberArray("length", lengthValues);
+
+		if (x1Values.length != y1Values.length || x1Values.length != x2Values.length
+				|| x1Values.length != y2Values.length) // Prevents index out of
+														// bounds when data is
+														// being gathered
+			setValues();
 	}
 
 	/**
@@ -215,9 +221,12 @@ public class Main {
 	private synchronized static void filterGoals() {
 
 		for (int index = 0; index < goals.size(); index++) {
+			Goal g = goals.get(index);
 			for (int i = 0; i < goals.size(); i++) {
-				if (goals.get(index).isInsideGoal(goals.get(i)))
+				if (g.isInsideGoal(goals.get(i))) {
 					goals.remove(i);
+					i--;
+				}
 			}
 		}
 
@@ -239,4 +248,18 @@ public class Main {
 
 	}
 
+	public void filterHorizontalLines() {
+		lines = getHorizontalLines();
+	}
+
+	public ArrayList<Line> getHorizontalLines() {
+		ArrayList<Line> horizontalLines = new ArrayList<>();
+
+		for (Line l : lines) {
+			if (l.isHorizontal())
+				horizontalLines.add(l);
+		}
+
+		return horizontalLines;
+	}
 }
