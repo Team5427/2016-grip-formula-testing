@@ -122,11 +122,9 @@ public class Main {
 	 * touching the given lines. If there are multiple, then it will only return
 	 * the one that is first in the ArrayList.
 	 * 
-	 * @param l1
-	 *            One of the line that you would like to compare to the rest of
+	 * @param l1 One of the line that you would like to compare to the rest of
 	 *            the ArrayList
-	 * @param l2
-	 *            One of the line that you would like to compare to the rest of
+	 * @param l2 One of the line that you would like to compare to the rest of
 	 *            the ArrayList
 	 * @return An array of the two lines given, plus the third line that was
 	 *         found
@@ -234,10 +232,8 @@ public class Main {
 
 	/**
 	 * 
-	 * @param d1
-	 *            The first distance.
-	 * @param d2
-	 *            The second distance.
+	 * @param d1 The first distance.
+	 * @param d2 The second distance.
 	 * @return The lowest value given, either d1 or d2.
 	 */
 	private static double returnLowestDouble(double d1, double d2) {
@@ -248,10 +244,19 @@ public class Main {
 
 	}
 
+	/**
+	 * There's no apparent use for this.
+	 */
+/*
 	public void filterHorizontalLines() {
 		lines = getHorizontalLines();
 	}
+*/
 
+	/**
+	 * Finds the horizontal lines in the list of lines and returns it
+	 * @return all horizontal lines in the list
+     */
 	public ArrayList<Line> getHorizontalLines() {
 		ArrayList<Line> horizontalLines = new ArrayList<>();
 

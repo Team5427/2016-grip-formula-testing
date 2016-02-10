@@ -1,6 +1,6 @@
 package com.Team5427.VisionProcessing;
 
-//import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.Webcam;
 
 import java.util.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	private int width, height;
 	private BufferedImage buffer;
 
-	// private Webcam webcam;
+	private Webcam webcam;
 	private Dimension resolution;
 
 	Scanner scanner;
@@ -48,15 +48,23 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	/**
 	 * Enables the usb camera for viewing
 	 */
-	/*
-	 * public void enableCamera() { try { webcam = Webcam.getWebcams().get(1);
-	 * // 1 is a usb camera, 0 is for built-in camera
-	 * webcam.setViewSize(resolution); // Sets the correct resolution
-	 * webcam.open(); // I think this "opens" the camera. This line is needed }
-	 * catch (NoClassDefFoundError e) { System.err.println(
-	 * "Cannot find usb camera"); } catch (Exception e) { e.printStackTrace(); }
-	 * }
-	 */
+	 public void enableCamera() {
+
+		 // TODO: Add IPCam class driver
+//		 Webcam.setDriver(new IPCamDriver());
+
+		 try {
+			 webcam = Webcam.getWebcams().get(1);
+			 // 1 is a usb camera, 0 is for built-in camera
+			 webcam.setViewSize(resolution); // Sets the correct resolution
+			 webcam.open(); // I think this "opens" the camera. This line is needed
+		 }
+		 catch (NoClassDefFoundError e) {
+			 System.err.println("Cannot find usb camera");
+		 } catch (Exception e) {
+			 e.printStackTrace();
+		 }
+	 }
 
 	@Override
 	public void addNotify() {
@@ -89,7 +97,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	public void initializeCalibration() {
 		System.out.println("===FOV Calibration===");
 
-		if (Main.goals != null && Main.goals.size() == 1) {
+		if (Goal.ENABLE_FOV_CALIBRATION && Main.goals != null && Main.goals.size() == 1) {
 			Goal g = Main.goals.get(0);
 
 			System.out.print("Do you want to calibrate the camera? (y,n): ");
@@ -126,7 +134,8 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 						+ " goals. Only 1 must visible in the camera for calibration.");
 			else if (Main.goals.size() == 0) {
 				System.out.println("There are no goals found.");
-			}
+			} else if (!Goal.ENABLE_FOV_CALIBRATION)
+				System.out.println("FOV Calibration has been disabled.");
 
 			System.out.println("\nExiting calibration.");
 		}
