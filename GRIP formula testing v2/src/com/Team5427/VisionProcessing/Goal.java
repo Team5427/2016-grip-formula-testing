@@ -11,7 +11,8 @@ public class Goal {
 	 * The FOV of the attached webcam. It is used in calculating the distance to
 	 * the goals.
 	 */
-	public static final double FOV = Main.CAMERA_FOV;
+	public static double FOV = 59;
+//	public static double FOV = Main.CAMERA_FOV;
 	public static final boolean ENABLE_FOV_CALIBRATION = true; // Set this to
 																// false if we
 																// don't want to
