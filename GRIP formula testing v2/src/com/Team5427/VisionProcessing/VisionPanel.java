@@ -1,6 +1,6 @@
 package com.Team5427.VisionProcessing;
 
-//import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.Webcam;
 
 import java.util.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	private int width, height;
 	private BufferedImage buffer;
 
-	// private Webcam webcam;
+	private Webcam webcam;
 	private Dimension resolution;
 
 	Scanner scanner;
@@ -48,15 +48,23 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	/**
 	 * Enables the usb camera for viewing
 	 */
-	/*
-	 * public void enableCamera() { try { webcam = Webcam.getWebcams().get(1);
-	 * // 1 is a usb camera, 0 is for built-in camera
-	 * webcam.setViewSize(resolution); // Sets the correct resolution
-	 * webcam.open(); // I think this "opens" the camera. This line is needed }
-	 * catch (NoClassDefFoundError e) { System.err.println(
-	 * "Cannot find usb camera"); } catch (Exception e) { e.printStackTrace(); }
-	 * }
-	 */
+	 public void enableCamera() {
+
+		 // TODO: Add IPCam class driver
+//		 Webcam.setDriver(new IPCamDriver());
+
+		 try {
+			 webcam = Webcam.getWebcams().get(1);
+			 // 1 is a usb camera, 0 is for built-in camera
+			 webcam.setViewSize(resolution); // Sets the correct resolution
+			 webcam.open(); // I think this "opens" the camera. This line is needed
+		 }
+		 catch (NoClassDefFoundError e) {
+			 System.err.println("Cannot find usb camera");
+		 } catch (Exception e) {
+			 e.printStackTrace();
+		 }
+	 }
 
 	@Override
 	public void addNotify() {
