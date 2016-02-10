@@ -1,6 +1,9 @@
 package com.Team5427.VisionProcessing;
 
 import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry;
+import com.github.sarxos.webcam.ds.ipcam.IpCamDriver;
+import com.github.sarxos.webcam.ds.ipcam.IpCamMode;
 
 import java.util.*;
 import java.awt.*;
@@ -51,7 +54,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	 public void enableCamera() {
 
 		 // TODO: Add IPCam class driver
-//		 Webcam.setDriver(new IPCamDriver());
+		 Webcam.setDriver(new IpCamDriver());
 
 		 try {
 			 webcam = Webcam.getWebcams().get(1);
