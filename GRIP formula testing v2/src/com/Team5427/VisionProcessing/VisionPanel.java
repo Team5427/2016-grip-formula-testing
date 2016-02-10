@@ -89,7 +89,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	public void initializeCalibration() {
 		System.out.println("===FOV Calibration===");
 
-		if (Main.goals != null && Main.goals.size() == 1) {
+		if (Goal.ENABLE_FOV_CALIBRATION && Main.goals != null && Main.goals.size() == 1) {
 			Goal g = Main.goals.get(0);
 
 			System.out.print("Do you want to calibrate the camera? (y,n): ");
@@ -126,7 +126,8 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 						+ " goals. Only 1 must visible in the camera for calibration.");
 			else if (Main.goals.size() == 0) {
 				System.out.println("There are no goals found.");
-			}
+			} else if (!Goal.ENABLE_FOV_CALIBRATION)
+				System.out.println("FOV Calibration has been disabled.");
 
 			System.out.println("\nExiting calibration.");
 		}
