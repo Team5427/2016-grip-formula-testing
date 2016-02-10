@@ -13,6 +13,7 @@ public class Goal {
 	 */
 	public static double FOV = 59;
 //	public static double FOV = Main.CAMERA_FOV;
+
 	public static final boolean ENABLE_FOV_CALIBRATION = true; // Set this to
 																// false if we
 																// don't want to
@@ -22,14 +23,11 @@ public class Goal {
 	// Measurements are in inches
 	public static final double TRUE_GOAL_WIDTH = 16;
 	public static final double TRUE_GOAL_HEIGHT = 12;
-	// public static final double TOWER_HEIGHT = 97; // TOWER_HEIGHT is actually
-	// the distance from the carpet to the center of the entire target, not the
-	// bottom edge of the tape
-	// TODO damn it Charlie, this makes no sense ^^
 	/**
 	 * Distance from the carpet to bottom of the tape on the goal.
+	 * This is the distance from the carpet, to the very bottom of the goal's opening
 	 */
-	public static final double TOWER_HEIGHT = 83;
+	public static final double TOWER_HEIGHT = 85;
 	/**
 	 * Height of the camera on the robot which must be accounted for while
 	 * making calculations.
@@ -55,8 +53,7 @@ public class Goal {
 	 * center lines are all set, in addition to the approximate area being
 	 * calculated.
 	 * 
-	 * @param lines
-	 *            An array of three lines that will comprise the goal.
+	 * @param lines An array of three lines that will comprise the goal.
 	 */
 	public Goal(Line[] lines) {
 
@@ -104,8 +101,7 @@ public class Goal {
 	 * the bounds of the left and right lines of the goal that was given to it
 	 * when called.
 	 * 
-	 * @param g
-	 *            The goal which is potentially outside of the current goal.
+	 * @param g The goal which is potentially outside of the current goal.
 	 *
 	 * @return Whether or not the current goal is inside of the goal passed
 	 *         through the parameters.
@@ -156,8 +152,15 @@ public class Goal {
 		this.goalCompleted = goalCompleted;
 	}
 
-	// TODO Charlie, document these two methods properly, i'm not which one is
-	// which. They also have unclear names.
+	/**
+	 * Calculates the width in inches from the center of the camera
+	 * to the horizontal edge.* This is used to calculate the distance
+	 * from the goal to the robot and to calibrate the FOV.
+	 *
+	 * @return vertical distance in inches from the center to the horizontal
+	 * 		   edge of the camera.
+	 * 		   edge of the camera.
+     */
 	public double getVerticalDistance() {
 		double verticalAvg = (leftLine.getLength() + rightLine.getLength()) / 2;
 		double pixelWidth = verticalAvg * TRUE_GOAL_WIDTH / TRUE_GOAL_HEIGHT;
