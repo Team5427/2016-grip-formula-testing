@@ -1,7 +1,13 @@
 package com.Team5427.VisionProcessing;
 
-//import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.Webcam;
 
+import com.github.sarxos.webcam.ds.ipcam.IpCamDevice;
+import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry;
+import com.github.sarxos.webcam.ds.ipcam.IpCamDriver;
+import com.github.sarxos.webcam.ds.ipcam.IpCamMode;
+
+import java.net.MalformedURLException;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -12,10 +18,12 @@ import javax.swing.JPanel;
 
 public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
+	public static final String IP_CAMERA_URL = "10.54.27.11";
+
 	private int width, height;
 	private BufferedImage buffer;
 
-//	private Webcam webcam;
+	private Webcam webcam;
 	private Dimension resolution;
 
 	Scanner scanner;
@@ -39,34 +47,38 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		scanner = new Scanner(System.in);
 
 		addKeyListener(this);
+
 		// Creates a new webcam
-		// enableCamera();
+		try {
+//			initializeCamera();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		// new Thread(this).start();
 	}
 
 	/**
-	 * Enables the usb camera for viewing
+	 * Initializes the camera for use
 	 */
-	/*
-	 public void enableCamera() {
 
-		 // TODO: Add IPCam class driver
-//		 Webcam.setDriver(new IPCamDriver());
+	public void initializeCamera() throws MalformedURLException {
+		Webcam.setDriver(new IpCamDriver());
 
-		 try {
-			 webcam = Webcam.getWebcams().get(1);
-			 // 1 is a usb camera, 0 is for built-in camera
-			 webcam.setViewSize(resolution); // Sets the correct resolution
-			 webcam.open(); // I think this "opens" the camera. This line is needed
-		 }
-		 catch (NoClassDefFoundError e) {
-			 System.err.println("Cannot find usb camera");
-		 } catch (Exception e) {
-			 e.printStackTrace();
-		 }
-	 }
-*/
+		IpCamDeviceRegistry.register(new IpCamDevice("Robot Vision", IP_CAMERA_URL, IpCamMode.PUSH));
+
+		try {
+			webcam = Webcam.getWebcams().get(0);
+			webcam.setViewSize(resolution); // Sets the correct resolution
+			webcam.open(); // I think this "opens" the camera. This line is
+							// needed
+		} catch (NoClassDefFoundError e) {
+			System.err.println("Cannot find usb camera");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public void addNotify() {
 		super.addNotify();
@@ -93,7 +105,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	}
 
 	/**
-	 * Initialize the calibration sequence
+	 * Initializes the calibration sequence
 	 */
 	public void initializeCalibration() {
 		System.out.println("===FOV Calibration===");
@@ -201,42 +213,11 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		bg.setColor(Color.BLACK);
 		bg.fillRect(0, 0, getWidth(), getHeight());
 
-		/*
-		 * // Gets image from camera, then draws it /* try { BufferedImage
-		 * cameraImage = webcam.getImage(); bg.drawImage(cameraImage, 0, 0,
-		 * null);
-		 * 
-		 * bg.setColor(Color.YELLOW); } catch (NullPointerException e) { // Null
-		 * pointer occurs when webcam was never initialized System.err.println(
-		 * "Webcam not initialized");
-		 * 
-		 * // Tries to initialize camera // enableCamera(); } catch(Exception e)
-		 * { e.printStackTrace(); }
-		 */
-
-		/*
-		 * // temp for testing the creation of goals if (Main.goals.size() > 0)
-		 * { bg.setColor(Color.GREEN); bg.drawLine((int)
-		 * Main.goals.get(0).getCenterLine().getX1(), (int)
-		 * Main.goals.get(0).getCenterLine().getY1(), (int)
-		 * Main.goals.get(0).getCenterLine().getX2(), (int)
-		 * Main.goals.get(0).getCenterLine().getY2());
-		 * 
-		 * bg.setColor(Color.BLUE); bg.drawLine((int)
-		 * Main.goals.get(0).getLeftLine().getX1(), (int)
-		 * Main.goals.get(0).getLeftLine().getY1(), (int)
-		 * Main.goals.get(0).getLeftLine().getX2(), (int)
-		 * Main.goals.get(0).getLeftLine().getY2());
-		 * 
-		 * bg.setColor(Color.RED); bg.drawLine((int)
-		 * Main.goals.get(0).getRightLine().getX1(), (int)
-		 * Main.goals.get(0).getRightLine().getY1(), (int)
-		 * Main.goals.get(0).getRightLine().getX2(), (int)
-		 * Main.goals.get(0).getRightLine().getY2());
-		 * 
-		 * }
-		 * 
-		 */
+		// Gets image from camera and paints it to the buffer
+		if (webcam != null) {
+			BufferedImage cameraImg = webcam.getImage();
+			bg.drawImage(cameraImg, 0, 0, null);
+		}
 
 		int x1, y1, x2, y2;
 		for (int i = 0; i < Main.goals.size(); i++) {

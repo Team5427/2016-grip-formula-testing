@@ -45,7 +45,7 @@ public class Goal {
 	private double angleOfElevation = -1;
 	private double area = -1;
 
-	private boolean isValid = false,goalCompleted = false;
+	private boolean isValid = false, goalCompleted = false;
 
 	/**
 	 * Receives an Array of three lines, then determines which of the three
@@ -97,6 +97,7 @@ public class Goal {
 			goalCompleted = true;
 
 		area = leftLine.getLength() * centerLine.getLength();
+		getDistanceToTower();
 	}
 
 	/**
@@ -173,7 +174,6 @@ public class Goal {
 		return distanceToGoal;
 	}
 
-
 	/**
 	 * TODO: Needs testing, not sure if this works yet Determines if current
 	 * goal is a valid for shooting
@@ -226,8 +226,8 @@ public class Goal {
 		if (angleOfElevation > 0)
 			return angleOfElevation;
 
-		angleOfElevation = Math.asin((TOWER_HEIGHT - ROBOT_HEIGHT) / getDistanceToGoal());
-
+		angleOfElevation = Math.asin((TOWER_HEIGHT - ROBOT_HEIGHT) / getDistanceToRobot());
+		// TODO that used to be getDistanceToGoal,not sure if changing it was good
 		return angleOfElevation;
 	}
 
