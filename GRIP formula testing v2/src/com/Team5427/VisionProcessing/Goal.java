@@ -1,6 +1,10 @@
 package com.Team5427.VisionProcessing;
 
+import java.util.ArrayList;
+
 public class Goal {
+
+	// TODO remove this, for testing purposes only
 
 	public static final double MIN_VERTICAL_SLOPE = -5;
 	public static final double MAX_VERTICAL_SLOPE = 5;
@@ -12,7 +16,7 @@ public class Goal {
 	 * the goals.
 	 */
 	public static double FOV = 59;
-//	public static double FOV = Main.CAMERA_FOV;
+	// public static double FOV = Main.CAMERA_FOV;
 
 	public static final boolean ENABLE_FOV_CALIBRATION = true; // Set this to
 																// false if we
@@ -24,8 +28,8 @@ public class Goal {
 	public static final double TRUE_GOAL_WIDTH = 16;
 	public static final double TRUE_GOAL_HEIGHT = 12;
 	/**
-	 * Distance from the carpet to bottom of the tape on the goal.
-	 * This is the distance from the carpet, to the very bottom of the goal's opening
+	 * Distance from the carpet to bottom of the tape on the goal. This is the
+	 * distance from the carpet, to the very bottom of the goal's opening
 	 */
 	public static final double TOWER_HEIGHT = 85;
 	/**
@@ -41,7 +45,7 @@ public class Goal {
 	private double angleOfElevation = -1;
 	private double area = -1;
 
-	private boolean goalCompleted = false;
+	private boolean isValid = false,goalCompleted = false;
 
 	/**
 	 * Receives an Array of three lines, then determines which of the three
@@ -53,7 +57,8 @@ public class Goal {
 	 * center lines are all set, in addition to the approximate area being
 	 * calculated.
 	 * 
-	 * @param lines An array of three lines that will comprise the goal.
+	 * @param lines
+	 *            An array of three lines that will comprise the goal.
 	 */
 	public Goal(Line[] lines) {
 
@@ -101,7 +106,8 @@ public class Goal {
 	 * the bounds of the left and right lines of the goal that was given to it
 	 * when called.
 	 * 
-	 * @param g The goal which is potentially outside of the current goal.
+	 * @param g
+	 *            The goal which is potentially outside of the current goal.
 	 *
 	 * @return Whether or not the current goal is inside of the goal passed
 	 *         through the parameters.
@@ -144,28 +150,18 @@ public class Goal {
 		return area;
 	}
 
-	public boolean isGoalCompleted() {
-		return goalCompleted;
-	}
-
-	public void setGoalCompleted(boolean goalCompleted) {
-		this.goalCompleted = goalCompleted;
-	}
-
 	/**
-	 * Calculates the width in inches from the center of the camera
-	 * to the horizontal edge.* This is used to calculate the distance
-	 * from the goal to the robot and to calibrate the FOV.
+	 * Calculates the width in inches from the center of the camera to the
+	 * horizontal edge.* This is used to calculate the distance from the goal to
+	 * the robot and to calibrate the FOV.
 	 *
 	 * @return vertical distance in inches from the center to the horizontal
-	 * 		   edge of the camera.
-	 * 		   edge of the camera.
-     */
+	 *         edge of the camera. edge of the camera.
+	 */
 	public double getVerticalDistance() {
 		double verticalAvg = (leftLine.getLength() + rightLine.getLength()) / 2;
 		double pixelWidth = verticalAvg * TRUE_GOAL_WIDTH / TRUE_GOAL_HEIGHT;
 		return (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / pixelWidth;
-
 	}
 
 	/**
@@ -174,6 +170,28 @@ public class Goal {
 	 * @return distance from robot to goal in inches
 	 */
 	public double getDistanceToGoal() {
+		return distanceToGoal;
+	}
+
+
+	/**
+	 * TODO: Needs testing, not sure if this works yet Determines if current
+	 * goal is a valid for shooting
+	 */
+
+	public void determineValid() {
+		if (leftLine.getMidpointY() > centerLine.getMidpointY() || rightLine.getMidpointY() < centerLine.getMidpointY())
+			return;
+
+		isValid = true;
+	}
+
+	/**
+	 * Returns the distance from the goal to the robot
+	 *
+	 * @return the distance from goal to the robot
+	 */
+	public double getDistanceToRobot() {
 
 		if (distanceToGoal > 0)
 			return distanceToGoal;

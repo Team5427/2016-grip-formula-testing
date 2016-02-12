@@ -1,6 +1,6 @@
 package com.Team5427.VisionProcessing;
 
-import com.github.sarxos.webcam.Webcam;
+//import com.github.sarxos.webcam.Webcam;
 
 import java.util.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	private int width, height;
 	private BufferedImage buffer;
 
-	private Webcam webcam;
+//	private Webcam webcam;
 	private Dimension resolution;
 
 	Scanner scanner;
@@ -48,6 +48,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	/**
 	 * Enables the usb camera for viewing
 	 */
+	/*
 	 public void enableCamera() {
 
 		 // TODO: Add IPCam class driver
@@ -65,7 +66,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 			 e.printStackTrace();
 		 }
 	 }
-
+*/
 	@Override
 	public void addNotify() {
 		super.addNotify();
