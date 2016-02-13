@@ -18,18 +18,20 @@ import javax.swing.JPanel;
 
 public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
-	public static final String IP_CAMERA_URL = "10.54.27.11";
+	public static final String IP_CAMERA_URL = "http://10.54.27.11/mjpg/video.mjpg";
 
 	private int width, height;
 	private BufferedImage buffer;
 
 	private Webcam webcam;
 	private Dimension resolution;
+	private BufferedImage cameraImg;
 
 	Scanner scanner;
 
 	private int updatesPerSecond = 30;
 	private long updateCount = 0;
+	private double previousFrameTime = 0;
 
 	public VisionPanel(int width, int height) {
 
@@ -38,7 +40,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		this.width = width;
 		this.height = height;
 
-		resolution = new Dimension(width, height);
+		resolution = new Dimension(640, 480);
 
 		setSize(width, height);
 
@@ -50,7 +52,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 		// Creates a new webcam
 		try {
-//			initializeCamera();
+			initializeCamera();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -62,8 +64,11 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	 * Initializes the camera for use
 	 */
 
-	public void initializeCamera() throws MalformedURLException {
+	static {
 		Webcam.setDriver(new IpCamDriver());
+	}
+
+	public void initializeCamera() throws MalformedURLException {
 
 		IpCamDeviceRegistry.register(new IpCamDevice("Robot Vision", IP_CAMERA_URL, IpCamMode.PUSH));
 
@@ -209,14 +214,19 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	public synchronized void paint(Graphics g) {
 
 		Graphics bg = buffer.getGraphics();
+		double timeDifference = -1;
+
 
 		bg.setColor(Color.BLACK);
 		bg.fillRect(0, 0, getWidth(), getHeight());
 
 		// Gets image from camera and paints it to the buffer
 		if (webcam != null) {
-			BufferedImage cameraImg = webcam.getImage();
+			cameraImg = webcam.getImage();
+			timeDifference = System.nanoTime() - previousFrameTime;
+			previousFrameTime = System.nanoTime();
 			bg.drawImage(cameraImg, 0, 0, null);
+
 		}
 
 		int x1, y1, x2, y2;
@@ -240,23 +250,32 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		/* Draws distance of goal on the bottom left */
 		// This can be later merged the for each loop that draws the lines. This
 		// is temporary for readability
-		bg.setColor(Color.WHITE);
+		bg.setColor(Color.BLUE);
 		bg.setFont(new Font("Comic Sans", Font.PLAIN, 10));
 
-		for (int i = 0; i < Main.goals.size(); i++) {
+		ArrayList<Goal> goalProccess = Main.goals;					// This is needed to stop a weird index out of bounds exception
+		for (int i = 0; i < goalProccess.size(); i++) {
 
-			int x = (int) Main.goals.get(i).getCenterLine().getX1() - 5;
-			int y = (int) Main.goals.get(i).getCenterLine().getY1() + 15;
+			int x = (int) goalProccess.get(i).getCenterLine().getX1() - 5;
+			int y = (int) goalProccess.get(i).getCenterLine().getY1() + 15;
 
-			String distance = String.format("%.2f", Main.goals.get(i).getDistanceToGoal());
-			String towerDistance = String.format("%.2f", Main.goals.get(i).getDistanceToTower());
-			String angleDegrees = String.format("%.2f", Main.goals.get(i).getAngleOfElevationInDegrees());
+			String distance = String.format("%.2f", goalProccess.get(i).getDistanceToGoal());
+			String towerDistance = String.format("%.2f", goalProccess.get(i).getDistanceToTower());
+			String angleDegrees = String.format("%.2f", goalProccess.get(i).getAngleOfElevationInDegrees());
 
 			bg.drawString("Distance: " + distance + "in.", x, y);
 			bg.drawString("Tower Distance: " + towerDistance + "in.", x, y += 12);
 			bg.drawString("Angle " + angleDegrees + "°", x, y + 12);
 
 		}
+
+		// Draws frame rate
+		bg.setColor(Color.GREEN);
+		bg.setFont(new Font("Arial Narrow", Font.PLAIN, 14));
+		double fps = 1000000000 / timeDifference;
+		String fpsOutput = String.format("%.2f", fps);
+
+		bg.drawString("FPS: " + fpsOutput, 2, 14);
 
 		g.drawImage(buffer, 0, 0, null);
 	}

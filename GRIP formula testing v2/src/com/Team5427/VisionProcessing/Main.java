@@ -167,17 +167,14 @@ public class Main {
 	 * Retrieves all of the data from the network table in the form of arrays
 	 */
 	private static void setValues() {
-		x1Values = table.getNumberArray("x1", x1Values);
-		y1Values = table.getNumberArray("y1", y1Values);
-		x2Values = table.getNumberArray("x2", x2Values);
-		y2Values = table.getNumberArray("y2", y2Values);
-		lengthValues = table.getNumberArray("length", lengthValues);
+		do {
+			x1Values = table.getNumberArray("x1", x1Values);
+			y1Values = table.getNumberArray("y1", y1Values);
+			x2Values = table.getNumberArray("x2", x2Values);
+			y2Values = table.getNumberArray("y2", y2Values);
+			lengthValues = table.getNumberArray("length", lengthValues);
+		} while (!(x1Values.length == y1Values.length && y1Values.length == x2Values.length && x2Values.length == y2Values.length && y2Values.length == lengthValues.length));
 
-		if (x1Values.length != y1Values.length || x1Values.length != x2Values.length
-				|| x1Values.length != y2Values.length) // Prevents index out of
-														// bounds when data is
-														// being gathered
-			setValues();
 	}
 
 	/**
@@ -186,8 +183,15 @@ public class Main {
 	 */
 	private static void createLines() {
 		for (int i = 0; i < lengthValues.length; i++) {
-			if (lengthValues[i] != 0)
-				lines.add(new Line(x1Values[i], y1Values[i], x2Values[i], y2Values[i], lengthValues[i]));
+			if (lengthValues[i] != 0) {
+				try {
+					lines.add(new Line(x1Values[i], y1Values[i], x2Values[i], y2Values[i], lengthValues[i]));
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println(x1Values.length + ":" + y1Values.length + ":" + x2Values.length + ":"
+							+ y2Values.length + ":" + lengthValues.length);
+				}
+			}
 		}
 	}
 
