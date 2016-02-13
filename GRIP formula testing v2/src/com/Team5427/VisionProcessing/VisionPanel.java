@@ -31,7 +31,9 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 	private int updatesPerSecond = 30;
 	private long updateCount = 0;
-	private double previousFrameTime = 0;
+	private double previousFrameTime = 0;						// Previous System nanotime for last frame
+
+	private boolean donePainting = false;
 
 	public VisionPanel(int width, int height) {
 
@@ -210,6 +212,14 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		}
 	}
 
+	public boolean isDonePainting() {
+		return donePainting;
+	}
+
+	public void setDonePainting(boolean donePainting) {
+		this.donePainting = donePainting;
+	}
+
 	@Override
 	public synchronized void paint(Graphics g) {
 
@@ -253,15 +263,14 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		bg.setColor(Color.BLUE);
 		bg.setFont(new Font("Comic Sans", Font.PLAIN, 10));
 
-		ArrayList<Goal> goalProccess = Main.goals;					// This is needed to stop a weird index out of bounds exception
-		for (int i = 0; i < goalProccess.size(); i++) {
+		for (int i = 0; i < Main.goals.size(); i++) {
 
-			int x = (int) goalProccess.get(i).getCenterLine().getX1() - 5;
-			int y = (int) goalProccess.get(i).getCenterLine().getY1() + 15;
+			int x = (int) Main.goals.get(i).getCenterLine().getX1() - 5;
+			int y = (int) Main.goals.get(i).getCenterLine().getY1() + 15;
 
-			String distance = String.format("%.2f", goalProccess.get(i).getDistanceToGoal());
-			String towerDistance = String.format("%.2f", goalProccess.get(i).getDistanceToTower());
-			String angleDegrees = String.format("%.2f", goalProccess.get(i).getAngleOfElevationInDegrees());
+			String distance = String.format("%.2f", Main.goals.get(i).getDistanceToGoal());
+			String towerDistance = String.format("%.2f", Main.goals.get(i).getDistanceToTower());
+			String angleDegrees = String.format("%.2f", Main.goals.get(i).getAngleOfElevationInDegrees());
 
 			bg.drawString("Distance: " + distance + "in.", x, y);
 			bg.drawString("Tower Distance: " + towerDistance + "in.", x, y += 12);
@@ -272,12 +281,14 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		// Draws frame rate
 		bg.setColor(Color.GREEN);
 		bg.setFont(new Font("Arial Narrow", Font.PLAIN, 14));
-		double fps = 1000000000 / timeDifference;
-		String fpsOutput = String.format("%.2f", fps);
+/*		double FPS = 1000000000 / timeDifference;
+		String fpsOutput = String.format("%.2f", FPS);*/
 
-		bg.drawString("FPS: " + fpsOutput, 2, 14);
+		bg.drawString("FPS: " + Main.FPS, 2, 14);
 
 		g.drawImage(buffer, 0, 0, null);
+
+		donePainting = true;
 	}
 
 }

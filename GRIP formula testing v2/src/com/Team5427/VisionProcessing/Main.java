@@ -23,6 +23,7 @@ public class Main {
 	static double[] x2Values = new double[20];
 	static double[] y2Values = new double[20];
 	static double[] lengthValues = new double[20];
+	static double FPS = -1;
 	static ArrayList<Line> lines = new ArrayList<Line>();
 	static ArrayList<Goal> goals = new ArrayList<Goal>();
 
@@ -49,7 +50,7 @@ public class Main {
 	public static void main(String[] args) {
 		NetworkTable.setClientMode();
 		NetworkTable.setIPAddress("localhost");
-		table = NetworkTable.getTable("GRIP/myLinesReport");
+		table = NetworkTable.getTable("GRIP");
 		vf = new VisionFrame();
 
 		setValues();
@@ -65,11 +66,15 @@ public class Main {
 
 				filterGoals();
 
-				Thread.sleep(100);
+				Thread.sleep(10);
 
 				vf.getPanel().repaint();
 
-				// Thread.sleep(100);
+				do {
+					Thread.sleep(5);
+				} while (!vf.getPanel().isDonePainting());
+
+				vf.getPanel().setDonePainting(false);
 
 				lines.clear();
 				goals.clear();
@@ -168,11 +173,12 @@ public class Main {
 	 */
 	private static void setValues() {
 		do {
-			x1Values = table.getNumberArray("x1", x1Values);
-			y1Values = table.getNumberArray("y1", y1Values);
-			x2Values = table.getNumberArray("x2", x2Values);
-			y2Values = table.getNumberArray("y2", y2Values);
-			lengthValues = table.getNumberArray("length", lengthValues);
+//			FPS = table.getNumber("FPS");
+			x1Values = table.getNumberArray("myLinesReport/x1", x1Values);
+			y1Values = table.getNumberArray("myLinesReport/y1", y1Values);
+			x2Values = table.getNumberArray("myLinesReport/x2", x2Values);
+			y2Values = table.getNumberArray("myLinesReport/y2", y2Values);
+			lengthValues = table.getNumberArray("myLinesReport/length", lengthValues);
 		} while (!(x1Values.length == y1Values.length && y1Values.length == x2Values.length && x2Values.length == y2Values.length && y2Values.length == lengthValues.length));
 
 	}
