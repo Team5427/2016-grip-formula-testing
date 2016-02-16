@@ -1,7 +1,5 @@
 package com.Team5427.VisionProcessing;
 
-import java.util.ArrayList;
-
 public class Goal {
 
 	// TODO remove this, for testing purposes only
@@ -160,6 +158,11 @@ public class Goal {
 	 *         edge of the camera. edge of the camera.
 	 */
 	public double getVerticalDistance() {
+		/*
+		 * TODO Charlie, can you please average the width of the top and bottom
+		 * of the goal to determine the angle that it is at so that we can
+		 * normalize it in that axis as well?
+		 */
 		double verticalAvg = (leftLine.getLength() + rightLine.getLength()) / 2;
 		double pixelWidth = verticalAvg * TRUE_GOAL_WIDTH / TRUE_GOAL_HEIGHT;
 		return (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / pixelWidth;
@@ -227,7 +230,8 @@ public class Goal {
 			return angleOfElevation;
 
 		angleOfElevation = Math.asin((TOWER_HEIGHT - ROBOT_HEIGHT) / getDistanceToRobot());
-		// TODO that used to be getDistanceToGoal,not sure if changing it was good
+		// TODO that used to be getDistanceToGoal,not sure if changing it was
+		// good
 		return angleOfElevation;
 	}
 
