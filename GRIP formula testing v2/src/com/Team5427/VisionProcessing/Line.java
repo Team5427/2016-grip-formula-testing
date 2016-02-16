@@ -150,6 +150,30 @@ public class Line {
 		return y2;
 	}
 
+	/**
+	 * Returns the x value of the top point
+	 *
+	 * @return the x value of the top point
+     */
+	public double getTopPointX() {
+		if (y1 < y2)
+			return x1;
+
+		return x2;
+	}
+
+	/**
+	 * Returns the y value of the top point
+	 *
+	 * @return the y value of the top point
+     */
+	public double getTopPointY() {
+		if (y1 < y2)
+			return y1;
+
+		return y2;
+	}
+
 	public double getSlope() {
 
 		if (x1 == x2)
