@@ -96,6 +96,10 @@ public class Line {
 		return (y1 + y2) / 2;
 	}
 
+	public double getMidpointX() {
+		return (x1 + x2) / 2;
+	}
+
 	public double getLength() {
 		return length;
 	}
@@ -161,5 +165,4 @@ public class Line {
 	public boolean isVertical() {
 		return vertical;
 	}
-
 }

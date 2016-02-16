@@ -237,4 +237,31 @@ public class Goal {
 	public double getAngleOfElevationInDegrees() {
 		return Math.toDegrees(getAngleOfElevationInRadians());
 	}
+
+	/**
+	 * Gets the angle the robot has to aim in the horizontal axis in degrees
+	 *
+	 * @return horizontal angle in degrees from the center of the robot to the goal. A negative angle
+	 * 		   represents that the goal is to the left from the center of the robot. A positive angle
+	 * 		   represents that the goal is to the right from the center of the robot.
+     */
+	public double getHorizontalAngleInDegrees() {
+		double halfResolution = VisionPanel.RESOLUTION.getWidth() / 2;
+		double fromCenter = centerLine.getMidpointX() - halfResolution;
+
+		return (FOV / 2 * fromCenter) / halfResolution;
+	}
+
+	/**
+	 * Gets the angle the robot has to aim in the horizontal axis in radians
+	 *
+	 * @return horizontal angle in radians from the center of the robot to the goal. A negative angle
+	 * 		   represents that the goal is to the left from the center of the robot. A positive angle
+	 * 		   represents that the goal is to the right from the center of the robot.
+     */
+	public double getHorizontalAngleInRadians() {
+		return Math.toRadians(getAngleOfElevationInDegrees());
+	}
+
+
 }
