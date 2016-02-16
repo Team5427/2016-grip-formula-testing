@@ -11,10 +11,7 @@ public class VisionFrame extends JFrame {
 	 * Change this if we're using camera or images - Image w:h - 720:502 -
 	 * Multiply the width and height by the resize
 	 */
-/*
-	public static final int width = (int) (720 * .75);
-	public static final int height = (int) (502 * .75);
-*/
+
 	public static final int width = 640;
 	public static final int height = 480;
 

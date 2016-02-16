@@ -19,12 +19,13 @@ import javax.swing.JPanel;
 public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 	public static final String IP_CAMERA_URL = "http://10.54.27.11/mjpg/video.mjpg";
+	public static final Dimension RESOLUTION = new Dimension(640, 480);
 
 	private int width, height;
-	private BufferedImage buffer;
 
+	private BufferedImage buffer;
 	private Webcam webcam;
-	private Dimension resolution;
+	;
 	private BufferedImage cameraImg;
 
 	Scanner scanner;
@@ -41,8 +42,6 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 		this.width = width;
 		this.height = height;
-
-		resolution = new Dimension(640, 480);
 
 		setSize(width, height);
 
@@ -76,7 +75,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 		try {
 			webcam = Webcam.getWebcams().get(0);
-			webcam.setViewSize(resolution); // Sets the correct resolution
+			webcam.setViewSize(RESOLUTION); // Sets the correct RESOLUTION
 			webcam.open(); // I think this "opens" the camera. This line is
 							// needed
 		} catch (NoClassDefFoundError e) {
@@ -260,21 +259,28 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		/* Draws distance of goal on the bottom left */
 		// This can be later merged the for each loop that draws the lines. This
 		// is temporary for readability
-		bg.setColor(Color.BLUE);
-		bg.setFont(new Font("Comic Sans", Font.PLAIN, 10));
+		bg.setFont(new Font("Arial Narrow", Font.PLAIN, 10));
 
 		for (int i = 0; i < Main.goals.size(); i++) {
 
-			int x = (int) Main.goals.get(i).getCenterLine().getX1() - 5;
+			bg.setColor(new Color(255,255,255,150));
+
+			int x = (int) Main.goals.get(i).getCenterLine().getX1() - 8;
 			int y = (int) Main.goals.get(i).getCenterLine().getY1() + 15;
+
+			bg.fillRect(x - 3, y - 10, 100, 48);
+
+			bg.setColor(Color.BLACK);
 
 			String distance = String.format("%.2f", Main.goals.get(i).getDistanceToGoal());
 			String towerDistance = String.format("%.2f", Main.goals.get(i).getDistanceToTower());
 			String angleDegrees = String.format("%.2f", Main.goals.get(i).getAngleOfElevationInDegrees());
+			String horizontalAngle = String.format("%.2f", Main.goals.get(i).getHorizontalAngleInDegrees());
 
 			bg.drawString("Distance: " + distance + "in.", x, y);
 			bg.drawString("Tower Distance: " + towerDistance + "in.", x, y += 12);
-			bg.drawString("Angle " + angleDegrees + "°", x, y + 12);
+			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += 12);
+			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y + 12);
 
 		}
 

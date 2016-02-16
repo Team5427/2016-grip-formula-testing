@@ -96,8 +96,37 @@ public class Line {
 		return (y1 + y2) / 2;
 	}
 
+	public double getMidpointX() {
+		return (x1 + x2) / 2;
+	}
+
 	public double getLength() {
 		return length;
+	}
+
+	/**
+	 * Returns the angle of the line in radians
+	 * @return angle of line in radians
+     */
+	public double getAngle() {
+		double x1 = this.x1;
+		double y1 = this.y1;
+		double x2 = this.x2;
+		double y2 = this.y2;
+
+		if (this.x1 > this.x2) {
+			x1 = this.x2;
+			y1 = this.y2;
+			x2 = this.x1;
+			y2 = this.y1;
+		}
+
+		double angle = Math.acos(length / (x2 - x1));
+
+		if (y1 > y2)
+			angle *= -1;
+
+		return angle;
 	}
 
 	public double getSmallestX() {
@@ -136,5 +165,4 @@ public class Line {
 	public boolean isVertical() {
 		return vertical;
 	}
-
 }
