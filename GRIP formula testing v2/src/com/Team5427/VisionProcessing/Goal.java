@@ -47,7 +47,7 @@ public class Goal {
 
 	/**
 	 * Receives an Array of three lines, then determines which of the three
-	 * lines is horizontal line, sets it as the horizontal line, and then
+	 * lines is horiSzontal line, sets it as the horizontal line, and then
 	 * proceeds to remove it from the Array. The remaining two lines then have
 	 * their X values compared in order to determine which of the remaining
 	 * lines is the left and which is the right. By the end of this constructor,
@@ -89,13 +89,17 @@ public class Goal {
 
 		}
 
-		if (setCenter = false)
+		if (!setCenter)
 			goalCompleted = false;
 		else
 			goalCompleted = true;
 
-		area = leftLine.getLength() * centerLine.getLength();
-		getDistanceToTower();
+		if ((goalCompleted && (rightLine.getLargestX() - leftLine.getLargestX()) > centerLine.getLength() / 1.5)) {
+			area = leftLine.getLength() * centerLine.getLength();
+			getDistanceToTower();
+		} else
+			goalCompleted = false;
+
 	}
 
 	/**
@@ -112,8 +116,8 @@ public class Goal {
 	 *         through the parameters.
 	 */
 	public boolean isInsideGoal(Goal g) {
-		if (g.leftLine.getSmallestX() < leftLine.getSmallestX()
-				&& g.rightLine.getLargestX() > rightLine.getLargestX()) {
+		if (g.leftLine.getSmallestX() > leftLine.getSmallestX()
+				&& g.rightLine.getLargestX() < rightLine.getLargestX()) {
 
 			return true;
 
@@ -147,6 +151,10 @@ public class Goal {
 
 	public double getArea() {
 		return area;
+	}
+	
+	public boolean isComplete(){
+		return goalCompleted;
 	}
 
 	/**
@@ -245,10 +253,11 @@ public class Goal {
 	/**
 	 * Gets the angle the robot has to aim in the horizontal axis in degrees
 	 *
-	 * @return horizontal angle in degrees from the center of the robot to the goal. A negative angle
-	 * 		   represents that the goal is to the left from the center of the robot. A positive angle
-	 * 		   represents that the goal is to the right from the center of the robot.
-     */
+	 * @return horizontal angle in degrees from the center of the robot to the
+	 *         goal. A negative angle represents that the goal is to the left
+	 *         from the center of the robot. A positive angle represents that
+	 *         the goal is to the right from the center of the robot.
+	 */
 	public double getHorizontalAngleInDegrees() {
 		double halfResolution = VisionPanel.RESOLUTION.getWidth() / 2;
 		double fromCenter = centerLine.getMidpointX() - halfResolution;
@@ -259,13 +268,13 @@ public class Goal {
 	/**
 	 * Gets the angle the robot has to aim in the horizontal axis in radians
 	 *
-	 * @return horizontal angle in radians from the center of the robot to the goal. A negative angle
-	 * 		   represents that the goal is to the left from the center of the robot. A positive angle
-	 * 		   represents that the goal is to the right from the center of the robot.
-     */
+	 * @return horizontal angle in radians from the center of the robot to the
+	 *         goal. A negative angle represents that the goal is to the left
+	 *         from the center of the robot. A positive angle represents that
+	 *         the goal is to the right from the center of the robot.
+	 */
 	public double getHorizontalAngleInRadians() {
 		return Math.toRadians(getAngleOfElevationInDegrees());
 	}
-
 
 }

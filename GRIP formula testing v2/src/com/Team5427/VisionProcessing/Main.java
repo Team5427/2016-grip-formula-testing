@@ -10,7 +10,7 @@ public class Main {
 	 * The FOV of the attached webcam. It is used in calculating the distance to
 	 * the goals.
 	 */
-//	public static final double CAMERA_FOV = 59;
+	// public static final double CAMERA_FOV = 59;
 
 	/**
 	 * The object from WPILib that allows the program to retrieve all of the
@@ -127,9 +127,11 @@ public class Main {
 	 * touching the given lines. If there are multiple, then it will only return
 	 * the one that is first in the ArrayList.
 	 * 
-	 * @param l1 One of the line that you would like to compare to the rest of
+	 * @param l1
+	 *            One of the line that you would like to compare to the rest of
 	 *            the ArrayList
-	 * @param l2 One of the line that you would like to compare to the rest of
+	 * @param l2
+	 *            One of the line that you would like to compare to the rest of
 	 *            the ArrayList
 	 * @return An array of the two lines given, plus the third line that was
 	 *         found
@@ -173,13 +175,14 @@ public class Main {
 	 */
 	private static void setValues() {
 		do {
-//			FPS = table.getNumber("FPS");
+			// FPS = table.getNumber("FPS");
 			x1Values = table.getNumberArray("myLinesReport/x1", x1Values);
 			y1Values = table.getNumberArray("myLinesReport/y1", y1Values);
 			x2Values = table.getNumberArray("myLinesReport/x2", x2Values);
 			y2Values = table.getNumberArray("myLinesReport/y2", y2Values);
 			lengthValues = table.getNumberArray("myLinesReport/length", lengthValues);
-		} while (!(x1Values.length == y1Values.length && y1Values.length == x2Values.length && x2Values.length == y2Values.length && y2Values.length == lengthValues.length));
+		} while (!(x1Values.length == y1Values.length && y1Values.length == x2Values.length
+				&& x2Values.length == y2Values.length && y2Values.length == lengthValues.length));
 
 	}
 
@@ -229,21 +232,26 @@ public class Main {
 	private synchronized static void filterGoals() {
 
 		for (int index = 0; index < goals.size(); index++) {
-			Goal g = goals.get(index);
-			for (int i = 0; i < goals.size(); i++) {
-				if (g.isInsideGoal(goals.get(i))) {
-					goals.remove(i);
-					i--;
+			if (goals.get(index).isComplete()) {
+				Goal g = goals.get(index);
+				for (int i = 0; i < goals.size(); i++) {
+					if (g.isInsideGoal(goals.get(i))) {
+						goals.remove(i);
+						i--;
+					}
 				}
-			}
+			} else
+				goals.remove(index);
 		}
 
 	}
 
 	/**
 	 * 
-	 * @param d1 The first distance.
-	 * @param d2 The second distance.
+	 * @param d1
+	 *            The first distance.
+	 * @param d2
+	 *            The second distance.
 	 * @return The lowest value given, either d1 or d2.
 	 */
 	private static double returnLowestDouble(double d1, double d2) {
@@ -257,16 +265,15 @@ public class Main {
 	/**
 	 * There's no apparent use for this.
 	 */
-/*
-	public void filterHorizontalLines() {
-		lines = getHorizontalLines();
-	}
-*/
+	/*
+	 * public void filterHorizontalLines() { lines = getHorizontalLines(); }
+	 */
 
 	/**
 	 * Finds the horizontal lines in the list of lines and returns it
+	 * 
 	 * @return all horizontal lines in the list
-     */
+	 */
 	public ArrayList<Line> getHorizontalLines() {
 		ArrayList<Line> horizontalLines = new ArrayList<>();
 
