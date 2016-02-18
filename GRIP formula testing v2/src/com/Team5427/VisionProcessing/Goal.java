@@ -23,8 +23,8 @@ public class Goal {
 																// FOV
 
 	// Measurements are in inches
-	public static final double TRUE_GOAL_WIDTH = 16;
-	public static final double TRUE_GOAL_HEIGHT = 12;
+	public static final double TRUE_GOAL_WIDTH = 20;
+	public static final double TRUE_GOAL_HEIGHT = 14;
 	/**
 	 * Distance from the carpet to bottom of the tape on the goal. This is the
 	 * distance from the carpet, to the very bottom of the goal's opening
@@ -149,11 +149,25 @@ public class Goal {
 		this.rightLine = rightLine;
 	}
 
+	/**
+	 * Returns the length between the pixel length of the top side of the goal
+	 *
+	 * @return pixel length of the the top side of the goal
+	 */
+	public double getTopLength() {
+		double x1 = leftLine.getTopPointX();
+		double y1 = leftLine.getTopPointY();
+		double x2 = rightLine.getTopPointX();
+		double y2 = rightLine.getTopPointY();
+
+		return Math.sqrt(Math.pow(x1 + x2, 2) + Math.pow(y1 + y2, 2));
+	}
+
 	public double getArea() {
 		return area;
 	}
-	
-	public boolean isComplete(){
+
+	public boolean isComplete() {
 		return goalCompleted;
 	}
 
@@ -165,15 +179,17 @@ public class Goal {
 	 * @return vertical distance in inches from the center to the horizontal
 	 *         edge of the camera. edge of the camera.
 	 */
-	public double getVerticalDistance() {
-		/*
-		 * TODO Charlie, can you please average the width of the top and bottom
-		 * of the goal to determine the angle that it is at so that we can
-		 * normalize it in that axis as well?
-		 */
+	public double getNormalizedVerticalDistance() {
 		double verticalAvg = (leftLine.getLength() + rightLine.getLength()) / 2;
 		double pixelWidth = verticalAvg * TRUE_GOAL_WIDTH / TRUE_GOAL_HEIGHT;
 		return (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / pixelWidth;
+	}
+
+	// TODO: Code this and add comments
+
+	public double getNormalizedHorizontalDistance() {
+		double horizontalAvg = (centerLine.getLength() + getTopLength()) / 2;
+		return (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / horizontalAvg;
 	}
 
 	/**
@@ -208,7 +224,7 @@ public class Goal {
 			return distanceToGoal;
 
 		double radAngle = Math.toRadians(FOV / 2);
-		double verticalDistance = getVerticalDistance();
+		double verticalDistance = getNormalizedHorizontalDistance();
 
 		distanceToGoal = verticalDistance / Math.tan(radAngle);
 
@@ -251,7 +267,8 @@ public class Goal {
 	}
 
 	/**
-	 * Gets the angle the robot has to aim in the horizontal axis in degrees
+	 * TODO: Fix this, probably not working right now Gets the angle the robot
+	 * has to aim in the horizontal axis in degrees
 	 *
 	 * @return horizontal angle in degrees from the center of the robot to the
 	 *         goal. A negative angle represents that the goal is to the left

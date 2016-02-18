@@ -170,7 +170,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	 * @return
 	 */
 	public double calibrateFOV(Goal goal, double distance) {
-		double verticalDistance = goal.getVerticalDistance();
+		double verticalDistance = goal.getNormalizedVerticalDistance();
 
 		double FOV = Math.toDegrees(Math.atan(verticalDistance / distance));
 		Goal.FOV = 2 * FOV;

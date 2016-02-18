@@ -31,7 +31,7 @@ public class Main {
 	 * The maximum distance that two lines can be from each other in order to be
 	 * considered as part of the same goal.
 	 */
-	private final static int lowestAcceptableValue = 15;
+	private final static int lowestAcceptableValue = 5;
 
 	/**
 	 * A frame created just to hold a VisionPanel.
