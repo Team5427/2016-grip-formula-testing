@@ -31,7 +31,7 @@ public class Main {
 	 * The maximum distance that two lines can be from each other in order to be
 	 * considered as part of the same goal.
 	 */
-	private final static int lowestAcceptableValue = 5;
+	private final static int lowestAcceptableValue = 10;
 
 	/**
 	 * A frame created just to hold a VisionPanel.
@@ -75,6 +75,8 @@ public class Main {
 				} while (!vf.getPanel().isDonePainting());
 
 				vf.getPanel().setDonePainting(false);
+				if(goals.size() != 0 )
+					Thread.sleep(120);
 
 				lines.clear();
 				goals.clear();

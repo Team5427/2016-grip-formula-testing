@@ -173,9 +173,9 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		double verticalDistance = goal.getNormalizedVerticalDistance();
 
 		double FOV = Math.toDegrees(Math.atan(verticalDistance / distance));
-		Goal.FOV = 2 * FOV;
+		Goal.horizontalFOV = 2 * FOV;
 
-		return Goal.FOV;
+		return Goal.horizontalFOV;
 	}
 
 	public void run() {
@@ -267,7 +267,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 			int x = (int) Main.goals.get(i).getCenterLine().getX1() - 8;
 			int y = (int) Main.goals.get(i).getCenterLine().getY1() + 15;
 
-			bg.fillRect(x - 3, y - 10 +12, 100, 48);
+			bg.fillRect(x - 3, y - 10, 100, 48);
 
 			bg.setColor(Color.BLACK);
 
@@ -276,16 +276,12 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 			String angleDegrees = String.format("%.2f", Main.goals.get(i).getAngleOfElevationInDegrees());
 			String horizontalAngle = String.format("%.2f", Main.goals.get(i).getHorizontalAngleInDegrees());
 
-			// TODO temp
-			String trueDistance = String.format("%.2f", Main.goals.get(i).getRealDistance());
-
+		
 			bg.drawString("Distance: " + distance + "in.", x, y);
 			bg.drawString("Tower Distance: " + towerDistance + "in.", x, y += 12);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += 12);
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += 12);
 
-			// TODO temp
-			bg.drawString("TrueDistance" + trueDistance + "in.", x, y += 12);
 		}
 
 		// Draws frame rate
