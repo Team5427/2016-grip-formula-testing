@@ -15,7 +15,7 @@ public class Goal {
 	 */
 	public static double verticalFOV   = -1;
 	/**
-	 *
+	 * Angle of the camera if it's pivoted up
 	 */
 	public static final double STARTING_CAMERA_ANGLE = 20;							// Experimental value
 
