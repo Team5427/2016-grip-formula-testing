@@ -24,15 +24,15 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	private int width, height;
 
 	private BufferedImage buffer;
-	private Webcam webcam;
-	;
+	private Webcam webcam;;
 	private BufferedImage cameraImg;
 
 	Scanner scanner;
 
 	private int updatesPerSecond = 30;
 	private long updateCount = 0;
-	private double previousFrameTime = 0;						// Previous System nanotime for last frame
+	private double previousFrameTime = 0; // Previous System nanotime for last
+											// frame
 
 	private boolean donePainting = false;
 
@@ -225,7 +225,6 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		Graphics bg = buffer.getGraphics();
 		double timeDifference = -1;
 
-
 		bg.setColor(Color.BLACK);
 		bg.fillRect(0, 0, getWidth(), getHeight());
 
@@ -263,12 +262,12 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 		for (int i = 0; i < Main.goals.size(); i++) {
 
-			bg.setColor(new Color(255,255,255,150));
+			bg.setColor(new Color(255, 255, 255, 150));
 
 			int x = (int) Main.goals.get(i).getCenterLine().getX1() - 8;
 			int y = (int) Main.goals.get(i).getCenterLine().getY1() + 15;
 
-			bg.fillRect(x - 3, y - 10, 100, 48);
+			bg.fillRect(x - 3, y - 10 +12, 100, 48);
 
 			bg.setColor(Color.BLACK);
 
@@ -277,18 +276,25 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 			String angleDegrees = String.format("%.2f", Main.goals.get(i).getAngleOfElevationInDegrees());
 			String horizontalAngle = String.format("%.2f", Main.goals.get(i).getHorizontalAngleInDegrees());
 
+			// TODO temp
+			String trueDistance = String.format("%.2f", Main.goals.get(i).getRealDistance());
+
 			bg.drawString("Distance: " + distance + "in.", x, y);
 			bg.drawString("Tower Distance: " + towerDistance + "in.", x, y += 12);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += 12);
-			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y + 12);
+			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += 12);
 
+			// TODO temp
+			bg.drawString("TrueDistance" + trueDistance + "in.", x, y += 12);
 		}
 
 		// Draws frame rate
 		bg.setColor(Color.GREEN);
 		bg.setFont(new Font("Arial Narrow", Font.PLAIN, 14));
-/*		double FPS = 1000000000 / timeDifference;
-		String fpsOutput = String.format("%.2f", FPS);*/
+		/*
+		 * double FPS = 1000000000 / timeDifference; String fpsOutput =
+		 * String.format("%.2f", FPS);
+		 */
 
 		bg.drawString("FPS: " + Main.FPS, 2, 14);
 

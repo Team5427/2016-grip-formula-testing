@@ -1,16 +1,8 @@
 <grip:Pipeline>
   <sources>
-    <grip:MultiImageFile>
-      <property name="path[6]" value="D:\Users\Frian\Programming\School\grip-formula-testing\misc\Sample Images\IMG_20160125_185032.jpg"/>
-      <property name="path[3]" value="D:\Users\Frian\Programming\School\grip-formula-testing\misc\Sample Images\IMG_20160125_185016.jpg"/>
-      <property name="path[0]" value="D:\Users\Frian\Programming\School\grip-formula-testing\misc\Sample Images\IMG_20160125_183424.jpg"/>
-      <property name="index" value="0"/>
-      <property name="numImages" value="7"/>
-      <property name="path[5]" value="D:\Users\Frian\Programming\School\grip-formula-testing\misc\Sample Images\IMG_20160125_185027.jpg"/>
-      <property name="path[2]" value="D:\Users\Frian\Programming\School\grip-formula-testing\misc\Sample Images\IMG_20160125_185011.jpg"/>
-      <property name="path[4]" value="D:\Users\Frian\Programming\School\grip-formula-testing\misc\Sample Images\IMG_20160125_185021.jpg"/>
-      <property name="path[1]" value="D:\Users\Frian\Programming\School\grip-formula-testing\misc\Sample Images\IMG_20160125_184939.jpg"/>
-    </grip:MultiImageFile>
+    <grip:Camera>
+      <property name="address" value="http://10.54.27.11/mjpg/video.mjpg"/>
+    </grip:Camera>
   </sources>
   <steps>
     <grip:Step name="Publish Number">
@@ -124,24 +116,20 @@
   </steps>
   <connections>
     <grip:Connection>
-      <grip:Output step="2" socket="0" previewed="false"/>
-      <grip:Input step="3" socket="0"/>
+      <grip:Output source="0" socket="0" previewed="false"/>
+      <grip:Input step="1" socket="0"/>
     </grip:Connection>
     <grip:Connection>
       <grip:Output step="1" socket="0" previewed="true"/>
       <grip:Input step="2" socket="0"/>
     </grip:Connection>
     <grip:Connection>
-      <grip:Output source="0" socket="0" previewed="false"/>
-      <grip:Input step="1" socket="0"/>
+      <grip:Output step="3" socket="0" previewed="false"/>
+      <grip:Input step="4" socket="0"/>
     </grip:Connection>
     <grip:Connection>
       <grip:Output step="4" socket="0" previewed="false"/>
       <grip:Input step="5" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
-      <grip:Output step="3" socket="0" previewed="false"/>
-      <grip:Input step="4" socket="0"/>
     </grip:Connection>
     <grip:Connection>
       <grip:Output step="5" socket="0" previewed="false"/>
@@ -150,6 +138,10 @@
     <grip:Connection>
       <grip:Output step="6" socket="0" previewed="true"/>
       <grip:Input step="7" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="2" socket="0" previewed="false"/>
+      <grip:Input step="3" socket="0"/>
     </grip:Connection>
   </connections>
   <settings>

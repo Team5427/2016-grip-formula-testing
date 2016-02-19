@@ -142,6 +142,13 @@ public class Line {
 
 		return x2;
 	}
+	
+	public double getSmallestY(){
+		if (y1 < y2)
+			return y1;
+
+		return y2;
+	}
 
 	public double getLargestY() {
 		if (y1 > y2)

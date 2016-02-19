@@ -192,6 +192,21 @@ public class Goal {
 		return (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / horizontalAvg;
 	}
 
+	public double getRealDistance() {
+		double pixelWidth = ((leftLine.getLength() + rightLine.getLength()) / 2) * TRUE_GOAL_WIDTH / TRUE_GOAL_HEIGHT;
+		distanceToTower = (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / pixelWidth;
+		
+		angleOfElevation = Math.atan(TOWER_HEIGHT/distanceToTower);
+
+		distanceToGoal = distanceToTower*Math.cosh(angleOfElevation);
+		
+		System.out.println(distanceToTower + "    ,     " + Math.toDegrees(angleOfElevation));
+		System.out.println(distanceToGoal);
+		
+		return -1;
+
+	}
+
 	/**
 	 * Gets the distance from the goal to the robot
 	 * 
@@ -224,7 +239,7 @@ public class Goal {
 			return distanceToGoal;
 
 		double radAngle = Math.toRadians(FOV / 2);
-		double verticalDistance = getNormalizedHorizontalDistance();
+		double verticalDistance = getNormalizedVerticalDistance();
 
 		distanceToGoal = verticalDistance / Math.tan(radAngle);
 
