@@ -160,7 +160,7 @@ public class Goal {
 		double x2 = rightLine.getTopPointX();
 		double y2 = rightLine.getTopPointY();
 
-		return Math.sqrt(Math.pow(x1 + x2, 2) + Math.pow(y1 + y2, 2));
+		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 	}
 
 	public double getArea() {
