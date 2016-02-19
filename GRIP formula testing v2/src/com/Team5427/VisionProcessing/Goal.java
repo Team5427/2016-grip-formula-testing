@@ -4,6 +4,7 @@ import com.Team5427.res.Config;
 
 public class Goal {
 
+
 	private Line leftLine, centerLine, rightLine;
 
 	private double distanceToGoal = -1;
