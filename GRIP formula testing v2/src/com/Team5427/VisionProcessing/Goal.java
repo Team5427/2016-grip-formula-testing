@@ -19,7 +19,10 @@ public class Goal {
 	 * distance of the goal.
 	 */
 	public static double verticalFOV   = -1;
-	// public static double FOV = Main.CAMERA_FOV;
+	/**
+	 *
+	 */
+	public static final double STARTING_CAMERA_ANGLE = 20;							// Experimental value
 
 	public static final boolean ENABLE_FOV_CALIBRATION = true; // Set this to
 																// false if we
@@ -202,11 +205,12 @@ public class Goal {
 	 * @return
 	 */
 	public double getActualAngle(){
-		
+
+
+/*
 		double cameraStartAngle = -1;
 		return cameraStartAngle + ();
-		
-		
+*/
 	}
 
 	/* didn't work....
@@ -262,7 +266,7 @@ public class Goal {
 		if (distanceToGoal > 0)
 			return distanceToGoal;
 
-		double radAngle = Math.toRadians(FOV / 2);
+		double radAngle = Math.toRadians(horizontalFOV / 2);
 		double verticalDistance = getNormalizedVerticalDistance();
 
 		distanceToGoal = verticalDistance / Math.tan(radAngle);
@@ -318,7 +322,7 @@ public class Goal {
 		double halfResolution = VisionPanel.RESOLUTION.getWidth() / 2;
 		double fromCenter = centerLine.getMidpointX() - halfResolution;
 
-		return (FOV / 2 * fromCenter) / halfResolution;
+		return (horizontalFOV / 2 * fromCenter) / halfResolution;
 	}
 
 	/**
