@@ -1,5 +1,6 @@
 package com.Team5427.VisionProcessing;
 
+import com.Team5427.res.Config;
 import com.github.sarxos.webcam.Webcam;
 
 import com.github.sarxos.webcam.ds.ipcam.IpCamDevice;
@@ -53,7 +54,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 		// Creates a new webcam
 		try {
-//			initializeCamera();
+			// initializeCamera();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -116,7 +117,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	public void initializeCalibration() {
 		System.out.println("===FOV Calibration===");
 
-		if (Goal.ENABLE_FOV_CALIBRATION && Main.goals != null && Main.goals.size() == 1) {
+		if (Config.ENABLE_FOV_CALIBRATION && Main.goals != null && Main.goals.size() == 1) {
 			Goal g = Main.goals.get(0);
 
 			System.out.print("Do you want to calibrate the camera? (y,n): ");
@@ -153,9 +154,8 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 						+ " goals. Only 1 must visible in the camera for calibration.");
 			else if (Main.goals.size() == 0) {
 				System.out.println("There are no goals found.");
-			} else if (!Goal.ENABLE_FOV_CALIBRATION)
+			} else if (!Config.ENABLE_FOV_CALIBRATION)
 				System.out.println("FOV Calibration has been disabled.");
-
 			System.out.println("\nExiting calibration.");
 		}
 	}
@@ -173,9 +173,9 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		double verticalDistance = goal.getNormalizedVerticalDistance();
 
 		double FOV = Math.toDegrees(Math.atan(verticalDistance / distance));
-		Goal.horizontalFOV = 2 * FOV;
+		Config.horizontalFOV = 2 * FOV;
 
-		return Goal.horizontalFOV;
+		return Config.horizontalFOV;
 	}
 
 	public void run() {
@@ -276,7 +276,6 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 			String angleDegrees = String.format("%.2f", Main.goals.get(i).getAngleOfElevationInDegrees());
 			String horizontalAngle = String.format("%.2f", Main.goals.get(i).getHorizontalAngleInDegrees());
 
-		
 			bg.drawString("Distance: " + distance + "in.", x, y);
 			bg.drawString("Tower Distance: " + towerDistance + "in.", x, y += 12);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += 12);

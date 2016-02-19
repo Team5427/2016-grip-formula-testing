@@ -1,40 +1,8 @@
 package com.Team5427.VisionProcessing;
 
+import com.Team5427.res.Config;
+
 public class Goal {
-
-	// TODO remove this, for testing purposes only
-
-	public static final double MIN_VERTICAL_SLOPE = -5;
-	public static final double MAX_VERTICAL_SLOPE = 5;
-	public static final double MIN_HORIZONTAL_SLOPE = -1;
-	public static final double MAX_HORIZONTAL_SLOPE = 1;
-
-	/**
-	 * The FOV of the attached webcam. It is used in calculating the distance to
-	 * the goals.
-	 */
-	public static double FOV = 55.689320368051696;
-	// public static double FOV = Main.CAMERA_FOV;
-
-	public static final boolean ENABLE_FOV_CALIBRATION = true; // Set this to
-																// false if we
-																// don't want to
-																// calibrate the
-																// FOV
-
-	// Measurements are in inches
-	public static final double TRUE_GOAL_WIDTH = 20;
-	public static final double TRUE_GOAL_HEIGHT = 14;
-	/**
-	 * Distance from the carpet to bottom of the tape on the goal. This is the
-	 * distance from the carpet, to the very bottom of the goal's opening
-	 */
-	public static final double TOWER_HEIGHT = 85;
-	/**
-	 * Height of the camera on the robot which must be accounted for while
-	 * making calculations.
-	 */
-	public static final double ROBOT_HEIGHT = 0;
 
 	private Line leftLine, centerLine, rightLine;
 
@@ -181,50 +149,29 @@ public class Goal {
 	 */
 	public double getNormalizedVerticalDistance() {
 		double verticalAvg = (leftLine.getLength() + rightLine.getLength()) / 2;
-		double pixelWidth = verticalAvg * TRUE_GOAL_WIDTH / TRUE_GOAL_HEIGHT;
-		return (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / pixelWidth;
+		double pixelWidth = verticalAvg * Config.TRUE_GOAL_WIDTH / Config.TRUE_GOAL_HEIGHT;
+		return (VisionFrame.width / 2) * Config.TRUE_GOAL_WIDTH / pixelWidth;
 	}
 
 	// TODO: Code this and add comments
 
 	public double getNormalizedHorizontalDistance() {
 		double horizontalAvg = (centerLine.getLength() + getTopLength()) / 2;
-		return (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / horizontalAvg;
+		return (VisionFrame.width / 2) * Config.TRUE_GOAL_WIDTH / horizontalAvg;
 	}
-	
+
 	/**
-	 * test method to determine the angle of the goal without needing the distance or anything, relying solely on the camera's FOV
+	 * test method to determine the angle of the goal without needing the
+	 * distance or anything, relying solely on the camera's FOV
+	 * 
 	 * @return
 	 */
-	public double getActualAngle(){
-		
+	public double getActualAngle() {
+
 		double cameraStartAngle = -1;
-		return cameraStartAngle + ();
-		
-		
-	}
-
-	/* didn't work....
-	public double getRealDistance() {
-		double pixelWidth = ((leftLine.getLength() + rightLine.getLength()) / 2) * TRUE_GOAL_WIDTH / TRUE_GOAL_HEIGHT;
-		// distanceToTower = (VisionFrame.width / 2) * TRUE_GOAL_WIDTH /
-		// pixelWidth;
-
-		// distanceToGoal = distanceToTower*Math.cosh(angleOfElevation);
-
-		distanceToTower = getNormalizedVerticalDistance() / Math.tan(Math.toRadians(FOV / 2));
-
-		angleOfElevation = Math.atan(TOWER_HEIGHT / distanceToTower);
-
-		distanceToGoal = distanceToTower / Math.cos(angleOfElevation);
-
-	//	System.out.println(distanceToTower + "    ,     " + Math.toDegrees(angleOfElevation));
-		System.out.println(distanceToGoal);
-
-		return -1;
+		return cameraStartAngle + (Config.verticalFOV / (VisionFrame.height - centerLine.getMidpointY()));
 
 	}
-	*/
 
 	/**
 	 * Gets the distance from the goal to the robot
@@ -257,7 +204,7 @@ public class Goal {
 		if (distanceToGoal > 0)
 			return distanceToGoal;
 
-		double radAngle = Math.toRadians(FOV / 2);
+		double radAngle = Math.toRadians(Config.horizontalFOV / 2);
 		double verticalDistance = getNormalizedVerticalDistance();
 
 		distanceToGoal = verticalDistance / Math.tan(radAngle);
@@ -274,7 +221,7 @@ public class Goal {
 		if (distanceToTower > 0)
 			return distanceToTower;
 
-		distanceToTower = (TOWER_HEIGHT - ROBOT_HEIGHT) / Math.tan(getAngleOfElevationInRadians());
+		distanceToTower = (Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT) / Math.tan(getAngleOfElevationInRadians());
 
 		return distanceToTower;
 	}
@@ -287,7 +234,7 @@ public class Goal {
 		if (angleOfElevation > 0)
 			return angleOfElevation;
 
-		angleOfElevation = Math.asin((TOWER_HEIGHT - ROBOT_HEIGHT) / getDistanceToRobot());
+		angleOfElevation = Math.asin((Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT) / getDistanceToRobot());
 		// TODO that used to be getDistanceToGoal,not sure if changing it was
 		// good
 		return angleOfElevation;
@@ -313,7 +260,7 @@ public class Goal {
 		double halfResolution = VisionPanel.RESOLUTION.getWidth() / 2;
 		double fromCenter = centerLine.getMidpointX() - halfResolution;
 
-		return (FOV / 2 * fromCenter) / halfResolution;
+		return (Config.horizontalFOV / 2 * fromCenter) / halfResolution;
 	}
 
 	/**
