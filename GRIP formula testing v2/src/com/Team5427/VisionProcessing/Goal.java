@@ -10,10 +10,15 @@ public class Goal {
 	public static final double MAX_HORIZONTAL_SLOPE = 1;
 
 	/**
-	 * The FOV of the attached webcam. It is used in calculating the distance to
-	 * the goals.
+	 * The FOV of the attached webcam horizontally. It is used in calculating the
+	 * distance to the goals.
 	 */
-	public static double FOV = 55.689320368051696;
+	public static double horizontalFOV = 55.689320368051696;
+	/**
+	 * The FOV of the attatched webcam vertically. It is used in calculating the
+	 * distance of the goal.
+	 */
+	public static double verticalFOV   = -1;
 	// public static double FOV = Main.CAMERA_FOV;
 
 	public static final boolean ENABLE_FOV_CALIBRATION = true; // Set this to

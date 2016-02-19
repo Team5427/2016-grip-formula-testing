@@ -24,7 +24,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	private int width, height;
 
 	private BufferedImage buffer;
-	private Webcam webcam;;
+	private Webcam webcam;
 	private BufferedImage cameraImg;
 
 	Scanner scanner;
@@ -64,9 +64,9 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	/**
 	 * Initializes the camera for use
 	 */
-
 	static {
 		Webcam.setDriver(new IpCamDriver());
+		calculateVerticalFOV();
 	}
 
 	public void initializeCamera() throws MalformedURLException {
@@ -169,13 +169,21 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	 *            Actual distance between goal to robot
 	 * @return
 	 */
-	public double calibrateFOV(Goal goal, double distance) {
+	public static double calibrateFOV(Goal goal, double distance) {
 		double verticalDistance = goal.getNormalizedVerticalDistance();
 
 		double FOV = Math.toDegrees(Math.atan(verticalDistance / distance));
 		Goal.horizontalFOV = 2 * FOV;
+		
+		calculateVerticalFOV();
 
 		return Goal.horizontalFOV;
+	}
+
+	public static void calculateVerticalFOV() {
+		double foo = (RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Goal.horizontalFOV/2));
+
+		Goal.verticalFOV = Math.toDegrees(RESOLUTION.getHeight()/2 / foo) * 2;
 	}
 
 	public void run() {
