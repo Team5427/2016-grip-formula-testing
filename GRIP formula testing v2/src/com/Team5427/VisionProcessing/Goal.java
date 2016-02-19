@@ -13,7 +13,7 @@ public class Goal {
 	 * The FOV of the attached webcam. It is used in calculating the distance to
 	 * the goals.
 	 */
-	public static double FOV = 58.157320136644095;
+	public static double FOV = 55.689320368051696;
 	// public static double FOV = Main.CAMERA_FOV;
 
 	public static final boolean ENABLE_FOV_CALIBRATION = true; // Set this to
@@ -191,21 +191,40 @@ public class Goal {
 		double horizontalAvg = (centerLine.getLength() + getTopLength()) / 2;
 		return (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / horizontalAvg;
 	}
+	
+	/**
+	 * test method to determine the angle of the goal without needing the distance or anything, relying solely on the camera's FOV
+	 * @return
+	 */
+	public double getActualAngle(){
+		
+		double cameraStartAngle = -1;
+		return cameraStartAngle + ();
+		
+		
+	}
 
+	/* didn't work....
 	public double getRealDistance() {
 		double pixelWidth = ((leftLine.getLength() + rightLine.getLength()) / 2) * TRUE_GOAL_WIDTH / TRUE_GOAL_HEIGHT;
-		distanceToTower = (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / pixelWidth;
-		
-		angleOfElevation = Math.atan(TOWER_HEIGHT/distanceToTower);
+		// distanceToTower = (VisionFrame.width / 2) * TRUE_GOAL_WIDTH /
+		// pixelWidth;
 
-		distanceToGoal = distanceToTower*Math.cosh(angleOfElevation);
-		
-		System.out.println(distanceToTower + "    ,     " + Math.toDegrees(angleOfElevation));
+		// distanceToGoal = distanceToTower*Math.cosh(angleOfElevation);
+
+		distanceToTower = getNormalizedVerticalDistance() / Math.tan(Math.toRadians(FOV / 2));
+
+		angleOfElevation = Math.atan(TOWER_HEIGHT / distanceToTower);
+
+		distanceToGoal = distanceToTower / Math.cos(angleOfElevation);
+
+	//	System.out.println(distanceToTower + "    ,     " + Math.toDegrees(angleOfElevation));
 		System.out.println(distanceToGoal);
-		
+
 		return -1;
 
 	}
+	*/
 
 	/**
 	 * Gets the distance from the goal to the robot
