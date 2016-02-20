@@ -280,13 +280,11 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 			bg.setColor(Color.BLACK);
 
-			String distance = String.format("%.2f", Main.goals.get(i).getDistanceToGoal());
-			String towerDistance = String.format("%.2f", Main.goals.get(i).getDistanceToTower());
+			String distance = String.format("%.2f", Main.goals.get(i).getGoalDistance());
 			String angleDegrees = String.format("%.2f", Main.goals.get(i).getAngleOfElevation());
 			String horizontalAngle = String.format("%.2f", Main.goals.get(i).getHorizontalAngle());
 
 			bg.drawString("Distance: " + distance + "in.", x, y);
-			bg.drawString("Tower Distance: " + towerDistance + "in.", x, y += 12);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += 12);
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += 12);
 
