@@ -206,10 +206,10 @@ public class Goal {
 
 
 	public double getActualAngle() {
+		
 
 		double cameraStartAngle = -1;
 		return cameraStartAngle + (Config.verticalFOV / (VisionFrame.height - centerLine.getMidpointY()));
-
 	}
 
 	/**
