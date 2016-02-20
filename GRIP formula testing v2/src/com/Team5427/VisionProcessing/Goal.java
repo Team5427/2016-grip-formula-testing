@@ -76,7 +76,8 @@ public class Goal {
 	 * Calculates the angle of elevation from the robot to the top of the goal.
 	 * It utilizes the vertical FOV in order to determine the angle.
 	 * 
-	 * @return the angle from the camera mounted on the robot, to the top of the goal.
+	 * @return the angle from the camera mounted on the robot, to the top of the
+	 *         goal.
 	 */
 	public double getAngleOfElevation() {
 		return Math
@@ -133,7 +134,8 @@ public class Goal {
 	 *         the goal is to the right from the center of the robot.
 	 */
 	public double getHorizontalAngle() {
-		return Math.tanh((centerLine.getMidpointX()-VisionPanel.RESOLUTION.getWidth()/2)/VisionPanel.pixelsToGoal);
+		return Math
+				.tanh((centerLine.getMidpointX() - VisionPanel.RESOLUTION.getWidth() / 2) / VisionPanel.pixelsToGoal);
 	}
 
 	public Line getCenterLine() {
@@ -193,14 +195,16 @@ public class Goal {
 		return (VisionFrame.width / 2) * Config.TRUE_GOAL_WIDTH / horizontalAvg;
 	}
 
-
 	/**
-	 * Returns the distance between the robot to the center of the goal in inches
-	 * @return Returns the distance between the robot to the center of the goal in inches
-     */
+	 * Returns the distance between the robot to the center of the goal in
+	 * inches
+	 * 
+	 * @return Returns the distance between the robot to the center of the goal
+	 *         in inches
+	 */
 	public double getGoalDistance() {
-		return (Config.TRUE_GOAL_HEIGHT + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT) /
-				Math.sin(getAngleOfElevation() + Math.toRadians(Config.CAMERA_ANGLE));
+		return (Config.TRUE_GOAL_HEIGHT + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT)
+				/ Math.sin(getAngleOfElevation() + Math.toRadians(Config.CAMERA_ANGLE));
 	}
 
 	/**
