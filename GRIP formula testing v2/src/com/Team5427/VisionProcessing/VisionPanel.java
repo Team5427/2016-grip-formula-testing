@@ -21,6 +21,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 	public static final String IP_CAMERA_URL = "http://10.54.27.11/mjpg/video.mjpg";
 	public static final Dimension RESOLUTION = new Dimension(640, 480);
+	public static double pixelsToGoal;
 
 	private int width, height;
 
@@ -181,9 +182,9 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	}
 
 	public static void calculateVerticalFOV() {
-		double foo = (RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV / 2));
+		pixelsToGoal = (RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV / 2));
 
-		Config.verticalFOV = Math.toDegrees(RESOLUTION.getHeight() / 2 / foo) * 2;
+		Config.verticalFOV = Math.toDegrees(RESOLUTION.getHeight() / 2 / pixelsToGoal) * 2;
 	}
 
 	public void run() {

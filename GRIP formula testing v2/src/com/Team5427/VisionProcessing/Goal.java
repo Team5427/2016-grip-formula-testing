@@ -57,7 +57,7 @@ public class Goal {
 
 		}
 
-		System.out.println(getActualAngle());
+		System.out.println(getAngleOfELevation());
 		if (!setCenter)
 			goalCompleted = false;
 		else
@@ -108,18 +108,10 @@ public class Goal {
 		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 	}
 
-	public double getArea() {
-		return area;
-	}
-
-	public boolean isComplete() {
-		return goalCompleted;
-	}
-
 	/**
-	 * Calculates the width in inches from the center of the camera to the
-	 * horizontal edge.* This is used to calculate the distance from the goal to
-	 * the robot and to calibrate the FOV.
+	 * @deprecated Calculates the width in inches from the center of the camera
+	 *             to the horizontal edge.* This is used to calculate the
+	 *             distance from the goal to the robot and to calibrate the FOV.
 	 *
 	 * @return vertical distance in inches from the center to the horizontal
 	 *         edge of the camera. edge of the camera.
@@ -132,6 +124,10 @@ public class Goal {
 
 	// TODO: Code this and add comments
 
+	/**
+	 * @deprecated
+	 * @return
+	 */
 	public double getNormalizedHorizontalDistance() {
 		double horizontalAvg = (centerLine.getLength() + getTopLength()) / 2;
 		return (VisionFrame.width / 2) * Config.TRUE_GOAL_WIDTH / horizontalAvg;
@@ -143,24 +139,17 @@ public class Goal {
 	 * 
 	 * @return
 	 */
-
-	public double getActualAngle() {
-<<<<<<< HEAD
-=======
-
->>>>>>> 4103d32f0c777b509bacd8c02ec5f0408772a873
-
-		double cameraStartAngle = 0;
-		System.out.println(Math.toDegrees(Math.sinh(VisionFrame.height - centerLine.getMidpointY())) + "   ,   "
-				+ Math.toDegrees(Math.tanh((VisionPanel.RESOLUTION.getHeight() / 2 - centerLine.getMidpointY())
-						/ (VisionPanel.RESOLUTION.getWidth() / 2)
-						/ Math.tan(Math.toRadians(Config.horizontalFOV / 2)))));
-		return cameraStartAngle + (Config.verticalFOV / (VisionFrame.height - centerLine.getMidpointY()));
+	public double getAngleOfELevation() {
+		return Math
+				.tanh((VisionPanel.RESOLUTION.getHeight() / 2
+						- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2)
+						/ (VisionPanel.RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV / 2)))
+				- Config.CAMERA_START_ANGLE;
 
 	}
 
 	/**
-	 * Gets the distance from the goal to the robot
+	 * @deprecated Gets the distance from the goal to the robot
 	 * 
 	 * @return distance from robot to goal in inches
 	 */
@@ -169,7 +158,7 @@ public class Goal {
 	}
 
 	/**
-	 * Returns the distance from the goal to the robot
+	 * @deprecated Returns the distance from the goal to the robot
 	 *
 	 * @return the distance from goal to the robot
 	 */
@@ -187,7 +176,7 @@ public class Goal {
 	}
 
 	/**
-	 * Gets the horizontal distance to the tower
+	 * @deprecated Gets the horizontal distance to the tower
 	 * 
 	 * @return distance from robot to tower
 	 */
@@ -201,6 +190,7 @@ public class Goal {
 	}
 
 	/**
+	 * @deprecated
 	 * @return The angle of the robot to the goal in radians
 	 */
 	public double getAngleOfElevationInRadians() {
@@ -215,15 +205,17 @@ public class Goal {
 	}
 
 	/**
+	 * @deprecated
 	 * @return the angle of the robot to the goal in degrees
 	 */
+
 	public double getAngleOfElevationInDegrees() {
 		return Math.toDegrees(getAngleOfElevationInRadians());
 	}
 
 	/**
-	 * TODO: Fix this, probably not working right now Gets the angle the robot
-	 * has to aim in the horizontal axis in degrees
+	 * @deprecated TODO: Fix this, probably not working right now Gets the angle
+	 *             the robot has to aim in the horizontal axis in degrees
 	 *
 	 * @return horizontal angle in degrees from the center of the robot to the
 	 *         goal. A negative angle represents that the goal is to the left
@@ -271,6 +263,14 @@ public class Goal {
 
 	public void setRightLine(Line rightLine) {
 		this.rightLine = rightLine;
+	}
+
+	public double getArea() {
+		return area;
+	}
+
+	public boolean isComplete() {
+		return goalCompleted;
 	}
 
 }
