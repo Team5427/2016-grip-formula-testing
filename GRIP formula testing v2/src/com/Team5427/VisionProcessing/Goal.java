@@ -145,6 +145,10 @@ public class Goal {
 	 */
 
 	public double getActualAngle() {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4103d32f0c777b509bacd8c02ec5f0408772a873
 
 		double cameraStartAngle = 0;
 		System.out.println(Math.toDegrees(Math.sinh(VisionFrame.height - centerLine.getMidpointY())) + "   ,   "
