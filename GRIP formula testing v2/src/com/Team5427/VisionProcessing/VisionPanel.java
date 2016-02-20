@@ -54,7 +54,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 		// Creates a new webcam
 		try {
-			// initializeCamera();
+			initializeCamera();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -163,8 +163,10 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	/**
 	 * Calibrates the FOV based on goal and distance
 	 * 
-	 * @param goal Reference goal
-	 * @param distance Actual distance between goal to robot
+	 * @param goal
+	 *            Reference goal
+	 * @param distance
+	 *            Actual distance between goal to robot
 	 * @return calibrated FOV
 	 */
 	public static double calibrateFOV(Goal goal, double distance) {
@@ -182,7 +184,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		double foo = (RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV / 2));
 
 		Config.verticalFOV = Math.toDegrees(RESOLUTION.getHeight() / 2 / foo) * 2;
-    }
+	}
 
 	public void run() {
 		// calculates how many miliseconds to wait for the next update

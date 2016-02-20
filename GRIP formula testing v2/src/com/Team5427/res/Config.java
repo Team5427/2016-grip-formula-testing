@@ -32,7 +32,8 @@ public class Config {
 	/**
 	 * Horizontal FOV of the attached Camera
 	 */
-	public static double horizontalFOV = 55.689320368051696;
+//	public static double horizontalFOV = 55.689320368051696;
+	public static double horizontalFOV = 67;
 	/**
 	 * Vertical FOV of the attached Camera
 	 */

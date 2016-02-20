@@ -4,41 +4,6 @@ import com.Team5427.res.Config;
 
 public class Goal {
 
-	/**
-	 * The FOV of the attached webcam horizontally. It is used in calculating the
-	 * distance to the goals.
-	 */
-	public static double horizontalFOV = 55.689320368051696;
-	/**
-	 * The FOV of the attatched webcam vertically. It is used in calculating the
-	 * distance of the goal.
-	 */
-	public static double verticalFOV   = -1;
-	/**
-	 * Angle of the camera if it's pivoted up
-	 */
-	public static final double STARTING_CAMERA_ANGLE = 20;							// Experimental value
-
-	public static final boolean ENABLE_FOV_CALIBRATION = true; // Set this to
-																// false if we
-																// don't want to
-																// calibrate the
-																// FOV
-
-	// Measurements are in inches
-	public static final double TRUE_GOAL_WIDTH = 20;
-	public static final double TRUE_GOAL_HEIGHT = 14;
-	/**
-	 * Distance from the carpet to bottom of the tape on the goal. This is the
-	 * distance from the carpet, to the very bottom of the goal's opening
-	 */
-	public static final double TOWER_HEIGHT = 85;
-	/**
-	 * Height of the camera on the robot which must be accounted for while
-	 * making calculations.
-	 */
-	public static final double ROBOT_HEIGHT = 0;
-
 	private Line leftLine, centerLine, rightLine;
 
 	private double distanceToGoal = -1;
@@ -92,6 +57,7 @@ public class Goal {
 
 		}
 
+		System.out.println(getActualAngle());
 		if (!setCenter)
 			goalCompleted = false;
 		else
@@ -126,30 +92,6 @@ public class Goal {
 
 		}
 		return false;
-	}
-
-	public Line getCenterLine() {
-		return centerLine;
-	}
-
-	public void setCenterLine(Line centerLine) {
-		this.centerLine = centerLine;
-	}
-
-	public Line getLeftLine() {
-		return leftLine;
-	}
-
-	public void setLeftLine(Line leftLine) {
-		this.leftLine = leftLine;
-	}
-
-	public Line getRightLine() {
-		return rightLine;
-	}
-
-	public void setRightLine(Line rightLine) {
-		this.rightLine = rightLine;
 	}
 
 	/**
@@ -202,14 +144,15 @@ public class Goal {
 	 * @return
 	 */
 
-
-
-
 	public double getActualAngle() {
-		
 
-		double cameraStartAngle = -1;
+		double cameraStartAngle = 0;
+		System.out.println(Math.toDegrees(Math.sinh(VisionFrame.height - centerLine.getMidpointY())) + "   ,   "
+				+ Math.toDegrees(Math.tanh((VisionPanel.RESOLUTION.getHeight() / 2 - centerLine.getMidpointY())
+						/ (VisionPanel.RESOLUTION.getWidth() / 2)
+						/ Math.tan(Math.toRadians(Config.horizontalFOV / 2)))));
 		return cameraStartAngle + (Config.verticalFOV / (VisionFrame.height - centerLine.getMidpointY()));
+
 	}
 
 	/**
@@ -222,18 +165,6 @@ public class Goal {
 	}
 
 	/**
-	 * TODO: Needs testing, not sure if this works yet Determines if current
-	 * goal is a valid for shooting
-	 */
-
-	public void determineValid() {
-		if (leftLine.getMidpointY() > centerLine.getMidpointY() || rightLine.getMidpointY() < centerLine.getMidpointY())
-			return;
-
-		isValid = true;
-	}
-
-	/**
 	 * Returns the distance from the goal to the robot
 	 *
 	 * @return the distance from goal to the robot
@@ -242,7 +173,6 @@ public class Goal {
 
 		if (distanceToGoal > 0)
 			return distanceToGoal;
-
 
 		double radAngle = Math.toRadians(Config.horizontalFOV / 2);
 		double verticalDistance = getNormalizedVerticalDistance();
@@ -300,7 +230,6 @@ public class Goal {
 		double halfResolution = VisionPanel.RESOLUTION.getWidth() / 2;
 		double fromCenter = centerLine.getMidpointX() - halfResolution;
 
-
 		return (Config.horizontalFOV / 2 * fromCenter) / halfResolution;
 	}
 
@@ -314,6 +243,30 @@ public class Goal {
 	 */
 	public double getHorizontalAngleInRadians() {
 		return Math.toRadians(getAngleOfElevationInDegrees());
+	}
+
+	public Line getCenterLine() {
+		return centerLine;
+	}
+
+	public void setCenterLine(Line centerLine) {
+		this.centerLine = centerLine;
+	}
+
+	public Line getLeftLine() {
+		return leftLine;
+	}
+
+	public void setLeftLine(Line leftLine) {
+		this.leftLine = leftLine;
+	}
+
+	public Line getRightLine() {
+		return rightLine;
+	}
+
+	public void setRightLine(Line rightLine) {
+		this.rightLine = rightLine;
 	}
 
 }
