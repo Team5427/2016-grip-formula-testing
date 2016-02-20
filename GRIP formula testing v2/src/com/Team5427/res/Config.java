@@ -60,5 +60,8 @@ public class Config {
 	 * attached to the robot.
 	 */
 	public static final double ROBOT_HEIGHT = 0;
-
+	/**
+	 * The angle of the camera in degrees
+	 */
+	public static final double CAMERA_ANGLE = 0;
 }

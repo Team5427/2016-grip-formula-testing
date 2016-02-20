@@ -58,6 +58,7 @@ public class Goal {
 		}
 
 		// System.out.println(getAngleOfELevation());
+
 		if (!setCenter)
 			goalCompleted = false;
 		else
@@ -190,6 +191,16 @@ public class Goal {
 	public double getNormalizedHorizontalDistance() {
 		double horizontalAvg = (centerLine.getLength() + getTopLength()) / 2;
 		return (VisionFrame.width / 2) * Config.TRUE_GOAL_WIDTH / horizontalAvg;
+	}
+
+
+	/**
+	 * Returns the distance between the robot to the center of the goal in inches
+	 * @return Returns the distance between the robot to the center of the goal in inches
+     */
+	public double getGoalDistance() {
+		return (Config.TRUE_GOAL_HEIGHT + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT) /
+				Math.sin(getAngleOfElevation() + Math.toRadians(Config.CAMERA_ANGLE));
 	}
 
 	/**
