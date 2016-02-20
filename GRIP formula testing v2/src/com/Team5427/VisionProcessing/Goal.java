@@ -57,7 +57,7 @@ public class Goal {
 
 		}
 
-		System.out.println(getAngleOfELevation());
+		System.out.println(getAngleOfElevation());
 		if (!setCenter)
 			goalCompleted = false;
 		else
@@ -139,13 +139,22 @@ public class Goal {
 	 * 
 	 * @return
 	 */
-	public double getAngleOfELevation() {
+	public double getAngleOfElevation() {
 		return Math
 				.tanh((VisionPanel.RESOLUTION.getHeight() / 2
 						- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2)
 						/ (VisionPanel.RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV / 2)))
 				- Config.CAMERA_START_ANGLE;
 
+	}
+
+	/**
+	 * Returns the distance between the robot to the center of the goal in inches
+	 * @return Returns the distance between the robot to the center of the goal in inches
+     */
+	public double getGoalDistance() {
+		return (Config.TRUE_GOAL_HEIGHT + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT) /
+				Math.sin(getAngleOfElevation() + Math.toRadians(Config.CAMERA_ANGLE));
 	}
 
 	/**
