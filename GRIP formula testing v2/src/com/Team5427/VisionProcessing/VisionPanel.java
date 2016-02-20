@@ -161,8 +161,8 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		}
 	}
 
-	/**@deprecated
-	 * Calibrates the FOV based on goal and distance
+	/**
+	 * @deprecated Calibrates the FOV based on goal and distance
 	 * 
 	 * @param goal
 	 *            Reference goal
@@ -185,6 +185,8 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		pixelsToGoal = (RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV / 2));
 
 		Config.verticalFOV = Math.toDegrees(RESOLUTION.getHeight() / 2 / pixelsToGoal) * 2;
+		System.out.println(Config.verticalFOV);
+
 	}
 
 	public void run() {
@@ -281,12 +283,22 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 			bg.setColor(Color.BLACK);
 
 			String distance = String.format("%.2f", Main.goals.get(i).getGoalDistance());
-			String angleDegrees = String.format("%.2f", Main.goals.get(i).getAngleOfElevation());
-			String horizontalAngle = String.format("%.2f", Main.goals.get(i).getHorizontalAngle());
+			String angleDegrees = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getAngleOfElevation()));
+			String horizontalAngle = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getHorizontalAngle()));
+
+			System.out.println("Distance: " + distance + "in." + "    Elevation Angle: " + angleDegrees + "°"
+					+ "Horizontal Angle: " + horizontalAngle + "°");
 
 			bg.drawString("Distance: " + distance + "in.", x, y);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += 12);
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += 12);
+
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 

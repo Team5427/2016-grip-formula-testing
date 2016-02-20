@@ -83,7 +83,7 @@ public class Goal {
 		return Math
 				.tanh((VisionPanel.RESOLUTION.getHeight() / 2
 						- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2)
-						/ (VisionPanel.RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV / 2)))
+						/ VisionPanel.pixelsToGoal)
 				- Config.CAMERA_START_ANGLE;
 
 	}
@@ -203,8 +203,8 @@ public class Goal {
 	 *         in inches
 	 */
 	public double getGoalDistance() {
-		return (Config.TRUE_GOAL_HEIGHT + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT) /
-				Math.sin(getAngleOfElevation() + Math.toRadians(Config.CAMERA_START_ANGLE));
+		return (Config.TRUE_GOAL_HEIGHT + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT)
+				/ Math.sin(getAngleOfElevation() + Math.toRadians(Config.CAMERA_START_ANGLE));
 	}
 
 	/**
