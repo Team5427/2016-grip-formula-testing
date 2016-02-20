@@ -11,7 +11,7 @@ public class Goal {
 	private double angleOfElevation = -1;
 	private double area = -1;
 
-	private boolean isValid = false, goalCompleted = false;
+	private boolean goalCompleted = false;
 
 	/**
 	 * Receives an Array of three lines, then determines which of the three
@@ -57,7 +57,7 @@ public class Goal {
 
 		}
 
-		System.out.println(getAngleOfELevation());
+		// System.out.println(getAngleOfELevation());
 		if (!setCenter)
 			goalCompleted = false;
 		else
@@ -65,9 +65,24 @@ public class Goal {
 
 		if ((goalCompleted && (rightLine.getLargestX() - leftLine.getLargestX()) > centerLine.getLength() / 1.5)) {
 			area = leftLine.getLength() * centerLine.getLength();
-			getDistanceToTower();
+			getGoalDistance();
 		} else
 			goalCompleted = false;
+
+	}
+
+	/**
+	 * Calculates the angle of elevation from the robot to the top of the goal.
+	 * It utilizes the vertical FOV in order to determine the angle.
+	 * 
+	 * @return the angle from the camera mounted on the robot, to the top of the goal.
+	 */
+	public double getAngleOfElevation() {
+		return Math
+				.tanh((VisionPanel.RESOLUTION.getHeight() / 2
+						- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2)
+						/ (VisionPanel.RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV / 2)))
+				- Config.CAMERA_START_ANGLE;
 
 	}
 
@@ -109,6 +124,50 @@ public class Goal {
 	}
 
 	/**
+	 * Gets the angle the robot has to aim in the horizontal axis in radians
+	 *
+	 * @return horizontal angle in radians from the center of the robot to the
+	 *         goal. A negative angle represents that the goal is to the left
+	 *         from the center of the robot. A positive angle represents that
+	 *         the goal is to the right from the center of the robot.
+	 */
+	public double getHorizontalAngle() {
+		return Math.tanh((centerLine.getMidpointX()-VisionPanel.RESOLUTION.getWidth()/2)/VisionPanel.pixelsToGoal);
+	}
+
+	public Line getCenterLine() {
+		return centerLine;
+	}
+
+	public void setCenterLine(Line centerLine) {
+		this.centerLine = centerLine;
+	}
+
+	public Line getLeftLine() {
+		return leftLine;
+	}
+
+	public void setLeftLine(Line leftLine) {
+		this.leftLine = leftLine;
+	}
+
+	public Line getRightLine() {
+		return rightLine;
+	}
+
+	public void setRightLine(Line rightLine) {
+		this.rightLine = rightLine;
+	}
+
+	public double getArea() {
+		return area;
+	}
+
+	public boolean isComplete() {
+		return goalCompleted;
+	}
+
+	/**
 	 * @deprecated Calculates the width in inches from the center of the camera
 	 *             to the horizontal edge.* This is used to calculate the
 	 *             distance from the goal to the robot and to calibrate the FOV.
@@ -131,21 +190,6 @@ public class Goal {
 	public double getNormalizedHorizontalDistance() {
 		double horizontalAvg = (centerLine.getLength() + getTopLength()) / 2;
 		return (VisionFrame.width / 2) * Config.TRUE_GOAL_WIDTH / horizontalAvg;
-	}
-
-	/**
-	 * test method to determine the angle of the goal without needing the
-	 * distance or anything, relying solely on the camera's FOV
-	 * 
-	 * @return
-	 */
-	public double getAngleOfELevation() {
-		return Math
-				.tanh((VisionPanel.RESOLUTION.getHeight() / 2
-						- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2)
-						/ (VisionPanel.RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV / 2)))
-				- Config.CAMERA_START_ANGLE;
-
 	}
 
 	/**
@@ -227,50 +271,6 @@ public class Goal {
 		double fromCenter = centerLine.getMidpointX() - halfResolution;
 
 		return (Config.horizontalFOV / 2 * fromCenter) / halfResolution;
-	}
-
-	/**
-	 * Gets the angle the robot has to aim in the horizontal axis in radians
-	 *
-	 * @return horizontal angle in radians from the center of the robot to the
-	 *         goal. A negative angle represents that the goal is to the left
-	 *         from the center of the robot. A positive angle represents that
-	 *         the goal is to the right from the center of the robot.
-	 */
-	public double getHorizontalAngleInRadians() {
-		return Math.toRadians(getAngleOfElevationInDegrees());
-	}
-
-	public Line getCenterLine() {
-		return centerLine;
-	}
-
-	public void setCenterLine(Line centerLine) {
-		this.centerLine = centerLine;
-	}
-
-	public Line getLeftLine() {
-		return leftLine;
-	}
-
-	public void setLeftLine(Line leftLine) {
-		this.leftLine = leftLine;
-	}
-
-	public Line getRightLine() {
-		return rightLine;
-	}
-
-	public void setRightLine(Line rightLine) {
-		this.rightLine = rightLine;
-	}
-
-	public double getArea() {
-		return area;
-	}
-
-	public boolean isComplete() {
-		return goalCompleted;
 	}
 
 }

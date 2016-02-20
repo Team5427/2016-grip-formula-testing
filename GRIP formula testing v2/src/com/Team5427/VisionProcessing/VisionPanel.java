@@ -161,7 +161,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		}
 	}
 
-	/**
+	/**@deprecated
 	 * Calibrates the FOV based on goal and distance
 	 * 
 	 * @param goal
@@ -282,8 +282,8 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 			String distance = String.format("%.2f", Main.goals.get(i).getDistanceToGoal());
 			String towerDistance = String.format("%.2f", Main.goals.get(i).getDistanceToTower());
-			String angleDegrees = String.format("%.2f", Main.goals.get(i).getAngleOfElevationInDegrees());
-			String horizontalAngle = String.format("%.2f", Main.goals.get(i).getHorizontalAngleInDegrees());
+			String angleDegrees = String.format("%.2f", Main.goals.get(i).getAngleOfElevation());
+			String horizontalAngle = String.format("%.2f", Main.goals.get(i).getHorizontalAngle());
 
 			bg.drawString("Distance: " + distance + "in.", x, y);
 			bg.drawString("Tower Distance: " + towerDistance + "in.", x, y += 12);
