@@ -54,14 +54,11 @@ public class Config {
 	 * Elevation of the goal from the bottom of the reflective tape to the
 	 * carpet.
 	 */
-	public static final double TOWER_HEIGHT = 85;
+//	public static final double TOWER_HEIGHT = 85;
+	public static final double TOWER_HEIGHT = 75.5;
 	/**
 	 * Elevation of the camera from the carpet, at the point where it is
 	 * attached to the robot.
 	 */
-	public static final double ROBOT_HEIGHT = 0;
-	/**
-	 * The angle of the camera in degrees
-	 */
-	public static final double CAMERA_ANGLE = 0;
+	public static final double ROBOT_HEIGHT = 18.5;
 }

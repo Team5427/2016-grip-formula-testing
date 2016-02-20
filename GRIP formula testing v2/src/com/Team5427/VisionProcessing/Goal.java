@@ -200,7 +200,7 @@ public class Goal {
      */
 	public double getGoalDistance() {
 		return (Config.TRUE_GOAL_HEIGHT + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT) /
-				Math.sin(getAngleOfElevation() + Math.toRadians(Config.CAMERA_ANGLE));
+				Math.sin(getAngleOfElevation() + Math.toRadians(Config.CAMERA_START_ANGLE));
 	}
 
 	/**
