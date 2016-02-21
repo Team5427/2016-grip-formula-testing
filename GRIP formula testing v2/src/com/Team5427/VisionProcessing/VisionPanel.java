@@ -55,7 +55,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 		// Creates a new webcam
 		try {
-//			initializeCamera();
+			initializeCamera();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -135,12 +135,14 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 			if (input == 'y') {
 
-				System.out.print("Enter the distance from the camera to the goal: ");
-				double distance = scanner.nextDouble();
+				System.out.print(
+						"Enter the height of the center of the goal, the distance to the base of the tower, and the distance to the center of the goal.");
 
-				double FOV = calibrateFOV(g, distance);
+				calibrateEverything(scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble());
 
-				System.out.println("The new FOV is: " + FOV);
+				// double FOV = calibrateFOV(g, distance);
+
+				// System.out.println("The new FOV is: " + FOV);
 
 			} else
 				System.out.println("\nExiting calibration.");
@@ -159,6 +161,14 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 				System.out.println("FOV Calibration has been disabled.");
 			System.out.println("\nExiting calibration.");
 		}
+	}
+
+	// TODO possibly finish later
+	public static double calibrateEverything(double goalHeight, double distanceToTower, double distanceToGoal) {
+
+		double angleOfElevation = Math.atan(goalHeight / distanceToTower);
+
+		return -1;
 	}
 
 	/**
@@ -287,7 +297,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 			String horizontalAngle = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getHorizontalAngle()));
 
 			System.out.println("Distance: " + distance + "in." + "    Elevation Angle: " + angleDegrees + "°"
-					+ "Horizontal Angle: " + horizontalAngle + "°");
+					+ "     Horizontal Angle: " + horizontalAngle + "°");
 
 			bg.drawString("Distance: " + distance + "in.", x, y);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += 12);

@@ -41,7 +41,7 @@ public class Config {
 	/**
 	 * Angle at which the camera is mounted on the robot, in degrees.
 	 */
-	public static final double CAMERA_START_ANGLE = 0;
+	public static final double CAMERA_START_ANGLE = 14.25;
 	/**
 	 * Actual width of the goal.
 	 */
@@ -55,7 +55,7 @@ public class Config {
 	 * carpet.
 	 */
 //	public static final double TOWER_HEIGHT = 85;
-	public static final double TOWER_HEIGHT = 75.5;
+	public static final double TOWER_HEIGHT = 76;
 	/**
 	 * Elevation of the camera from the carpet, at the point where it is
 	 * attached to the robot.

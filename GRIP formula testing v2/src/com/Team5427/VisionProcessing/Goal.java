@@ -80,10 +80,18 @@ public class Goal {
 	 *         goal.
 	 */
 	public double getAngleOfElevation() {
-		return Math.atan((VisionPanel.RESOLUTION.getHeight() / 2
-			   - (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2)
-			   / VisionPanel.pixelsToGoal) - Config.CAMERA_START_ANGLE;
 
+		return Math
+				.atan((VisionPanel.RESOLUTION.getHeight() / 2
+						- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2) / VisionPanel.pixelsToGoal)
+				+ Math.toRadians(Config.CAMERA_START_ANGLE);
+
+		/*
+		 * return Math .atan(((leftLine.getMidpointY() +
+		 * rightLine.getMidpointY()) / 2 - VisionPanel.RESOLUTION.getHeight() /
+		 * 2) / VisionPanel.pixelsToGoal) +
+		 * Math.toRadians(Config.CAMERA_START_ANGLE);
+		 */
 	}
 
 	/**
@@ -133,7 +141,7 @@ public class Goal {
 	 */
 	public double getHorizontalAngle() {
 		return Math
-				.tanh((centerLine.getMidpointX() - VisionPanel.RESOLUTION.getWidth() / 2) / VisionPanel.pixelsToGoal);
+				.atan((centerLine.getMidpointX() - VisionPanel.RESOLUTION.getWidth() / 2) / VisionPanel.pixelsToGoal);
 	}
 
 	public Line getCenterLine() {
@@ -201,8 +209,8 @@ public class Goal {
 	 *         in inches
 	 */
 	public double getGoalDistance() {
-		return (Config.TRUE_GOAL_HEIGHT + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT)
-				/ Math.sin(getAngleOfElevation() + Math.toRadians(Config.CAMERA_START_ANGLE));
+		return (Config.TRUE_GOAL_HEIGHT/2 + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT)
+				/ Math.sin(getAngleOfElevation());
 	}
 
 	/**

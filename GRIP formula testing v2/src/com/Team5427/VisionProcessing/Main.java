@@ -31,7 +31,7 @@ public class Main {
 	 * The maximum distance that two lines can be from each other in order to be
 	 * considered as part of the same goal.
 	 */
-	private final static int lowestAcceptableValue = 66;
+	private final static int lowestAcceptableValue = 8;
 
 	/**
 	 * A frame created just to hold a VisionPanel.
@@ -80,7 +80,7 @@ public class Main {
 				lines.clear();
 				goals.clear();
 				
-				System.out.println((System.nanoTime()-startTime)/1000000);
+//				System.out.println((System.nanoTime()-startTime)/1000000);
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
