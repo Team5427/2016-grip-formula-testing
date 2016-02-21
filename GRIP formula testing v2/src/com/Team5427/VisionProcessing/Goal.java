@@ -80,11 +80,9 @@ public class Goal {
 	 *         goal.
 	 */
 	public double getAngleOfElevation() {
-		return Math
-				.tanh((VisionPanel.RESOLUTION.getHeight() / 2
-						- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2)
-						/ VisionPanel.pixelsToGoal)
-				- Config.CAMERA_START_ANGLE;
+		return Math.atan((VisionPanel.RESOLUTION.getHeight() / 2
+			   - (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2)
+			   / VisionPanel.pixelsToGoal) - Config.CAMERA_START_ANGLE;
 
 	}
 
