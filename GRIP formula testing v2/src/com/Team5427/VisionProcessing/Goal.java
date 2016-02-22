@@ -80,6 +80,8 @@ public class Goal {
 	 *         goal.
 	 */
 	public double getAngleOfElevation() {
+/*		System.out.println((VisionPanel.RESOLUTION.getHeight() / 2
+				- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2));*/
 
 		return Math
 				.atan((VisionPanel.RESOLUTION.getHeight() / 2
@@ -209,7 +211,7 @@ public class Goal {
 	 *         in inches
 	 */
 	public double getGoalDistance() {
-		return (Config.TRUE_GOAL_HEIGHT/2 + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT)
+		return (Config.TRUE_GOAL_HEIGHT + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT)
 				/ Math.sin(getAngleOfElevation());
 	}
 
