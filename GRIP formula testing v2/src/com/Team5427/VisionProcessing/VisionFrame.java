@@ -12,8 +12,8 @@ public class VisionFrame extends JFrame {
 	 * Multiply the width and height by the resize
 	 */
 
-	public static final int width = 640;
-	public static final int height = 480;
+	public static final int width = 632;
+	public static final int height = 600;
 
 	private VisionPanel p;
 
