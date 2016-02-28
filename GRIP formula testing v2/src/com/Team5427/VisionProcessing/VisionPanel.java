@@ -57,7 +57,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 		// Creates a new webcam
 		try {
-//			initializeCamera();
+			initializeCamera();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -198,6 +198,22 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		calculateVerticalFOV();
 
 		return Config.horizontalFOV;
+	}
+
+	/**
+	 * // TODO: Finish this
+	 *
+	 * Calibrates the angle of the robot using angles
+	 * @param goal
+	 * @param distance
+     * @return
+     */
+	public static double callibrateFOVfromAngle(Goal goal, double distance) {
+		double standardAngle = goal.getCameraAngle();
+
+		double theta = Math.asin((Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT)/distance);
+
+		return -1;
 	}
 
 	public static void calculateVerticalFOV() {
