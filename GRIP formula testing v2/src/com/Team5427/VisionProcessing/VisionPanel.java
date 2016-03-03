@@ -31,6 +31,8 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 	Scanner scanner;
 
+	private static ArrayList<Color> colorList;
+
 	private int updatesPerSecond = 30;
 	private long updateCount = 0;
 	private double previousFrameTime = 0; // Previous System nanotime for last
@@ -55,7 +57,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 		// Creates a new webcam
 		try {
-//			initializeCamera();
+			initializeCamera();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -69,6 +71,13 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	static {
 		Webcam.setDriver(new IpCamDriver());
 		calculateVerticalFOV();
+
+		// Color ArrayList
+		colorList = new ArrayList<>();
+		colorList.add(Color.BLUE);
+		colorList.add(Color.GREEN);
+		colorList.add(Color.MAGENTA);
+		colorList.add(Color.CYAN);
 	}
 
 	public void initializeCamera() throws MalformedURLException {
@@ -191,6 +200,22 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		return Config.horizontalFOV;
 	}
 
+	/**
+	 * // TODO: Finish this
+	 *
+	 * Calibrates the angle of the robot using angles
+	 * @param goal
+	 * @param distance
+     * @return
+     */
+	public static double callibrateFOVfromAngle(Goal goal, double distance) {
+		double standardAngle = goal.getCameraAngle();
+
+		double theta = Math.asin((Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT)/distance);
+
+		return -1;
+	}
+
 	public static void calculateVerticalFOV() {
 		pixelsToGoal = (RESOLUTION.getWidth() / 2) / Math.tan(Math.toRadians(Config.horizontalFOV / 2));
 
@@ -242,12 +267,33 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 	@Override
 	public synchronized void paint(Graphics g) {
-
 		Graphics bg = buffer.getGraphics();
+
+		int xStart = getWidth() / 4;
+		int yStart = (int)RESOLUTION.getHeight();
+
+
 		double timeDifference = -1;
 
 		bg.setColor(Color.BLACK);
 		bg.fillRect(0, 0, getWidth(), getHeight());
+
+		// Drawing the panel in the bottom
+		bg.setColor(Color.GRAY);
+		bg.fillRect(0,(int)RESOLUTION.getHeight()+1, getWidth(),getHeight() - (int)RESOLUTION.getHeight());
+
+		bg.setColor(Color.BLACK);
+		for (int i = 0 ; i < 3; i++) {
+			int xPos = xStart * (i+1);
+			bg.drawLine(xPos, (int)RESOLUTION.getHeight(), xPos, getHeight());
+
+			bg.setColor(Color.BLACK);
+			bg.setFont(new Font("Arial", Font.BOLD, 16));
+
+			xPos = xStart * i + 10;
+			bg.fillRect(xPos, yStart + 10, 20, 20);
+			bg.drawString("Goal " + (i+1), xPos + 50, yStart + 27);
+		}
 
 		// Gets image from camera and paints it to the buffer
 		if (webcam != null) {
@@ -261,16 +307,22 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		int x1, y1, x2, y2;
 		for (int i = 0; i < Main.goals.size(); i++) {
 
-			bg.setColor(Color.GREEN);
+			int j = i;
+			while (j > colorList.size())
+				j = i % colorList.size();
+
+
+			bg.setColor(colorList.get(j));
+//			bg.setColor(Color.GREEN);
 			bg.drawLine((int) Main.goals.get(i).getCenterLine().getX1(),
 					(int) Main.goals.get(i).getCenterLine().getY1(), (int) Main.goals.get(i).getCenterLine().getX2(),
 					(int) Main.goals.get(i).getCenterLine().getY2());
 
-			bg.setColor(Color.BLUE);
+//			bg.setColor(Color.BLUE);
 			bg.drawLine((int) Main.goals.get(i).getLeftLine().getX1(), (int) Main.goals.get(i).getLeftLine().getY1(),
 					(int) Main.goals.get(i).getLeftLine().getX2(), (int) Main.goals.get(i).getLeftLine().getY2());
 
-			bg.setColor(Color.RED);
+//			bg.setColor(Color.RED);
 			bg.drawLine((int) Main.goals.get(i).getRightLine().getX1(), (int) Main.goals.get(i).getRightLine().getY1(),
 					(int) Main.goals.get(i).getRightLine().getX2(), (int) Main.goals.get(i).getRightLine().getY2());
 
@@ -279,16 +331,25 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		/* Draws distance of goal on the bottom left */
 		// This can be later merged the for each loop that draws the lines. This
 		// is temporary for readability
-		bg.setFont(new Font("Arial Narrow", Font.PLAIN, 10));
+		bg.setFont(new Font("Arial", Font.BOLD, 12));
+
 
 		for (int i = 0; i < Main.goals.size(); i++) {
 
-			bg.setColor(new Color(255, 255, 255, 150));
+//			bg.setColor(new Color(255, 255, 255, 150));
 
+/*
 			int x = (int) Main.goals.get(i).getCenterLine().getX1() - 8;
 			int y = (int) Main.goals.get(i).getCenterLine().getY1() + 15;
+*/
+			int x = xStart * i + 10;
+			int y = yStart + 50;
 
-			bg.fillRect(x - 3, y - 10, 100, 48);
+//			bg.fillRect(x - 3, y - 10, 100, 48);
+
+			bg.setColor(colorList.get(i));
+			int xPos = xStart * i + 10;
+			bg.fillRect(xPos, yStart + 10, 20, 20);
 
 			bg.setColor(Color.BLACK);
 
@@ -299,9 +360,10 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 			System.out.println("Distance: " + distance + "in." + "    Elevation Angle: " + angleDegrees + "°"
 					+ "     Horizontal Angle: " + horizontalAngle + "°");
 
+			int interval = 15;
 			bg.drawString("Distance: " + distance + "in.", x, y);
-			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += 12);
-			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += 12);
+			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
+			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
 
 			try {
 				Thread.sleep(100);

@@ -28,7 +28,7 @@ public class Config {
 	 * Determines whether or not the user will be able to calibrate the camera
 	 * from the VisionPanel.
 	 */
-	public static final boolean ENABLE_FOV_CALIBRATION = true;
+	public static final boolean ENABLE_FOV_CALIBRATION = false;
 	/**
 	 * Horizontal FOV of the attached Camera
 	 */
@@ -41,7 +41,8 @@ public class Config {
 	/**
 	 * Angle at which the camera is mounted on the robot, in degrees.
 	 */
-	public static final double CAMERA_START_ANGLE = 15.45;
+//	public static final double CAMERA_START_ANGLE = 15.45;
+	public static final double CAMERA_START_ANGLE = 15.7;
 	/**
 	 * Actual width of the goal.
 	 */

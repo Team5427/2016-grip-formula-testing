@@ -73,6 +73,17 @@ public class Goal {
 	}
 
 	/**
+	 * Calculates the angle of the goal from the robot to the top of the goal.
+	 * This does not take in account the starting angle of the camera.
+	 *
+	 * @return Angle from the robot to the top of the camera as viewed by the camera
+     */
+	public double getCameraAngle() {
+		return Math.atan((VisionPanel.RESOLUTION.getHeight() / 2
+				- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2) / VisionPanel.pixelsToGoal);
+	}
+
+	/**
 	 * Calculates the angle of elevation from the robot to the top of the goal.
 	 * It utilizes the vertical FOV in order to determine the angle.
 	 * 
@@ -83,8 +94,7 @@ public class Goal {
 /*		System.out.println((VisionPanel.RESOLUTION.getHeight() / 2
 				- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2));*/
 
-		return Math
-				.atan((VisionPanel.RESOLUTION.getHeight() / 2
+		return Math.atan((VisionPanel.RESOLUTION.getHeight() / 2
 						- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2) / VisionPanel.pixelsToGoal)
 				+ Math.toRadians(Config.CAMERA_START_ANGLE);
 
