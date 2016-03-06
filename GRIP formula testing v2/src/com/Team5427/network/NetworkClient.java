@@ -83,10 +83,6 @@ public class NetworkClient implements Runnable{
         return inputStreamData;
     }
 
-    public void setInputStreamData(ArrayList<Object> inputStreamData) {
-        this.inputStreamData = inputStreamData;
-    }
-
     /**
      * Sends an object to the server
      *
