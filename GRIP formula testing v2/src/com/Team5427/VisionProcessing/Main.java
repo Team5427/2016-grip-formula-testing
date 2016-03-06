@@ -2,6 +2,8 @@ package com.Team5427.VisionProcessing;
 
 import java.util.ArrayList;
 
+import com.Team5427.network.GoalData;
+import com.Team5427.network.NetworkClient;
 import edu.wpi.first.wpilibj.networktables.*;
 
 public class Main {
@@ -17,6 +19,7 @@ public class Main {
 	 * information that is created by GRIP.
 	 */
 	public static NetworkTable table;
+	public static NetworkClient client;
 
 	static double[] x1Values = new double[20];
 	static double[] y1Values = new double[20];
@@ -55,6 +58,13 @@ public class Main {
 
 		setValues();
 
+		// Attempts to connect to the roborio
+		client = new NetworkClient();
+		if (client.connect())
+			System.out.println("Connection established to the roborio.");
+		else
+			System.out.println("Connection not established to the roborio.");
+
 		while (true) {
 			long startTime = System.nanoTime();
 			try {
@@ -66,6 +76,8 @@ public class Main {
 				findGoals();
 
 				filterGoals();
+
+				sendData();							// Sends goal data to the roborio.
 
 				Thread.sleep(10);
 
@@ -287,5 +299,38 @@ public class Main {
 		}
 
 		return horizontalLines;
+	}
+
+	/**
+	 * Sends the appropriate goal data to the roborio
+	 */
+	public static void sendData() {
+		client.send(getGoalData());
+	}
+
+	/**
+	 * Selects the best goal found by the vision processing, then returns it as
+	 * a GoalData
+	 *
+	 * - By default, this chooses the goal with the widest center line of a goal
+	 * TODO: Modify this to select which goal the driver wants to send
+	 *
+	 * @return data of the appropriate goal, null if no goals are found
+     */
+	public static GoalData getGoalData() {
+		if (goals.size() == 0)
+			return null;
+
+		int goalIndex = 0;
+		double goalWidth = 0;
+		for (int i = 0; i < goals.size(); i++) {
+			double lineWidth = goals.get(i).getCenterLine().getXWidth();
+			if (goalWidth < lineWidth) {
+				goalIndex = 0;
+				goalWidth = lineWidth;
+			}
+		}
+
+		return new GoalData(goals.get(goalIndex));
 	}
 }

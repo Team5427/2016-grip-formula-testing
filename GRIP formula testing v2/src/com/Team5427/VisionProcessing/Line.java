@@ -189,6 +189,10 @@ public class Line {
 		return (y2 - y1) / (x2 - x1);
 	}
 
+	public double getXWidth() {
+		return x2 - x1;
+	}
+
 	public boolean isHorizontal() {
 		return horizontal;
 	}
