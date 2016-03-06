@@ -305,7 +305,8 @@ public class Main {
 	 * Sends the appropriate goal data to the roborio
 	 */
 	public static void sendData() {
-		client.send(getGoalData());
+		if (client.isConnected())
+			client.send(getGoalData());
 	}
 
 	/**

@@ -16,6 +16,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
+import javax.swing.text.html.HTMLDocument;
 
 public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
@@ -109,7 +110,11 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		char key = Character.toLowerCase(e.getKeyChar());
 
+		if (key == 'r') {
+			connectToNetwork();
+		}
 	}
 
 	@Override
@@ -202,6 +207,9 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 	/**
 	 * // TODO: Finish this
+	 *
+	 * NOTE: Mr. Segura told me(Charlie) that there's no need for calibration since we have encoders. If we do
+	 * need this code, then finish the method and refactor the method name to something more relevant.
 	 *
 	 * Calibrates the angle of the robot using angles
 	 * @param goal
