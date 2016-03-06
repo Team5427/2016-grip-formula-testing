@@ -58,7 +58,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 		// Creates a new webcam
 		try {
-			initializeCamera();
+//			initializeCamera();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -124,6 +124,16 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		if (key == 'c') {
 			initializeCalibration();
 		}
+	}
+
+	/**
+	 * Attempts to establish connection with the roborio
+	 *
+	 * // TODO: Do something so that the driver will not accidentally reconnect to the roborio when
+	 * 			connection has already been established.
+	 */
+	public void connectToNetwork() {
+		Main.client.connect();
 	}
 
 	/**
@@ -206,7 +216,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	}
 
 	/**
-	 * @deprecated 
+	 * @deprecated
 	 * // TODO: Finish this
 	 *
 	 * NOTE: Mr. Segura told me(Charlie) that there's no need for calibration since we have encoders. If we do
@@ -381,6 +391,18 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 				e.printStackTrace();
 			}
 
+		}
+
+		// Paints data from the roborio if connection is established
+		bg.setFont(new Font("Arial", Font.BOLD, 12));
+		if (Main.client.isConnected()) {
+			bg.setColor(Color.GREEN);
+			bg.fillOval(490, 493, 10, 10);
+			bg.drawString("Connected to Roborio", 510, 503);
+		} else {
+			bg.setColor(Color.RED);
+			bg.fillOval(490, 493, 10, 10);
+			bg.drawString("No Connection", 520, 503);
 		}
 
 		// Draws frame rate

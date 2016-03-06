@@ -48,7 +48,7 @@ public class NetworkClient implements Runnable{
             inputStreamData = new ArrayList<>();
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Connection failed to establish");
             return false;
         }
     }
