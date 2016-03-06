@@ -206,6 +206,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	}
 
 	/**
+	 * @deprecated 
 	 * // TODO: Finish this
 	 *
 	 * NOTE: Mr. Segura told me(Charlie) that there's no need for calibration since we have encoders. If we do
