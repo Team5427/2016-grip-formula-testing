@@ -19,7 +19,7 @@ public class NetworkClient implements Runnable{
     Thread networkThread;
     public ArrayList<Object> inputStreamData = null;
 
-    private Socket serverSocket;
+    private Socket clientSocket;
     private ObjectOutputStream os;
     private ObjectInputStream is;
 
@@ -42,9 +42,9 @@ public class NetworkClient implements Runnable{
      */
     public boolean connect() {
         try {
-            serverSocket = new Socket(ip, port);
-            is = new ObjectInputStream(serverSocket.getInputStream());
-            os = new ObjectOutputStream(serverSocket.getOutputStream());
+            clientSocket = new Socket(ip, port);
+            is = new ObjectInputStream(clientSocket.getInputStream());
+            os = new ObjectOutputStream(clientSocket.getOutputStream());
             inputStreamData = new ArrayList<>();
             return true;
         } catch (Exception e) {
@@ -60,7 +60,9 @@ public class NetworkClient implements Runnable{
      *         if not.
      */
     public boolean isConnected() {
-        return serverSocket != null;
+        return clientSocket != null && !clientSocket.isClosed();
+        //basically if nothing happens then youre going to die sorat like mark stallone died in die hard 69
+        //your mom is pretty good like super good dude almost as good as luaras mom
     }
 
     public static String getIp() {
@@ -107,7 +109,7 @@ public class NetworkClient implements Runnable{
      *         otherwise.
      */
     public boolean startRecieve() {
-        if (serverSocket != null) {
+        if (clientSocket != null) {
             networkThread = new Thread(this);
             networkThread.start();
             running = true;
