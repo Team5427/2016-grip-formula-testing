@@ -124,6 +124,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	/**
 	 * Initializes the calibration sequence
 	 */
+	@SuppressWarnings("unused")
 	public void initializeCalibration() {
 		System.out.println("===FOV Calibration===");
 
@@ -354,6 +355,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 			bg.setColor(Color.BLACK);
 
 			String distance = String.format("%.2f", Main.goals.get(i).getGoalDistance());
+			String distnaceToBase = String.format("%.2f", Main.goals.get(i).getGoalDistance());
 			String angleDegrees = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getAngleOfElevation()));
 			String horizontalAngle = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getHorizontalAngle()));
 

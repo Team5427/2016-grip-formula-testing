@@ -224,6 +224,8 @@ public class Goal {
 		return (Config.TRUE_GOAL_HEIGHT + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT)
 				/ Math.sin(getAngleOfElevation());
 	}
+	
+
 
 	/**
 	 * @deprecated Gets the distance from the goal to the robot

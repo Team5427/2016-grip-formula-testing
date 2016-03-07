@@ -2,6 +2,8 @@ package com.Team5427.VisionProcessing;
 
 import java.util.ArrayList;
 
+import com.Team5427.Networking.Server;
+
 import edu.wpi.first.wpilibj.networktables.*;
 
 public class Main {
@@ -54,6 +56,8 @@ public class Main {
 		vf = new VisionFrame();
 
 		setValues();
+		
+		Server.start();
 
 		while (true) {
 			long startTime = System.nanoTime();
@@ -286,6 +290,6 @@ public class Main {
 				horizontalLines.add(l);
 		}
 
-		return horizontalLines;
-	}
+	return horizontalLines;
+    }
 }

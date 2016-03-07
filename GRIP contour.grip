@@ -1,0 +1,115 @@
+<grip:Pipeline>
+  <sources>
+    <grip:MultiImageFile>
+      <property name="numImages" value="3"/>
+      <property name="path[0]" value="C:\Users\andre\workspace\grip-formula-testing\misc\Sample Images\footage from IP camera\image 1.jpg"/>
+      <property name="path[1]" value="C:\Users\andre\workspace\grip-formula-testing\misc\Sample Images\footage from IP camera\image 2.jpg"/>
+      <property name="index" value="2"/>
+      <property name="path[2]" value="C:\Users\andre\workspace\grip-formula-testing\misc\Sample Images\footage from IP camera\image 3.jpg"/>
+    </grip:MultiImageFile>
+  </sources>
+  <steps>
+    <grip:Step name="CV Canny">
+      <grip:Input step="0" socket="0"/>
+      <grip:Input step="0" socket="1">
+        <value>500.0</value>
+      </grip:Input>
+      <grip:Input step="0" socket="2">
+        <value>600.0</value>
+      </grip:Input>
+      <grip:Input step="0" socket="3">
+        <value>3.0</value>
+      </grip:Input>
+      <grip:Input step="0" socket="4">
+        <value>true</value>
+      </grip:Input>
+      <grip:Output step="0" socket="0" previewed="true"/>
+    </grip:Step>
+    <grip:Step name="CV Laplacian">
+      <grip:Input step="1" socket="0"/>
+      <grip:Input step="1" socket="1">
+        <value>1</value>
+      </grip:Input>
+      <grip:Input step="1" socket="2">
+        <value>1.0</value>
+      </grip:Input>
+      <grip:Input step="1" socket="3">
+        <value>0.0</value>
+      </grip:Input>
+      <grip:Input step="1" socket="4">
+        <value>BORDER_DEFAULT</value>
+      </grip:Input>
+      <grip:Output step="1" socket="0" previewed="false"/>
+    </grip:Step>
+    <grip:Step name="Find Contours">
+      <grip:Input step="2" socket="0"/>
+      <grip:Input step="2" socket="1">
+        <value>true</value>
+      </grip:Input>
+      <grip:Output step="2" socket="0" previewed="false"/>
+    </grip:Step>
+    <grip:Step name="Convex Hulls">
+      <grip:Input step="3" socket="0"/>
+      <grip:Output step="3" socket="0" previewed="false"/>
+    </grip:Step>
+    <grip:Step name="Filter Contours">
+      <grip:Input step="4" socket="0"/>
+      <grip:Input step="4" socket="1">
+        <value>1000.0</value>
+      </grip:Input>
+      <grip:Input step="4" socket="2">
+        <value>100.0</value>
+      </grip:Input>
+      <grip:Input step="4" socket="3">
+        <value>20.0</value>
+      </grip:Input>
+      <grip:Input step="4" socket="4">
+        <value>1000</value>
+      </grip:Input>
+      <grip:Input step="4" socket="5">
+        <value>20.0</value>
+      </grip:Input>
+      <grip:Input step="4" socket="6">
+        <value>1000</value>
+      </grip:Input>
+      <grip:Input step="4" socket="7">
+        <value>
+          <double>80.48561151079137</double>
+          <double>100.0</double>
+        </value>
+      </grip:Input>
+      <grip:Output step="4" socket="0" previewed="true"/>
+    </grip:Step>
+  </steps>
+  <connections>
+    <grip:Connection>
+      <grip:Output source="0" socket="0" previewed="false"/>
+      <grip:Input step="0" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="0" socket="0" previewed="true"/>
+      <grip:Input step="2" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output source="0" socket="0" previewed="false"/>
+      <grip:Input step="1" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="3" socket="0" previewed="false"/>
+      <grip:Input step="4" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="2" socket="0" previewed="false"/>
+      <grip:Input step="3" socket="0"/>
+    </grip:Connection>
+  </connections>
+  <settings>
+    <teamNumber>5427</teamNumber>
+    <publishAddress>localhost</publishAddress>
+    <deployAddress>localhost</deployAddress>
+    <deployDir>/home/lvuser</deployDir>
+    <deployUser>lvuser</deployUser>
+    <deployJavaHome>/usr/local/frc/JRE/</deployJavaHome>
+    <deployJvmOptions>-Xmx50m -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError</deployJvmOptions>
+  </settings>
+</grip:Pipeline>
