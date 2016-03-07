@@ -121,7 +121,7 @@ public class NetworkClient implements Runnable{
      *         otherwise.
      */
     public boolean startRecieve() {
-        if (clientSocket != null) {
+        if (clientSocket != null || !clientSocket.isClosed()) {
             networkThread = new Thread(this);
             networkThread.start();
             running = true;
@@ -151,6 +151,8 @@ public class NetworkClient implements Runnable{
      */
     @Override
     public void run() {
+
+
 
         while (running) {
             try {

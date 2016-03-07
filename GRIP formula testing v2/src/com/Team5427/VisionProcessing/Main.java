@@ -59,7 +59,8 @@ public class Main {
 		setValues();
 
 		// Attempts to connect to the roborio
-		client = new NetworkClient();
+//		client = new NetworkClient();
+		client = new NetworkClient("localhost", NetworkClient.DEFAULT_PORT);
 		if (client.connect())
 			System.out.println("Connection established to the roborio.");
 		else

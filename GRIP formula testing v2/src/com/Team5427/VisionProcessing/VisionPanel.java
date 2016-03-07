@@ -133,6 +133,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	 * 			connection has already been established.
 	 */
 	public void connectToNetwork() {
+		System.out.println("test");
 		Main.client.connect();
 	}
 
@@ -403,6 +404,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 			bg.setColor(Color.RED);
 			bg.fillOval(490, 493, 10, 10);
 			bg.drawString("No Connection", 520, 503);
+			System.out.println("Paint");
 		}
 
 		// Draws frame rate
