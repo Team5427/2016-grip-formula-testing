@@ -20,8 +20,8 @@ public class NetworkClient implements Runnable{
     public ArrayList<Object> inputStreamData = null;
 
     private Socket clientSocket;
-    private ObjectOutputStream os;
     private ObjectInputStream is;
+    private ObjectOutputStream os;
 
     private boolean running = false;
 
@@ -60,6 +60,9 @@ public class NetworkClient implements Runnable{
             is = new ObjectInputStream(clientSocket.getInputStream());
             os = new ObjectOutputStream(clientSocket.getOutputStream());
             inputStreamData = new ArrayList<>();
+
+            System.out.println("Connection to the server has been established successfully.");
+
             return true;
         } catch (Exception e) {
             System.out.println("Connection failed to establish");
@@ -104,7 +107,7 @@ public class NetworkClient implements Runnable{
      * @return true if the object is sent successfully, false
      *         if otherwise.
      */
-    public boolean send(Object o) {
+    public synchronized boolean send(Object o) {
         try {
             os.writeObject(o);
             os.reset();
@@ -120,8 +123,8 @@ public class NetworkClient implements Runnable{
      * @return true if the thread starts successfully, false if
      *         otherwise.
      */
-    public boolean startRecieve() {
-        if (clientSocket != null || !clientSocket.isClosed()) {
+    public synchronized boolean start() {
+        if (clientSocket == null || !clientSocket.isClosed()) {
             networkThread = new Thread(this);
             networkThread.start();
             running = true;
@@ -137,7 +140,7 @@ public class NetworkClient implements Runnable{
      * @return true if the thread is stopped successfully, false
      *         if otherwise.
      */
-    public boolean stopRecieve() {
+    public synchronized boolean stop() {
         if (networkThread.isAlive()) {      // The thread is found running and is stopped
             running = false;
             return true;
@@ -152,9 +155,9 @@ public class NetworkClient implements Runnable{
     @Override
     public void run() {
 
+        connect();
 
-
-        while (running) {
+        while (running && clientSocket != null && !clientSocket.isClosed() && is != null) {
             try {
                 inputStreamData.add(is.readObject());
             } catch (Exception e) {

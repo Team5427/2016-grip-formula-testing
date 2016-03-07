@@ -134,7 +134,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	 */
 	public void connectToNetwork() {
 		System.out.println("test");
-		Main.client.connect();
+		Main.client.start();
 	}
 
 	/**
@@ -399,6 +399,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		if (Main.client.isConnected()) {
 			bg.setColor(Color.GREEN);
 			bg.fillOval(490, 493, 10, 10);
+			System.out.println("Connected");
 			bg.drawString("Connected to Roborio", 510, 503);
 		} else {
 			bg.setColor(Color.RED);

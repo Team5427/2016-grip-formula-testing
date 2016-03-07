@@ -5,6 +5,7 @@
 
 package com.Team5427.testing;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -61,7 +62,6 @@ public class SteelServer implements Runnable{
     public void findClient() {
 //        clientSocket = new ClientSearcher(serverSocket).findClient(500);
         ClientSearcher searcher = new ClientSearcher(this);
-        System.err.println("Ran");
         searcher.findClient();
 
 /*        if (clientSocket != null) {
@@ -88,15 +88,18 @@ public class SteelServer implements Runnable{
      *
      * @return true if stream established sucessfully, false if otherwise
      */
-    public boolean establishStream() {
+    private boolean establishStream() {
         if (clientSocket != null && !clientSocket.isClosed()) {
             try {
-                serverSocket = new ServerSocket(port);
                 is = new ObjectInputStream(clientSocket.getInputStream());
+                System.out.println("Input stream established");
                 os = new ObjectOutputStream(clientSocket.getOutputStream());
+                System.out.println("Output stream established");
                 inputStreamData = new ArrayList<>();
+                System.out.println("Connection has been established with the driver station.");
                 return true;
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("Input and Output stream failed to establish with the driver station.");
                 return false;
             }
@@ -173,7 +176,7 @@ public class SteelServer implements Runnable{
      * @return true if the thread starts successfully, false if
      *         otherwise.
      */
-    public boolean startRecieve() {
+    public boolean start() {
         if (serverSocket != null) {
             networkThread = new Thread(this);
             networkThread.start();
@@ -190,7 +193,7 @@ public class SteelServer implements Runnable{
      * @return true if the thread is stopped successfully, false
      *         if otherwise.
      */
-    public boolean stopRecieve() {
+    public boolean stop() {
         if (networkThread.isAlive()) {      // The thread is found running and is stopped
             running = false;
             return true;
@@ -205,19 +208,23 @@ public class SteelServer implements Runnable{
     @Override
     public void run() {
 
-        while (running && (clientSocket == null || clientSocket.isClosed())) {
-            findClient();
+        try {
+            clientSocket = serverSocket.accept();
+            System.out.println("Client found");
 
-            if (clientSocket == null) {
-                try {
-                    networkThread.sleep(10);
-                } catch (Exception e) {
-                    System.out.println("Error in sleeping SteelServer");
-                }
-            }
+            is = new ObjectInputStream(clientSocket.getInputStream());
+            System.out.println("Input stream established");
+
+            os = new ObjectOutputStream(clientSocket.getOutputStream());
+            System.out.println("Output stream established");
+
+            System.out.println("\n~Connection established");
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        while (running) {
+        while (running && is != null) {
             if (clientSocket.isClosed()) {
                 running = false;
                 break;

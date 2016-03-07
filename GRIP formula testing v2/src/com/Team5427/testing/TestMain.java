@@ -7,8 +7,8 @@ public class TestMain {
 
     public static void main(String[] args) {
         SteelServer server = new SteelServer();
-        server.findClient();
-        while (server.getClientSocket() == null) {
+//        server.findClient();
+/*        while (server.getClientSocket() == null) {
             System.out.println("Finding client");
 
             try {
@@ -16,9 +16,9 @@ public class TestMain {
             } catch (Exception e) {
 
             }
-        }
+        }*/
 
-        server.establishStream();
+        server.start();
 
 
     }
