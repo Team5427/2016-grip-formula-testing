@@ -36,11 +36,25 @@ public class NetworkClient implements Runnable{
     }
 
     /**
-     * Connect the client to the server
+     * Connects to the client server. This will prevent reconnection if connection is already
+     * established
+     *
+     * @return true if connection is successful, returns false if not or connection has already
+     *         been established
+     */
+    public boolean connect() {
+        if (clientSocket == null || clientSocket.isClosed())
+            return reconnect();
+
+        return false;
+    }
+
+    /**
+     * Reconnect to the client to the server
      *
      * @return true if connection is a success, false if failed
      */
-    public boolean connect() {
+    public boolean reconnect() {
         try {
             clientSocket = new Socket(ip, port);
             is = new ObjectInputStream(clientSocket.getInputStream());
@@ -61,8 +75,6 @@ public class NetworkClient implements Runnable{
      */
     public boolean isConnected() {
         return clientSocket != null && !clientSocket.isClosed();
-        //basically if nothing happens then youre going to die sorat like mark stallone died in die hard 69
-        //your mom is pretty good like super good dude almost as good as luaras mom
     }
 
     public static String getIp() {
