@@ -43,12 +43,17 @@ public class Server {
 			   connection = serverSocket.accept();
 			   out = new ObjectOutputStream(connection.getOutputStream());
 			   in = new ObjectInputStream(connection.getInputStream());
+
 			} catch (Exception e) {
 			} finally {
 			   if (connection != null && !connection.isClosed()) System.out.println("Connected!");
 			}
 		   } else {
 			Object o = in.readObject();
+
+			if (o instanceof Task) {
+
+			}
 
 		   }
 

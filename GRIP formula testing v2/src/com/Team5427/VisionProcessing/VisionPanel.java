@@ -16,6 +16,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
+import javax.swing.text.html.HTMLDocument;
 
 public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
@@ -57,7 +58,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 		// Creates a new webcam
 		try {
-			initializeCamera();
+//			initializeCamera();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -109,7 +110,11 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		char key = Character.toLowerCase(e.getKeyChar());
 
+		if (key == 'r') {
+			connectToNetwork();
+		}
 	}
 
 	@Override
@@ -119,6 +124,17 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		if (key == 'c') {
 			initializeCalibration();
 		}
+	}
+
+	/**
+	 * Attempts to establish connection with the roborio
+	 *
+	 * // TODO: Do something so that the driver will not accidentally reconnect to the roborio when
+	 * 			connection has already been established.
+	 */
+	public void connectToNetwork() {
+		System.out.println("test");
+		Main.client.start();
 	}
 
 	/**
@@ -202,7 +218,11 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	}
 
 	/**
+	 * @deprecated
 	 * // TODO: Finish this
+	 *
+	 * NOTE: Mr. Segura told me(Charlie) that there's no need for calibration since we have encoders. If we do
+	 * need this code, then finish the method and refactor the method name to something more relevant.
 	 *
 	 * Calibrates the angle of the robot using angles
 	 * @param goal
@@ -374,6 +394,20 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 				e.printStackTrace();
 			}
 
+		}
+
+		// Paints data from the roborio if connection is established
+		bg.setFont(new Font("Arial", Font.BOLD, 12));
+		if (Main.client.isConnected()) {
+			bg.setColor(Color.GREEN);
+			bg.fillOval(490, 493, 10, 10);
+			System.out.println("Connected");
+			bg.drawString("Connected to Roborio", 510, 503);
+		} else {
+			bg.setColor(Color.RED);
+			bg.fillOval(490, 493, 10, 10);
+			bg.drawString("No Connection", 520, 503);
+//			System.out.println("Paint");
 		}
 
 		// Draws frame rate
