@@ -25,10 +25,10 @@ public class Server {
 	   e.printStackTrace();
 	}
 
-	t.start();
+	listener.start();
    }
 
-   private static Thread t = new Thread(new Runnable() {
+   private static Thread listener = new Thread(new Runnable() {
 
 	@Override
 	public void run() {
@@ -43,6 +43,8 @@ public class Server {
 			   connection = serverSocket.accept();
 			   out = new ObjectOutputStream(connection.getOutputStream());
 			   in = new ObjectInputStream(connection.getInputStream());
+			   
+			   sender.start();
 
 			} catch (Exception e) {
 			} finally {
@@ -51,7 +53,18 @@ public class Server {
 		   } else {
 			Object o = in.readObject();
 
+			/**
+			 * These won't really be used, as the robot won't really be
+			 * sending data to the grip program. Just there for comical effect
+			 */
 			if (o instanceof Task) {
+
+			   switch (((Task) o).getTask()) {
+			   case GOAL_ATTACHED:
+				break;
+			   case LOG:
+				break;
+			   }
 
 			}
 
@@ -67,4 +80,16 @@ public class Server {
 
    );
 
+   private static Thread sender = new Thread(new Runnable(){
+
+	@Override
+	public void run() {
+	   while(connection != null && !connection.isClosed()){
+		//TODO send goals here
+	   }
+	   
+	}
+	   
+   });
+   
 }
