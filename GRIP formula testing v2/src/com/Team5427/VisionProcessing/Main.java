@@ -268,6 +268,12 @@ public class Main {
 
    }
 
+   public static Goal getHottestGoal() {
+	for (int i = 0; i < goals.size(); i++) {
+
+	}
+   }
+
    /**
     * 
     * @param d1
