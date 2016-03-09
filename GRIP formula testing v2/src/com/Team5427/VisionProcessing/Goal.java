@@ -225,6 +225,21 @@ public class Goal implements Comparable {
 		/ Math.sin(getAngleOfElevation());
    }
 
+   // TODO make this print out values to make a new goalData.
+   public String toString() {
+	return null;
+
+   }
+
+   /**
+    * used to compare the area of two goals to each other.
+    * 
+    * @param o
+    *           a goal to be compared to the current goal.
+    * 
+    * @return 1 if the current goal is larger than the one given, 0 if it is
+    *         not, and -1 if the object given is n ot an instance of a goal.
+    */
    @Override
    public int compareTo(Object o) {
 	if (o instanceof Goal) {

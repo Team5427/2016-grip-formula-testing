@@ -268,10 +268,19 @@ public class Main {
 
    }
 
-   public static Goal getHottestGoal() {
-	for (int i = 0; i < goals.size(); i++) {
-
+   /**
+    * method that will be used in determining which goal to send to the robot
+    * 
+    * @return the goal with the largest area.
+    */
+   public static Goal getBestGoal() {
+	int index = 0;
+	for (int i = 1; i < goals.size() - 1; i++) {
+	   if (goals.get(index).compareTo(goals.get(i)) == 0) {
+		index = i;
+	   }
 	}
+	return goals.get(index);
    }
 
    /**

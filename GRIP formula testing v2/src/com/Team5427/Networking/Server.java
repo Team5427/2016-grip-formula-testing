@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import com.Team5427.VisionProcessing.Main;
+
 public class Server {
 
    private static ServerSocket	 serverSocket;
@@ -85,7 +87,12 @@ public class Server {
 	@Override
 	public void run() {
 	   while(connection != null && !connection.isClosed()){
-		//TODO send goals here
+		try {
+		   out.writeObject(new Task(TaskDescription.GOAL_ATTACHED, new GoalData(Main.getBestGoal())));
+		} catch (IOException e) {
+		   // TODO Auto-generated catch block
+		   e.printStackTrace();
+		}
 	   }
 	   
 	}

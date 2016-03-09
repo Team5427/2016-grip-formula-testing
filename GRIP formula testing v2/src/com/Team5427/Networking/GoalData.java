@@ -25,6 +25,10 @@ public class GoalData {
         this.angleOfElevation = angleOfElevation;
         this.horizontalAngle = horizontalAngle;
     }
+    
+    public GoalData(String s){
+	 
+    }
 
     public double getDistance() {
         return distance;
