@@ -2,10 +2,8 @@ package com.Team5427.VisionProcessing;
 
 import java.util.ArrayList;
 
-import com.Team5427.Networking.Server;
-
-import com.Team5427.network.GoalData;
-import com.Team5427.network.NetworkClient;
+import com.Team5427.Networking.GoalData;
+import com.Team5427.Networking.client.NetworkClient;
 import edu.wpi.first.wpilibj.networktables.*;
 
 public class Main {
@@ -49,7 +47,7 @@ public class Main {
     * table, turning all of the arrays full of doubles into a single ArrayList
     * full of lines, determining where the goals are out of all of those lines,
     * and then removing the goals which are inside of others.
-    * 
+    *
     * @param args
     */
    public static void main(String[] args) {
@@ -60,7 +58,7 @@ public class Main {
 
 	setValues();
 
-	Server.start();
+	// server.start();
 
 	// Attempts to connect to the roborio
 	// client = new NetworkClient();
@@ -113,8 +111,8 @@ public class Main {
     * the program by GRIP, and is used to determine which, if any lines are
     * touching the given line. If there are multiple, then it will only return
     * the one that is first in the ArrayList.
-    * 
-    * 
+    *
+    *
     * @param l
     *           The line that you would like to compare to the rest of the
     *           ArrayList
@@ -143,12 +141,12 @@ public class Main {
    }
 
    /**
-    * 
+    *
     * This method goes through the entire ArrayList of lines that is given to
     * the program by GRIP, and is used to determine which, if any lines are
     * touching the given lines. If there are multiple, then it will only return
     * the one that is first in the ArrayList.
-    * 
+    *
     * @param l1
     *           One of the line that you would like to compare to the rest of
     *           the ArrayList
@@ -284,7 +282,7 @@ public class Main {
    }
 
    /**
-    * 
+    *
     * @param d1
     *           The first distance.
     * @param d2
@@ -308,7 +306,7 @@ public class Main {
 
    /**
     * Finds the horizontal lines in the list of lines and returns it
-    * 
+    *
     * @return all horizontal lines in the list
     */
    public ArrayList<Line> getHorizontalLines() {

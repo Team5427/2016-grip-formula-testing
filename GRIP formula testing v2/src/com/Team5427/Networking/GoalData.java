@@ -1,5 +1,7 @@
 package com.Team5427.Networking;
 
+import com.Team5427.VisionProcessing.Goal;
+
 /**
  * The object that will be sent from the driver station and
  * will be received by the robot. This class only contains
@@ -19,6 +21,12 @@ public class GoalData {
      * The horizontal angle from the camera to the
      */
     private double horizontalAngle;
+
+    public GoalData(Goal goal) {
+        distance = goal.getGoalDistance();
+        angleOfElevation = goal.getAngleOfElevation();
+        horizontalAngle = goal.getHorizontalAngle();
+    }
 
     public GoalData(double distance, double angleOfElevation, double horizontalAngle) {
         this.distance = distance;
