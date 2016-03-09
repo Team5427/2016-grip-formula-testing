@@ -5,45 +5,45 @@ import javax.swing.*;
 
 public class VisionFrame extends JFrame {
 
-    public static final String title = "Vision Filtering Test";
+	public static final String title = "Vision Filtering Test";
 
-    /*
-     * Change this if we're using camera or images - Image w:h - 720:502 -
-     * Multiply the width and height by the resize
-     */
+	/*
+	 * Change this if we're using camera or images - Image w:h - 720:502 -
+	 * Multiply the width and height by the resize
+	 */
 
-    public static final int width = 632;
-    public static final int height = 600;
+	public static final int width = 632;
+	public static final int height = 600;
 
-    private VisionPanel p;
+	private VisionPanel p;
 
-    public VisionFrame() {
-	super(title);
+	public VisionFrame() {
+		super(title);
 
-	pack();
+		pack();
 
-	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	Insets insect = getInsets();
-	int fWidth = insect.left + insect.right + width;
-	int fHeight = insect.top + insect.bottom + height;
+		Insets insect = getInsets();
+		int fWidth = insect.left + insect.right + width;
+		int fHeight = insect.top + insect.bottom + height;
 
-	p = new VisionPanel(fWidth, fHeight);
+		p = new VisionPanel(fWidth, fHeight);
 
-	setPreferredSize(new Dimension(fWidth, fHeight));
+		setPreferredSize(new Dimension(fWidth, fHeight));
 
-	add(p);
+		add(p);
 
-	// May change this later
-	setResizable(false);
+		// May change this later
+		setResizable(false);
 
-	pack();
+		pack();
 
-	setVisible(true);
+		setVisible(true);
 
-    }
+	}
 
-    public VisionPanel getPanel() {
-	return p;
-    }
+	public VisionPanel getPanel() {
+		return p;
+	}
 }
