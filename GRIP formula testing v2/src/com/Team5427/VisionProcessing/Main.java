@@ -2,10 +2,8 @@ package com.Team5427.VisionProcessing;
 
 import java.util.ArrayList;
 
-import com.Team5427.Networking.Server;
-
-import com.Team5427.network.GoalData;
-import com.Team5427.network.NetworkClient;
+import com.Team5427.networking.GoalData;
+import com.Team5427.networking.client.NetworkClient;
 import edu.wpi.first.wpilibj.networktables.*;
 
 public class Main {
@@ -60,7 +58,7 @@ public class Main {
 
 		setValues();
 
-//		Server.start();
+//		server.start();
 
 		// Attempts to connect to the roborio
 //		client = new NetworkClient();

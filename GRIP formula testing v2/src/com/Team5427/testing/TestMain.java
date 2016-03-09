@@ -1,6 +1,6 @@
 package com.Team5427.testing;
 
-import com.Team5427.Networking.Server;
+import com.Team5427.networking.server.Server;
 
 public class TestMain {
 

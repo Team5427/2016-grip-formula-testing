@@ -1,6 +1,7 @@
-package com.Team5427.Networking;
+package com.Team5427.networking.server;
 
-import java.io.IOException;
+import com.Team5427.networking.Task;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;

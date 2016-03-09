@@ -210,7 +210,7 @@ public class SteelServer implements Runnable{
 
         try {
             clientSocket = serverSocket.accept();
-            System.out.println("Client found");
+            System.out.println("client found");
 
             is = new ObjectInputStream(clientSocket.getInputStream());
             System.out.println("Input stream established");

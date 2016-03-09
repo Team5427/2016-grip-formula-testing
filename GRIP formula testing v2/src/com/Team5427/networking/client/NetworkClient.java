@@ -1,4 +1,4 @@
-package com.Team5427.network;
+package com.Team5427.networking.client;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
