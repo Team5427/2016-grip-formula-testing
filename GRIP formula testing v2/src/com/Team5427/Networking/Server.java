@@ -10,93 +10,95 @@ import com.Team5427.VisionProcessing.Main;
 
 public class Server {
 
-   private static ServerSocket	 serverSocket;
-   private static Socket		 connection	= null;
-   private static ObjectInputStream	 in;
-   private static ObjectOutputStream out;
+    private static ServerSocket serverSocket;
+    private static Socket connection = null;
+    private static ObjectInputStream in;
+    private static ObjectOutputStream out;
 
-   private static final int		 PORT		= 25565;
+    private static final int PORT = 25565;
 
-   public static void start() {
+    public static void start() {
 
 	try {
-	   serverSocket = new ServerSocket(PORT);
-	   serverSocket.setSoTimeout(100);
+	    serverSocket = new ServerSocket(PORT);
+	    serverSocket.setSoTimeout(100);
 
 	} catch (Exception e) {
-	   e.printStackTrace();
+	    e.printStackTrace();
 	}
 
 	listener.start();
-   }
+    }
 
-   private static Thread listener = new Thread(new Runnable() {
+    private static Thread listener = new Thread(new Runnable() {
 
 	@Override
 	public void run() {
 
-	   while (true) {
+	    while (true) {
 		try {
 
-		   if (connection == null || connection.isClosed()) {
+		    if (connection == null || connection.isClosed()) {
 			System.out.println("Searching for a connection...");
 			try {
 
-			   connection = serverSocket.accept();
-			   out = new ObjectOutputStream(connection.getOutputStream());
-			   in = new ObjectInputStream(connection.getInputStream());
-			   
-			   sender.start();
+			    connection = serverSocket.accept();
+			    out = new ObjectOutputStream(connection.getOutputStream());
+			    in = new ObjectInputStream(connection.getInputStream());
+
+			    sender.start();
 
 			} catch (Exception e) {
 			} finally {
-			   if (connection != null && !connection.isClosed()) System.out.println("Connected!");
+			    if (connection != null && !connection.isClosed())
+				System.out.println("Connected!");
 			}
-		   } else {
+		    } else {
 			Object o = in.readObject();
 
 			/**
-			 * These won't really be used, as the robot won't really be
-			 * sending data to the grip program. Just there for comical effect
+			 * These won't really be used, as the robot won't really
+			 * be sending data to the grip program. Just there for
+			 * comical effect
 			 */
 			if (o instanceof Task) {
 
-			   switch (((Task) o).getTask()) {
-			   case GOAL_ATTACHED:
+			    switch (((Task) o).getTask()) {
+			    case GOAL_ATTACHED:
 				break;
-			   case LOG:
+			    case LOG:
 				break;
-			   }
+			    }
 
 			}
 
-		   }
+		    }
 
 		} catch (Exception e) {
-		   e.printStackTrace();
+		    e.printStackTrace();
 		}
-	   }
+	    }
 
 	}
-   }
+    }
 
-   );
+    );
 
-   private static Thread sender = new Thread(new Runnable(){
+    private static Thread sender = new Thread(new Runnable() {
 
 	@Override
 	public void run() {
-	   while(connection != null && !connection.isClosed()){
+	    while (connection != null && !connection.isClosed()) {
 		try {
-		   out.writeObject(new Task(TaskDescription.GOAL_ATTACHED, new GoalData(Main.getBestGoal())));
+		    out.writeObject(new Task(TaskDescription.GOAL_ATTACHED, new GoalData(Main.getBestGoal())));
 		} catch (IOException e) {
-		   // TODO Auto-generated catch block
-		   e.printStackTrace();
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
 		}
-	   }
-	   
+	    }
+
 	}
-	   
-   });
-   
+
+    });
+
 }

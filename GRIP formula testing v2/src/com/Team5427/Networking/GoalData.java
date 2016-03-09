@@ -3,9 +3,8 @@ package com.Team5427.Networking;
 import com.Team5427.VisionProcessing.Goal;
 
 /**
- * The object that will be sent from the driver station and
- * will be received by the robot. This class only contains
- * data that may be useful for the robot.
+ * The object that will be sent from the driver station and will be received by
+ * the robot. This class only contains data that may be useful for the robot.
  */
 public class GoalData {
 
@@ -23,43 +22,43 @@ public class GoalData {
     private double horizontalAngle;
 
     public GoalData(Goal goal) {
-        distance = goal.getGoalDistance();
-        angleOfElevation = goal.getAngleOfElevation();
-        horizontalAngle = goal.getHorizontalAngle();
+	distance = goal.getGoalDistance();
+	angleOfElevation = goal.getAngleOfElevation();
+	horizontalAngle = goal.getHorizontalAngle();
     }
 
     public GoalData(double distance, double angleOfElevation, double horizontalAngle) {
-        this.distance = distance;
-        this.angleOfElevation = angleOfElevation;
-        this.horizontalAngle = horizontalAngle;
+	this.distance = distance;
+	this.angleOfElevation = angleOfElevation;
+	this.horizontalAngle = horizontalAngle;
     }
-    
-    public GoalData(String s){
-	 
+
+    public GoalData(String s) {
+
     }
 
     public double getDistance() {
-        return distance;
+	return distance;
     }
 
     public void setDistance(double distance) {
-        this.distance = distance;
+	this.distance = distance;
     }
 
     public double getAngleOfElevation() {
-        return angleOfElevation;
+	return angleOfElevation;
     }
 
     public void setAngleOfElevation(double angleOfElevation) {
-        this.angleOfElevation = angleOfElevation;
+	this.angleOfElevation = angleOfElevation;
     }
 
     public double getHorizontalAngle() {
-        return horizontalAngle;
+	return horizontalAngle;
     }
 
     public void setHorizontalAngle(double horizontalAngle) {
-        this.horizontalAngle = horizontalAngle;
+	this.horizontalAngle = horizontalAngle;
     }
 
     /**
@@ -68,6 +67,6 @@ public class GoalData {
      * @return the class type for networking use
      */
     public String toString() {
-        return "Team 5427 - GoalData";
+	return "Team 5427 - GoalData";
     }
 }
