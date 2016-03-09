@@ -5,9 +5,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-/**
- * Created by Charlemagne Wong on 3/6/2016.
- */
 public class NetworkClient implements Runnable{
 
     public static final String DEFAULT_IP = "10.54.27.1";
@@ -36,6 +33,7 @@ public class NetworkClient implements Runnable{
     }
 
     /**
+     * @deprecated
      * Connects to the client server. This will prevent reconnection if connection is already
      * established
      *
@@ -109,10 +107,12 @@ public class NetworkClient implements Runnable{
      */
     public synchronized boolean send(Object o) {
         try {
-            os.writeObject(o);
+            System.out.println("os " + (os == null));
+            os.writeObject(o);                              // The error here is that writeObject is null
             os.reset();
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -155,11 +155,13 @@ public class NetworkClient implements Runnable{
     @Override
     public void run() {
 
-        connect();
+        reconnect();
 
         while (running && clientSocket != null && !clientSocket.isClosed() && is != null) {
             try {
                 inputStreamData.add(is.readObject());
+//                is.reset();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

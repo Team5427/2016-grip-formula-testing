@@ -54,23 +54,23 @@ public class SteelServer implements Runnable{
         }
     }
 
-    /**
+/*    *//**
      * Waits to find connection from the client
      *
      * @return true if connection is a success, false if failed
-     */
+     *//*
     public void findClient() {
 //        clientSocket = new ClientSearcher(serverSocket).findClient(500);
         ClientSearcher searcher = new ClientSearcher(this);
         searcher.findClient();
 
-/*        if (clientSocket != null) {
+*//*        if (clientSocket != null) {
             establishStream();
 
             return true;
-        }*/
+        }*//*
 
-/*        if (serverSocket == null)
+*//*        if (serverSocket == null)
             System.err.println("hi");
         try {
             clientSocket = serverSocket.accept();
@@ -78,10 +78,10 @@ public class SteelServer implements Runnable{
             e.printStackTrace();
         }
 
-        */
+        *//*
 
 
-    }
+    }*/
 
     /**
      * Establishes the input and output stream between client and server

@@ -63,7 +63,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 			e.printStackTrace();
 		}
 
-		// new Thread(this).start();
+		// ne w Thread(this).start();
 	}
 
 	/**
@@ -400,9 +400,9 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		bg.setFont(new Font("Arial", Font.BOLD, 12));
 		if (Main.client.isConnected()) {
 			bg.setColor(Color.GREEN);
-			bg.fillOval(490, 493, 10, 10);
-			System.out.println("Connected");
+			bg.fillOval(489, 493, 10, 10);
 			bg.drawString("Connected to Roborio", 510, 503);
+			System.out.println(Main.client.send(bg));
 		} else {
 			bg.setColor(Color.RED);
 			bg.fillOval(490, 493, 10, 10);

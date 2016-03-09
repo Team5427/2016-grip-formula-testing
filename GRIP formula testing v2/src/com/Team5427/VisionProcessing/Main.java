@@ -10,340 +10,346 @@ import edu.wpi.first.wpilibj.networktables.*;
 
 public class Main {
 
-   /**
-    * The FOV of the attached webcam. It is used in calculating the distance to
-    * the goals.
-    */
-   // public static final double CAMERA_FOV = 59;
+	/**
+	 * The FOV of the attached webcam. It is used in calculating the distance to
+	 * the goals.
+	 */
+	// public static final double CAMERA_FOV = 59;
 
-   /**
-    * The object from WPILib that allows the program to retrieve all of the
-    * information that is created by GRIP.
-    */
-   public static NetworkTable	 table;
-   public static NetworkClient client;
+	/**
+	 * The object from WPILib that allows the program to retrieve all of the
+	 * information that is created by GRIP.
+	 */
+	public static NetworkTable	 table;
+	public static NetworkClient client;
 
-   static double[]		 x1Values		     = new double[20];
-   static double[]		 y1Values		     = new double[20];
-   static double[]		 x2Values		     = new double[20];
-   static double[]		 y2Values		     = new double[20];
-   static double[]		 lengthValues	     = new double[20];
-   static double			 FPS			     = -1;
-   static ArrayList<Line>	 lines		     = new ArrayList<Line>();
-   static ArrayList<Goal>	 goals		     = new ArrayList<Goal>();
+	static double[]		 x1Values		     = new double[20];
+	static double[]		 y1Values		     = new double[20];
+	static double[]		 x2Values		     = new double[20];
+	static double[]		 y2Values		     = new double[20];
+	static double[]		 lengthValues	     = new double[20];
+	static double			 FPS			     = -1;
+	static ArrayList<Line>	 lines		     = new ArrayList<Line>();
+	static ArrayList<Goal>	 goals		     = new ArrayList<Goal>();
 
-   /**
-    * The maximum distance that two lines can be from each other in order to be
-    * considered as part of the same goal.
-    */
-   private final static int	 lowestAcceptableValue = 9;
+	/**
+	 * The maximum distance that two lines can be from each other in order to be
+	 * considered as part of the same goal.
+	 */
+	private final static int	 lowestAcceptableValue = 9;
 
-   /**
-    * A frame created just to hold a VisionPanel.
-    */
-   static VisionFrame		 vf;
+	/**
+	 * A frame created just to hold a VisionPanel.
+	 */
+	static VisionFrame		 vf;
 
-   /**
-    * After initializing several variables, the main method then proceeds to go
-    * into a while loop which cycles through getting the values from the network
-    * table, turning all of the arrays full of doubles into a single ArrayList
-    * full of lines, determining where the goals are out of all of those lines,
-    * and then removing the goals which are inside of others.
-    * 
-    * @param args
-    */
-   public static void main(String[] args) {
-	NetworkTable.setClientMode();
-	NetworkTable.setIPAddress("localhost");
-	table = NetworkTable.getTable("GRIP");
-	vf = new VisionFrame();
-
-	setValues();
-
-	Server.start();
-
-	// Attempts to connect to the roborio
-	// client = new NetworkClient();
-	client = new NetworkClient("localhost", NetworkClient.DEFAULT_PORT);
-	client.start();
-	if (client.isConnected())
-	   System.out.println("Connection established to the roborio.");
-	else
-	   System.out.println("Connection not established to the roborio.");
-
-	while (true) {
-	   long startTime = System.nanoTime();
-	   try {
+	/**
+	 * After initializing several variables, the main method then proceeds to go
+	 * into a while loop which cycles through getting the values from the network
+	 * table, turning all of the arrays full of doubles into a single ArrayList
+	 * full of lines, determining where the goals are out of all of those lines,
+	 * and then removing the goals which are inside of others.
+	 *
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		NetworkTable.setClientMode();
+		NetworkTable.setIPAddress("localhost");
+		table = NetworkTable.getTable("GRIP");
+		vf = new VisionFrame();
 
 		setValues();
 
-		createLines();
+//		Server.start();
 
-		findGoals();
+		// Attempts to connect to the roborio
+//		client = new NetworkClient();
+		client = new NetworkClient("localhost", NetworkClient.DEFAULT_PORT);
+		client.start();
+		if (client.isConnected())
+			System.out.println("Connection established to the roborio.");
+		else
+			System.out.println("Connection not established to the roborio.");
 
-		filterGoals();
+		while (true) {
+			long startTime = System.nanoTime();
+			try {
 
-		sendData(); // Sends goal data to the roborio.
+				setValues();
 
-		Thread.sleep(10);
+				createLines();
 
-		vf.getPanel().repaint();
+				findGoals();
 
+				filterGoals();
+
+				sendData(); // Sends goal data to the roborio.
+
+				Thread.sleep(10);
+
+				vf.getPanel().repaint();
+
+				do {
+					Thread.sleep(5);
+				} while (!vf.getPanel().isDonePainting());
+
+				vf.getPanel().setDonePainting(false);
+
+				lines.clear();
+				goals.clear();
+
+				// System.out.println((System.nanoTime()-startTime)/1000000);
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	/**
+	 * This method goes through the entire ArrayList of lines that is given to
+	 * the program by GRIP, and is used to determine which, if any lines are
+	 * touching the given line. If there are multiple, then it will only return
+	 * the one that is first in the ArrayList.
+	 *
+	 *
+	 * @param l The line that you would like to compare to the rest of the
+	 *          ArrayList
+	 * @return The first line in the ArrayList of lines that is close to the
+	 *         current line
+	 */
+	public static Line isClose(Line l) {
+		int index = -1;
+		double lowestValue = lowestAcceptableValue;
+
+		for (int i = 0; i < lines.size(); i++) {
+
+			if (l.isHorizontal() != lines.get(i).isHorizontal()) {
+
+				double distance = l.compareTo(lines.get(i));
+				if (distance <= lowestValue) {
+					index = i;
+					lowestValue = distance;
+				}
+			}
+		}
+		if (index >= 0)
+			return lines.remove(index);
+		else
+			return null;
+	}
+
+	/**
+	 *
+	 * This method goes through the entire ArrayList of lines that is given to
+	 * the program by GRIP, and is used to determine which, if any lines are
+	 * touching the given lines. If there are multiple, then it will only return
+	 * the one that is first in the ArrayList.
+	 *
+	 * @param l1
+	 *           One of the line that you would like to compare to the rest of
+	 *           the ArrayList
+	 * @param l2
+	 *           One of the line that you would like to compare to the rest of
+	 *           the ArrayList
+	 * @return An array of the two lines given, plus the third line that was
+	 *         found
+	 */
+	public static Line[] isClose(Line l1, Line l2) {
+
+		int index = -1;
+		double lowestValue = lowestAcceptableValue;
+		boolean needHorizontal;
+
+		// determines whether a vertical or horizontal line is needed in order
+		// to complete the goal
+		if (l1.isHorizontal() || l2.isHorizontal())
+			needHorizontal = false;
+		else
+			needHorizontal = true;
+
+		for (int i = 0; i < lines.size(); i++) {
+			if (needHorizontal == lines.get(i).isHorizontal()) {
+
+				double d = returnLowestDouble(l1.compareTo(lines.get(i)), l2.compareTo(lines.get(i)));
+
+				if (d < lowestValue) {
+					index = i;
+					lowestValue = d;
+				}
+
+			}
+
+		}
+
+		if (index >= 0)
+			return new Line[] { l1, l2, lines.remove(index) };
+		else
+			return null;
+
+	}
+
+	/**
+	 * Retrieves all of the data from the network table in the form of arrays
+	 */
+	private static void setValues() {
 		do {
-		   Thread.sleep(5);
-		} while (!vf.getPanel().isDonePainting());
+			// FPS = table.getNumber("FPS");
+			x1Values = table.getNumberArray("myLinesReport/x1", x1Values);
+			y1Values = table.getNumberArray("myLinesReport/y1", y1Values);
+			x2Values = table.getNumberArray("myLinesReport/x2", x2Values);
+			y2Values = table.getNumberArray("myLinesReport/y2", y2Values);
+			lengthValues = table.getNumberArray("myLinesReport/length", lengthValues);
+		} while (!(x1Values.length == y1Values.length && y1Values.length == x2Values.length
+				&& x2Values.length == y2Values.length && y2Values.length == lengthValues.length));
 
-		vf.getPanel().setDonePainting(false);
-
-		lines.clear();
-		goals.clear();
-
-		// System.out.println((System.nanoTime()-startTime)/1000000);
-
-	   } catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	   }
 	}
 
-   }
-
-   /**
-    * This method goes through the entire ArrayList of lines that is given to
-    * the program by GRIP, and is used to determine which, if any lines are
-    * touching the given line. If there are multiple, then it will only return
-    * the one that is first in the ArrayList.
-    * 
-    * 
-    * @param l
-    *           The line that you would like to compare to the rest of the
-    *           ArrayList
-    * @return The first line in the ArrayList of lines that is close to the
-    *         current line
-    */
-   public static Line isClose(Line l) {
-	int index = -1;
-	double lowestValue = lowestAcceptableValue;
-
-	for (int i = 0; i < lines.size(); i++) {
-
-	   if (l.isHorizontal() != lines.get(i).isHorizontal()) {
-
-		double distance = l.compareTo(lines.get(i));
-		if (distance <= lowestValue) {
-		   index = i;
-		   lowestValue = distance;
+	/**
+	 * Takes all of the data previously gotten from the NetworkTable, and turns
+	 * it into an ArrayList of lines.
+	 */
+	private static void createLines() {
+		for (int i = 0; i < lengthValues.length; i++) {
+			if (lengthValues[i] != 0) {
+				try {
+					lines.add(new Line(x1Values[i], y1Values[i], x2Values[i], y2Values[i], lengthValues[i]));
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println(x1Values.length + ":" + y1Values.length + ":" + x2Values.length + ":"
+							+ y2Values.length + ":" + lengthValues.length);
+				}
+			}
 		}
-	   }
 	}
-	if (index >= 0)
-	   return lines.remove(index);
-	else
-	   return null;
-   }
 
-   /**
-    * 
-    * This method goes through the entire ArrayList of lines that is given to
-    * the program by GRIP, and is used to determine which, if any lines are
-    * touching the given lines. If there are multiple, then it will only return
-    * the one that is first in the ArrayList.
-    * 
-    * @param l1
-    *           One of the line that you would like to compare to the rest of
-    *           the ArrayList
-    * @param l2
-    *           One of the line that you would like to compare to the rest of
-    *           the ArrayList
-    * @return An array of the two lines given, plus the third line that was
-    *         found
-    */
-   public static Line[] isClose(Line l1, Line l2) {
+	/**
+	 * Iterates through the ArrayList of lines, and if two are found to have ends
+	 * less than two pixels away from each other, then it will remove both of the
+	 * lines from the ArrayList, and proceed to add both of them to a new Goal,
+	 * leaving the third line of the Goal to be fixed later.
+	 */
+	private static void findGoals() {
+		for (int i = 0; i < lines.size() - 1;) {
+			Line l = isClose(lines.get(i));
+			if (l == null)
+				lines.remove(i);
+			else {
+				Line[] temp = isClose(l, lines.remove(i));
+				// System.out.println(temp);
+				if (temp != null)
+					goals.add(new Goal(temp));
+			}
 
-	int index = -1;
-	double lowestValue = lowestAcceptableValue;
-	boolean needHorizontal;
+		}
+	}
 
-	// determines whether a vertical or horizontal line is needed in order
-	// to complete the goal
-	if (l1.isHorizontal() || l2.isHorizontal())
-	   needHorizontal = false;
-	else
-	   needHorizontal = true;
+	/**
+	 * Removes any goals from the ArrayList which are inside of another goal by
+	 * calling the isInsideGoal method within the Goal class.
+	 */
+	private synchronized static void filterGoals() {
 
-	for (int i = 0; i < lines.size(); i++) {
-	   if (needHorizontal == lines.get(i).isHorizontal()) {
-
-		double d = returnLowestDouble(l1.compareTo(lines.get(i)), l2.compareTo(lines.get(i)));
-
-		if (d < lowestValue) {
-		   index = i;
-		   lowestValue = d;
+		for (int index = 0; index < goals.size(); index++) {
+			if (goals.get(index).isComplete()) {
+				Goal g = goals.get(index);
+				for (int i = 0; i < goals.size(); i++) {
+					if (g.isInsideGoal(goals.get(i))) {
+						goals.remove(i);
+						i--;
+					}
+				}
+			} else
+				goals.remove(index);
 		}
 
-	   }
-
 	}
 
-	if (index >= 0)
-	   return new Line[] { l1, l2, lines.remove(index) };
-	else
-	   return null;
-
-   }
-
-   /**
-    * Retrieves all of the data from the network table in the form of arrays
-    */
-   private static void setValues() {
-	do {
-	   // FPS = table.getNumber("FPS");
-	   x1Values = table.getNumberArray("myLinesReport/x1", x1Values);
-	   y1Values = table.getNumberArray("myLinesReport/y1", y1Values);
-	   x2Values = table.getNumberArray("myLinesReport/x2", x2Values);
-	   y2Values = table.getNumberArray("myLinesReport/y2", y2Values);
-	   lengthValues = table.getNumberArray("myLinesReport/length", lengthValues);
-	} while (!(x1Values.length == y1Values.length && y1Values.length == x2Values.length
-		&& x2Values.length == y2Values.length && y2Values.length == lengthValues.length));
-
-   }
-
-   /**
-    * Takes all of the data previously gotten from the NetworkTable, and turns
-    * it into an ArrayList of lines.
-    */
-   private static void createLines() {
-	for (int i = 0; i < lengthValues.length; i++) {
-	   if (lengthValues[i] != 0) {
-		try {
-		   lines.add(new Line(x1Values[i], y1Values[i], x2Values[i], y2Values[i], lengthValues[i]));
-		} catch (Exception e) {
-		   e.printStackTrace();
-		   System.out.println(x1Values.length + ":" + y1Values.length + ":" + x2Values.length + ":"
-			   + y2Values.length + ":" + lengthValues.length);
-		}
-	   }
-	}
-   }
-
-   /**
-    * Iterates through the ArrayList of lines, and if two are found to have ends
-    * less than two pixels away from each other, then it will remove both of the
-    * lines from the ArrayList, and proceed to add both of them to a new Goal,
-    * leaving the third line of the Goal to be fixed later.
-    */
-   private static void findGoals() {
-	for (int i = 0; i < lines.size() - 1;) {
-	   Line l = isClose(lines.get(i));
-	   if (l == null)
-		lines.remove(i);
-	   else {
-		Line[] temp = isClose(l, lines.remove(i));
-		// System.out.println(temp);
-		if (temp != null)
-		   goals.add(new Goal(temp));
-	   }
-
-	}
-   }
-
-   /**
-    * Removes any goals from the ArrayList which are inside of another goal by
-    * calling the isInsideGoal method within the Goal class.
-    */
-   private synchronized static void filterGoals() {
-
-	for (int index = 0; index < goals.size(); index++) {
-	   if (goals.get(index).isComplete()) {
-		Goal g = goals.get(index);
+	/**
+	 * TODO: Finish this method.
+	 *
+	 * @return null at the moment
+	 */
+	public static Goal getHottestGoal() {
 		for (int i = 0; i < goals.size(); i++) {
-		   if (g.isInsideGoal(goals.get(i))) {
-			goals.remove(i);
-			i--;
-		   }
+
 		}
-	   } else
-		goals.remove(index);
+
+		return null;
 	}
 
-   }
-
-   public static Goal getHottestGoal() {
-	for (int i = 0; i < goals.size(); i++) {
+	/**
+	 *
+	 * @param d1
+	 *           The first distance.
+	 * @param d2
+	 *           The second distance.
+	 * @return The lowest value given, either d1 or d2.
+	 */
+	private static double returnLowestDouble(double d1, double d2) {
+		if (d1 < d2)
+			return d1;
+		else
+			return d2;
 
 	}
-   }
 
-   /**
-    * 
-    * @param d1
-    *           The first distance.
-    * @param d2
-    *           The second distance.
-    * @return The lowest value given, either d1 or d2.
-    */
-   private static double returnLowestDouble(double d1, double d2) {
-	if (d1 < d2)
-	   return d1;
-	else
-	   return d2;
-
-   }
-
-   /**
-    * There's no apparent use for this.
-    */
+	/**
+	 * There's no apparent use for this.
+	 */
    /*
     * public void filterHorizontalLines() { lines = getHorizontalLines(); }
     */
 
-   /**
-    * Finds the horizontal lines in the list of lines and returns it
-    * 
-    * @return all horizontal lines in the list
-    */
-   public ArrayList<Line> getHorizontalLines() {
-	ArrayList<Line> horizontalLines = new ArrayList<>();
+	/**
+	 * Finds the horizontal lines in the list of lines and returns it
+	 *
+	 * @return all horizontal lines in the list
+	 */
+	public ArrayList<Line> getHorizontalLines() {
+		ArrayList<Line> horizontalLines = new ArrayList<>();
 
-	for (Line l : lines) {
-	   if (l.isHorizontal())
-		horizontalLines.add(l);
+		for (Line l : lines) {
+			if (l.isHorizontal())
+				horizontalLines.add(l);
+		}
+
+		return horizontalLines;
 	}
 
-	return horizontalLines;
-   }
-
-   /**
-    * Sends the appropriate goal data to the roborio
-    */
-   public static void sendData() {
-	if (client.isConnected())
-	   client.send(getGoalData());
-   }
-
-   /**
-    * Selects the best goal found by the vision processing, then returns it as a
-    * GoalData
-    *
-    * - By default, this chooses the goal with the widest center line of a goal
-    * TODO: Modify this to select which goal the driver wants to send
-    *
-    * @return data of the appropriate goal, null if no goals are found
-    */
-   public static GoalData getGoalData() {
-	if (goals.size() == 0)
-	   return null;
-
-	int goalIndex = 0;
-	double goalWidth = 0;
-	for (int i = 0; i < goals.size(); i++) {
-	   double lineWidth = goals.get(i).getCenterLine().getXWidth();
-	   if (goalWidth < lineWidth) {
-		goalIndex = 0;
-		goalWidth = lineWidth;
-	   }
+	/**
+	 * Sends the appropriate goal data to the roborio
+	 */
+	public static void sendData() {
+		if (client.isConnected())
+			client.send(getGoalData());
 	}
 
-	return new GoalData(goals.get(goalIndex));
-   }
+	/**
+	 * Selects the best goal found by the vision processing, then returns it as a
+	 * GoalData
+	 *
+	 * - By default, this chooses the goal with the widest center line of a goal
+	 * TODO: Modify this to select which goal the driver wants to send
+	 *
+	 * @return data of the appropriate goal, null if no goals are found
+	 */
+	public static GoalData getGoalData() {
+		if (goals.size() == 0)
+			return null;
+
+		int goalIndex = 0;
+		double goalWidth = 0;
+		for (int i = 0; i < goals.size(); i++) {
+			double lineWidth = goals.get(i).getCenterLine().getXWidth();
+			if (goalWidth < lineWidth) {
+				goalIndex = 0;
+				goalWidth = lineWidth;
+			}
+		}
+
+		return new GoalData(goals.get(goalIndex));
+	}
 }
