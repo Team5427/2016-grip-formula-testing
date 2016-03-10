@@ -1,6 +1,7 @@
 package com.Team5427.Networking.server;
 
 import com.Team5427.Networking.Task;
+import com.Team5427.Networking.TaskDescription;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,16 +25,20 @@ public class Server {
 	private static final int PORT = 25565;
 
 	/**
-	 * Sends an object to the client
+	 * Always use this method to send anything to the client, as it will ensure
+	 * that the proper thing is sent in order to avoid any unnecessary errors.
 	 * 
 	 * @param o
-	 *            object to be sent
-	 * @return true if object has been sent and false if otherwise
+	 *            Object to be sent to the client
+	 * @param t
+	 *            an enum from the class TaskDescription, used to tell the
+	 *            client what to do with the received information.
+	 * @return whether or not the operation was successful.
 	 */
-	public static boolean send(Object o) {
+	public static boolean send(Object o, TaskDescription t) {
 		if (hasConnection()) {
 			try {
-				out.writeObject(o);
+				out.writeObject(new Task(t, o));
 				out.flush(); // is reset needed? No, we need to flush it I
 								// believe
 				return true;
@@ -159,5 +164,30 @@ public class Server {
 		}
 
 	});
+
+	/**
+	 * TODO remove this method soon, as it is old. Sends an object to the client
+	 * 
+	 * @deprecated use the other send method that takes in an object and an enum
+	 *             in order to ensure the proper creation of a task that will be
+	 *             sent to the client.
+	 * 
+	 * @param o
+	 *            object to be sent
+	 * @return true if object has been sent and false if otherwise
+	 */
+	public static boolean send(Object o) {
+		if (hasConnection()) {
+			try {
+				out.writeObject(o);
+				out.flush();
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return false;
+	}
 
 }

@@ -2,6 +2,7 @@ package com.Team5427.VisionProcessing;
 
 import com.Team5427.res.Config;
 
+@SuppressWarnings("rawtypes")
 public class Goal implements Comparable {
 
 	private Line leftLine, centerLine, rightLine;
@@ -194,31 +195,6 @@ public class Goal implements Comparable {
 	}
 
 	/**
-	 * @deprecated Calculates the width in inches from the center of the camera
-	 *             to the horizontal edge.* This is used to calculate the
-	 *             distance from the goal to the robot and to calibrate the FOV.
-	 *
-	 * @return vertical distance in inches from the center to the horizontal
-	 *         edge of the camera. edge of the camera.
-	 */
-	public double getNormalizedVerticalDistance() {
-		double verticalAvg = (leftLine.getLength() + rightLine.getLength()) / 2;
-		double pixelWidth = verticalAvg * Config.TRUE_GOAL_WIDTH / Config.TRUE_GOAL_HEIGHT;
-		return (VisionFrame.width / 2) * Config.TRUE_GOAL_WIDTH / pixelWidth;
-	}
-
-	// TODO: Code this and add comments
-
-	/**
-	 * @deprecated
-	 * @return
-	 */
-	public double getNormalizedHorizontalDistance() {
-		double horizontalAvg = (centerLine.getLength() + getTopLength()) / 2;
-		return (VisionFrame.width / 2) * Config.TRUE_GOAL_WIDTH / horizontalAvg;
-	}
-
-	/**
 	 * Returns the distance between the robot to the center of the goal in
 	 * inches
 	 * 
@@ -255,85 +231,5 @@ public class Goal implements Comparable {
 		return -1;
 	}
 
-	/**
-	 * @deprecated Gets the distance from the goal to the robot
-	 * 
-	 * @return distance from robot to goal in inches
-	 */
-	public double getDistanceToGoal() {
-		return distanceToGoal;
-	}
-
-	/**
-	 * @deprecated Returns the distance from the goal to the robot
-	 *
-	 * @return the distance from goal to the robot
-	 */
-	public double getDistanceToRobot() {
-
-		if (distanceToGoal > 0)
-			return distanceToGoal;
-
-		double radAngle = Math.toRadians(Config.horizontalFOV / 2);
-		double verticalDistance = getNormalizedVerticalDistance();
-
-		distanceToGoal = verticalDistance / Math.tan(radAngle);
-
-		return distanceToGoal;
-	}
-
-	/**
-	 * @deprecated Gets the horizontal distance to the tower
-	 * 
-	 * @return distance from robot to tower
-	 */
-	public double getDistanceToTower() {
-		if (distanceToTower > 0)
-			return distanceToTower;
-
-		distanceToTower = (Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT) / Math.tan(getAngleOfElevationInRadians());
-
-		return distanceToTower;
-	}
-
-	/**
-	 * @deprecated
-	 * @return The angle of the robot to the goal in radians
-	 */
-	public double getAngleOfElevationInRadians() {
-
-		if (angleOfElevation > 0)
-			return angleOfElevation;
-
-		angleOfElevation = Math.asin((Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT) / getDistanceToRobot());
-		// TODO that used to be getDistanceToGoal,not sure if changing it was
-		// good
-		return angleOfElevation;
-	}
-
-	/**
-	 * @deprecated
-	 * @return the angle of the robot to the goal in degrees
-	 */
-
-	public double getAngleOfElevationInDegrees() {
-		return Math.toDegrees(getAngleOfElevationInRadians());
-	}
-
-	/**
-	 * @deprecated TODO: Fix this, probably not working right now Gets the angle
-	 *             the robot has to aim in the horizontal axis in degrees
-	 *
-	 * @return horizontal angle in degrees from the center of the robot to the
-	 *         goal. A negative angle represents that the goal is to the left
-	 *         from the center of the robot. A positive angle represents that
-	 *         the goal is to the right from the center of the robot.
-	 */
-	public double getHorizontalAngleInDegrees() {
-		double halfResolution = VisionPanel.RESOLUTION.getWidth() / 2;
-		double fromCenter = centerLine.getMidpointX() - halfResolution;
-
-		return (Config.horizontalFOV / 2 * fromCenter) / halfResolution;
-	}
 
 }
