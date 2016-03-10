@@ -69,7 +69,7 @@ public class Server {
 
 		try {
 			serverSocket = new ServerSocket(PORT);
-			serverSocket.setSoTimeout(100);
+			serverSocket.setSoTimeout(1000);
 
 		} catch (Exception e) {
 			e.printStackTrace();

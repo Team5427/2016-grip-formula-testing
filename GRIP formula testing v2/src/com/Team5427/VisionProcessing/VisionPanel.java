@@ -365,17 +365,16 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		}
 
 		// Paints data from the roborio if connection is established
-		bg.setFont(new Font("Arial", Font.BOLD, 12));
-		if (Main.client.isConnected()) {
-			bg.setColor(Color.GREEN);
-			bg.fillOval(489, 493, 10, 10);
-			bg.drawString("Connected to Roborio", 510, 503);
-		} else {
-			bg.setColor(Color.RED);
-			bg.fillOval(490, 493, 10, 10);
-			bg.drawString("No Connection", 520, 503);
-			// System.out.println("Paint");
-		}
+//		bg.setFont(new Font("Arial", Font.BOLD, 12));
+//		if (Main.client.isConnected()) {
+//			bg.setColor(Color.GREEN);
+//			bg.fillOval(489, 493, 10, 10);
+//			bg.drawString("Connected to Roborio", 510, 503);
+//		} else {
+//			bg.setColor(Color.RED);
+//			bg.fillOval(490, 493, 10, 10);
+//			bg.drawString("No Connection", 520, 503);
+//		}
 
 		// Draws frame rate
 		bg.setColor(Color.GREEN);
