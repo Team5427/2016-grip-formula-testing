@@ -8,6 +8,7 @@ import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry;
 import com.github.sarxos.webcam.ds.ipcam.IpCamDriver;
 import com.github.sarxos.webcam.ds.ipcam.IpCamMode;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.*;
 import java.awt.*;
@@ -400,7 +401,8 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 			bg.setColor(Color.GREEN);
 			bg.fillOval(489, 493, 10, 10);
 			bg.drawString("Connected to Roborio", 510, 503);
-			System.out.println(Main.client.send(bg));
+			System.out.println(new Serializable() {
+			});
 		} else {
 			bg.setColor(Color.RED);
 			bg.fillOval(490, 493, 10, 10);

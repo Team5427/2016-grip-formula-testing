@@ -1,14 +1,16 @@
 package com.Team5427.Networking.client;
 
+import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 
 public class NetworkClient implements Runnable {
 
 	public static final String DEFAULT_IP = "10.54.27.1";
-	public static final int DEFAULT_PORT = 25565;
+	public static final int DEFAULT_PORT = 25564;
 
 	public static String ip;
 	public static int port;
@@ -103,16 +105,19 @@ public class NetworkClient implements Runnable {
 	 *            object to be sent to the server
 	 * @return true if the object is sent successfully, false if otherwise.
 	 */
-	public synchronized boolean send(Object o) {
+	public synchronized boolean send(Serializable o) {
 		try {
 			System.out.println("os " + (os == null));
 			os.writeObject(o); // The error here is that writeObject is null
 			os.reset();
 			return true;
+		} catch (NotSerializableException e) {
+			System.out.println("The object to be sent is not serializable.");
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
 		}
+
+		return false;
 	}
 
 	/**
