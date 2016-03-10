@@ -362,7 +362,7 @@ public class Main {
 				goalWidth = lineWidth;
 			}
 		}
-return null;
-//		return new GoalData(goals.get(goalIndex));
+		return null;
+		// return new GoalData(goals.get(goalIndex));
 	}
 }
