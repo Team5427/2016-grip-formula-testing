@@ -1,10 +1,14 @@
 package com.Team5427.testing;
 
+import com.Team5427.Networking.client.NetworkClient;
 import com.Team5427.Networking.server.Server;
 
 public class TestMain {
 
+	public static NetworkClient client;
+	
 	public static void main(String[] args) {
-		Server.start();
+		client = new NetworkClient("localhost", NetworkClient.DEFAULT_PORT);
+		client.start();
 	}
 }

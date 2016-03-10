@@ -21,7 +21,9 @@ public class Main {
 	 * information that is created by GRIP.
 	 */
 	public static NetworkTable table;
-	public static NetworkClient client;
+	public static NetworkClient client; // TODO remove client from the program,
+										// as the client will be on the roborio,
+										// not an object on the server.
 
 	static double[] x1Values = new double[20];
 	static double[] y1Values = new double[20];
@@ -60,16 +62,16 @@ public class Main {
 
 		setValues();
 
-//		Server.start();
+		Server.start();
 
 		// Attempts to connect to the roborio
 		// client = new NetworkClient();
-		client = new NetworkClient("localhost", NetworkClient.DEFAULT_PORT);
-		client.start();
-		if (client.isConnected())
-			System.out.println("Connection established to the roborio.");
-		else
-			System.out.println("Connection not established to the roborio.");
+		// client = new NetworkClient("localhost", NetworkClient.DEFAULT_PORT);
+		// client.start();
+		// if (client.isConnected())
+		// System.out.println("Connection established to the roborio.");
+		// else
+		// System.out.println("Connection not established to the roborio.");
 
 		while (true) {
 			long startTime = System.nanoTime();
@@ -83,7 +85,7 @@ public class Main {
 
 				filterGoals();
 
-				sendData(); // Sends goal data to the roborio.
+				// sendData(); // Sends goal data to the roborio.
 
 				Thread.sleep(10);
 

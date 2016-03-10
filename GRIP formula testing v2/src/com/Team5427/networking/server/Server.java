@@ -31,10 +31,11 @@ public class Server {
 	 * @return true if object has been sent and false if otherwise
 	 */
 	public static boolean send(Object o) {
-		if (connection != null && !connection.isClosed()) {
+		if (hasConnection()) {
 			try {
 				out.writeObject(o);
-				out.reset(); // is reset needed?
+				out.flush(); // is reset needed? No, we need to flush it I
+								// believe
 				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -42,6 +43,16 @@ public class Server {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Call whenever sending something to the client in order to check whether
+	 * or not it is connected to the server.
+	 * 
+	 * @return whether the client is connected.
+	 */
+	public static boolean hasConnection() {
+		return (connection != null && !connection.isClosed());
 	}
 
 	public static synchronized void reset() {
@@ -124,9 +135,9 @@ public class Server {
 					}
 
 				} catch (SocketException e) {
-					System.out.println("\n\tConnection to the client has been lost. Attempting to re-establish" +
-							"connection");
-//					reset();
+					System.out.println(
+							"\n\tConnection to the client has been lost. Attempting to re-establish" + "connection");
+					// reset();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
