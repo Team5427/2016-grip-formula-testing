@@ -1,5 +1,6 @@
 package com.Team5427.VisionProcessing;
 
+import com.Team5427.Networking.server.Server;
 import com.Team5427.res.Config;
 import com.github.sarxos.webcam.Webcam;
 
@@ -111,23 +112,22 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		char key = Character.toLowerCase(e.getKeyChar());
 
-		if (key == 'r') {
-			connectToNetwork();
-		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		char key = Character.toLowerCase(e.getKeyChar());
 
+/*
 		if (key == 'c') {
 			initializeCalibration();
 		}
+*/
 	}
 
 	/**
+	 * @deprecated
 	 * Attempts to establish connection with the roborio
 	 *
 	 * // TODO: Do something so that the driver will not accidentally reconnect
@@ -364,17 +364,17 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 		}
 
-		// Paints data from the roborio if connection is established
-//		bg.setFont(new Font("Arial", Font.BOLD, 12));
-//		if (Main.client.isConnected()) {
-//			bg.setColor(Color.GREEN);
-//			bg.fillOval(489, 493, 10, 10);
-//			bg.drawString("Connected to Roborio", 510, 503);
-//		} else {
-//			bg.setColor(Color.RED);
-//			bg.fillOval(490, 493, 10, 10);
-//			bg.drawString("No Connection", 520, 503);
-//		}
+//		 Paints data from the roborio if connection is established
+		bg.setFont(new Font("Arial", Font.BOLD, 12));
+		if (Server.hasConnection()) {
+			bg.setColor(Color.GREEN);
+			bg.fillOval(489, 493, 10, 10);
+			bg.drawString("Connected to Roborio", 510, 503);
+		} else {
+			bg.setColor(Color.RED);
+			bg.fillOval(490, 493, 10, 10);
+			bg.drawString("No Connection", 520, 503);
+		}
 
 		// Draws frame rate
 		bg.setColor(Color.GREEN);

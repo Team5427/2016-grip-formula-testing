@@ -10,5 +10,8 @@ public class TestMain {
 	public static void main(String[] args) {
 		client = new NetworkClient("localhost", NetworkClient.DEFAULT_PORT);
 		client.start();
+
+		Object o = client;
+		System.out.println(o.getClass());
 	}
 }

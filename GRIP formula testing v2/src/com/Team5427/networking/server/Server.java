@@ -113,10 +113,9 @@ public class Server {
 
 							sender.start();
 
-						} catch (Exception e) {
-						} finally {
 							if (connection != null && !connection.isClosed())
 								System.out.println("Connected!");
+						} catch (Exception e) {
 						}
 					} else {
 						Object o = in.readObject();
@@ -140,8 +139,7 @@ public class Server {
 					}
 
 				} catch (SocketException e) {
-					System.out.println(
-							"\n\tConnection to the client has been lost. Attempting to re-establish" + "connection");
+					System.out.println("\n\tConnection to the client has been lost. Attempting to re-establish connection");
 					// reset();
 				} catch (Exception e) {
 					e.printStackTrace();
