@@ -56,6 +56,8 @@ public class NetworkClient implements Runnable {
 			clientSocket = new Socket(ip, port);
 			is = new ObjectInputStream(clientSocket.getInputStream());
 			os = new ObjectOutputStream(clientSocket.getOutputStream());
+			System.out.println(clientSocket);
+			
 			inputStreamData = new ArrayList<>();
 
 			System.out.println("Connection to the server has been established successfully.");

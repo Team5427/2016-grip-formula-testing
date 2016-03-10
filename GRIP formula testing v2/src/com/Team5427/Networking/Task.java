@@ -1,6 +1,8 @@
 package com.Team5427.Networking;
 
-public class Task {
+import java.io.Serializable;
+
+public class Task implements Serializable{
 
 	TaskDescription t;
 	Object o;

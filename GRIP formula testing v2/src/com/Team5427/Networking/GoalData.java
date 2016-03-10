@@ -1,12 +1,14 @@
 package com.Team5427.Networking;
 
+import java.io.Serializable;
+
 import com.Team5427.VisionProcessing.Goal;
 
 /**
  * The object that will be sent from the driver station and will be received by
  * the robot. This class only contains data that may be useful for the robot.
  */
-public class GoalData {
+public class GoalData implements Serializable{
 
 	/**
 	 * Distance between the robot and the goal. The value is
