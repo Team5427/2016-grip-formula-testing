@@ -131,15 +131,18 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	 * Attempts to establish connection with the roborio
 	 *
 	 * // TODO: Do something so that the driver will not accidentally reconnect
-	 * to the roborio when connection has already been established.
+	 * to the roborio when connection has already been established. TODO make
+	 * this work without needing main.client
 	 */
 	public void connectToNetwork() {
 		System.out.println("\tAttempting to connect to the roborio\n");
-		Main.client.start();
+		// Main.client.start();
 	}
 
 	/**
 	 * Initializes the calibration sequence
+	 * 
+	 * @deprecated currently doesn't perform a function.
 	 */
 	@SuppressWarnings("unused")
 	public void initializeCalibration() {
@@ -164,13 +167,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 				System.out.print(
 						"Enter the height of the center of the goal, the distance to the base of the tower, and the distance to the center of the goal.");
-
-				calibrateEverything(scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble());
-
-				// double FOV = calibrateFOV(g, distance);
-
-				// System.out.println("The new FOV is: " + FOV);
-
+				// TODO put what ever calibration method we are using here.
 			} else
 				System.out.println("\nExiting calibration.");
 
@@ -188,34 +185,6 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 				System.out.println("FOV Calibration has been disabled.");
 			System.out.println("\nExiting calibration.");
 		}
-	}
-
-	// TODO possibly finish later
-	public static double calibrateEverything(double goalHeight, double distanceToTower, double distanceToGoal) {
-
-		double angleOfElevation = Math.atan(goalHeight / distanceToTower);
-
-		return -1;
-	}
-
-	/**
-	 * @deprecated Calibrates the FOV based on goal and distance
-	 * 
-	 * @param goal
-	 *            Reference goal
-	 * @param distance
-	 *            Actual distance between goal to robot
-	 * @return calibrated FOV
-	 */
-	public static double calibrateFOV(Goal goal, double distance) {
-		double verticalDistance = goal.getNormalizedVerticalDistance();
-
-		double FOV = Math.toDegrees(Math.atan(verticalDistance / distance));
-
-		Config.horizontalFOV = 2 * FOV;
-		calculateVerticalFOV();
-
-		return Config.horizontalFOV;
 	}
 
 	/**
