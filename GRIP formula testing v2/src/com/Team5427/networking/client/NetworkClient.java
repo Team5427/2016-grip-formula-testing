@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class NetworkClient implements Runnable {
 
 	public static final String DEFAULT_IP = "10.54.27.1";
-	public static final int DEFAULT_PORT = 25564;
+	public static final int DEFAULT_PORT = 25565;
 
 	public static String ip;
 	public static int port;
