@@ -1,10 +1,8 @@
 package com.Team5427.Networking.client;
 
-import java.io.NotSerializableException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 public class NetworkClient implements Runnable {
@@ -64,7 +62,7 @@ public class NetworkClient implements Runnable {
 
 			return true;
 		} catch (Exception e) {
-			System.out.println("Connection failed to establish");
+			System.out.println("Connection failed to establish.");
 			return false;
 		}
 	}
@@ -106,15 +104,25 @@ public class NetworkClient implements Runnable {
 	 * @return true if the object is sent successfully, false if otherwise.
 	 */
 	public synchronized boolean send(Serializable o) {
-		try {
-			System.out.println("os " + (os == null));
-			os.writeObject(o); // The error here is that writeObject is null
-			os.reset();
-			return true;
-		} catch (NotSerializableException e) {
-			System.out.println("The object to be sent is not serializable.");
-		} catch (Exception e) {
-			e.printStackTrace();
+
+		if (running) {
+			try {
+				if (os == null)
+					System.out.println("The output stream is null");
+				os.writeObject(o); // The error here is that writeObject is null
+				os.reset();
+                return true;
+            } catch (NotSerializableException e) {
+                System.err.println(getClass() + ":: send(Serializable o)\n\tThe object to be sent is not serializable.");
+            } catch (SocketException e) {
+				System.err.println("Socket Exception");
+				reset();
+			} catch (NullPointerException e) {
+				System.err.println("\n\tThere was an error connecting to the server.");					// This error occurs when the client attempts to connect to a server, but the running
+				stop();																					// server is having a SocketException
+			} catch (Exception e) {
+                e.printStackTrace();
+            }
 		}
 
 		return false;
@@ -126,10 +134,10 @@ public class NetworkClient implements Runnable {
 	 * @return true if the thread starts successfully, false if otherwise.
 	 */
 	public synchronized boolean start() {
-		if (clientSocket == null || !clientSocket.isClosed()) {
+		if (!running && (clientSocket == null || !clientSocket.isClosed())) {
 			networkThread = new Thread(this);
-			networkThread.start();
 			running = true;
+			networkThread.start();
 			return true;
 		}
 
@@ -142,13 +150,33 @@ public class NetworkClient implements Runnable {
 	 * @return true if the thread is stopped successfully, false if otherwise.
 	 */
 	public synchronized boolean stop() {
-		if (networkThread.isAlive()) { // The thread is found running and is
-			// stopped
-			running = false;
+		running = false;
+
+
+		try {
+			clientSocket.close();
+			os.close();
+			is.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		clientSocket = null;
+		os = null;
+		is = null;
+
+		if (!networkThread.isAlive()) {		 	// The thread is found running and is told to stop
 			return true;
-		} else { // The thread is not running in the first place
+		} else {								// The thread is not running in the first place
 			return false;
 		}
+	}
+
+	public synchronized boolean reset() {
+		stop();
+		start();
+
+		return false;
 	}
 
 	/**
@@ -164,6 +192,8 @@ public class NetworkClient implements Runnable {
 				inputStreamData.add(is.readObject());
 				// is.reset();
 
+			} catch (SocketException e) {
+				reset();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

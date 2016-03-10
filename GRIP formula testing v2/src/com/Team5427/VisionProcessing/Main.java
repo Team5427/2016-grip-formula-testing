@@ -60,7 +60,7 @@ public class Main {
 
 		setValues();
 
-		Server.start();
+//		Server.start();
 
 		// Attempts to connect to the roborio
 		// client = new NetworkClient();

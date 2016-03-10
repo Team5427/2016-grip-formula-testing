@@ -1,6 +1,5 @@
 /**
- * NOTE: This is not the same server class as the one in the robotics 2016 respository for
- *       the main robot. This is a server class for testing purposes.
+ * NOTE: Do not use this. This server isn't as good as Andrew's
  */
 
 package com.Team5427.testing;

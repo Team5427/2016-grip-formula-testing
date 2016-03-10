@@ -2,10 +2,12 @@ package com.Team5427.Networking.server;
 
 import com.Team5427.Networking.Task;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class Server {
 
@@ -42,7 +44,12 @@ public class Server {
 		return false;
 	}
 
-	public static void start() {
+	public static synchronized void reset() {
+		stop();
+		start();
+	}
+
+	public static synchronized void start() {
 
 		try {
 			serverSocket = new ServerSocket(PORT);
@@ -56,8 +63,20 @@ public class Server {
 		listener.start();
 	}
 
-	public static void stop() {
+	public static synchronized void stop() {
 		running = false;
+		try {
+			connection.close();
+			serverSocket.close();
+			in.close();
+			out.close();
+			connection = null;
+			serverSocket = null;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static Thread listener = new Thread(new Runnable() {
@@ -104,6 +123,10 @@ public class Server {
 
 					}
 
+				} catch (SocketException e) {
+					System.out.println("\n\tConnection to the client has been lost. Attempting to re-establish" +
+							"connection");
+//					reset();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
