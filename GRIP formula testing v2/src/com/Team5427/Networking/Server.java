@@ -1,12 +1,9 @@
 package com.Team5427.Networking;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import com.Team5427.VisionProcessing.Main;
 
 public class Server {
 
@@ -46,8 +43,6 @@ public class Server {
 							out = new ObjectOutputStream(connection.getOutputStream());
 							in = new ObjectInputStream(connection.getInputStream());
 
-							sender.start();
-
 						} catch (Exception e) {
 						} finally {
 							if (connection != null && !connection.isClosed())
@@ -83,22 +78,5 @@ public class Server {
 	}
 
 	);
-
-	private static Thread sender = new Thread(new Runnable() {
-
-		@Override
-		public void run() {
-			while (connection != null && !connection.isClosed()) {
-				try {
-					out.writeObject(new Task(TaskDescription.GOAL_ATTACHED, new GoalData(Main.getBestGoal())));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-		}
-
-	});
 
 }

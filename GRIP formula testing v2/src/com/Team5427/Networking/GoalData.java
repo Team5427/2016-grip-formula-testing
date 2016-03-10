@@ -10,7 +10,7 @@ import java.io.Serializable;
  * The object that will be sent from the driver station and will be received by
  * the robot. This class only contains data that may be useful for the robot.
  */
-public class GoalData implements Serializable{
+public class GoalData implements Serializable {
 
 	/**
 	 * Distance between the robot and the goal. The value is
@@ -25,20 +25,11 @@ public class GoalData implements Serializable{
 	 */
 	private double horizontalAngle;
 
-	public GoalData(Goal goal) {
-		distance = goal.getGoalDistance();
-		angleOfElevation = goal.getAngleOfElevation();
-		horizontalAngle = goal.getHorizontalAngle();
-	}
 
 	public GoalData(double distance, double angleOfElevation, double horizontalAngle) {
 		this.distance = distance;
 		this.angleOfElevation = angleOfElevation;
 		this.horizontalAngle = horizontalAngle;
-	}
-
-	public GoalData(String s) {
-
 	}
 
 	public double getDistance() {

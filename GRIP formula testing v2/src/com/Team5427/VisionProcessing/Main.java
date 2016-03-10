@@ -3,6 +3,7 @@ package com.Team5427.VisionProcessing;
 import java.util.ArrayList;
 
 import com.Team5427.Networking.GoalData;
+import com.Team5427.Networking.TaskDescription;
 import com.Team5427.Networking.client.NetworkClient;
 import com.Team5427.Networking.server.Server;
 
@@ -85,7 +86,7 @@ public class Main {
 
 				filterGoals();
 
-				// sendData(); // Sends goal data to the roborio.
+				sendData();
 
 				Thread.sleep(10);
 
@@ -276,13 +277,16 @@ public class Main {
 	 * @return the goal with the largest area.
 	 */
 	public static Goal getBestGoal() {
-		int index = 0;
-		for (int i = 1; i < goals.size() - 1; i++) {
-			if (goals.get(index).compareTo(goals.get(i)) == 0) {
-				index = i;
+		if (goals.size() > 0) {
+			int index = 0;
+			for (int i = 1; i < goals.size() - 1; i++) {
+				if (goals.get(index).compareTo(goals.get(i)) == 0) {
+					index = i;
+				}
 			}
-		}
-		return goals.get(index);
+			return goals.get(index);
+		} else
+			return null;
 	}
 
 	/**
@@ -328,8 +332,12 @@ public class Main {
 	 * Sends the appropriate goal data to the roborio
 	 */
 	public static void sendData() {
-		if (client.isConnected())
-			client.send(getGoalData());
+
+		if (Server.hasConnection() && goals.size() > 0) {
+			Goal g = getBestGoal();
+			Server.send(TaskDescription.GOAL_ATTACHED,
+					new GoalData(g.getGoalDistance(), g.getAngleOfElevation(), g.getHorizontalAngle()));
+		}
 	}
 
 	/**
@@ -354,7 +362,7 @@ public class Main {
 				goalWidth = lineWidth;
 			}
 		}
-
-		return new GoalData(goals.get(goalIndex));
+return null;
+//		return new GoalData(goals.get(goalIndex));
 	}
 }

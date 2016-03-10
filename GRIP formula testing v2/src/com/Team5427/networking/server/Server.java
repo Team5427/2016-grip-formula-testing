@@ -35,7 +35,7 @@ public class Server {
 	 *            client what to do with the received information.
 	 * @return whether or not the operation was successful.
 	 */
-	public static boolean send(Object o, TaskDescription t) {
+	public static boolean send(TaskDescription t, Object o) {
 		if (hasConnection()) {
 			try {
 				out.writeObject(new Task(t, o));
@@ -69,7 +69,7 @@ public class Server {
 
 		try {
 			serverSocket = new ServerSocket(PORT);
-			serverSocket.setSoTimeout(1000);
+			serverSocket.setSoTimeout(800);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,8 +157,17 @@ public class Server {
 
 		@Override
 		public void run() {
-			while (connection != null && !connection.isClosed()) {
+			while (true) {
 				// TODO send goals here
+				if (hasConnection())
+					System.out.println("sent a goal");
+
+				try {
+					Thread.sleep(25);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 		}
