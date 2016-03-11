@@ -1,4 +1,4 @@
-package com.Team5427.Networking.server;
+package com.Team5427.Networking;
 
 import com.Team5427.Networking.Task;
 import com.Team5427.Networking.TaskDescription;
@@ -57,7 +57,7 @@ public class Server {
 	 * @return whether the client is connected.
 	 */
 	public static boolean hasConnection() {
-		return (connection != null && !connection.isClosed());
+		return (connection != null && !connection.isClosed() );
 	}
 
 	public static synchronized void reset() {
