@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class Task implements Serializable{
 
-	TaskDescription t;
-	Object o;
+	private TaskDescription t;
+	private Object o;
 
 	public Task(TaskDescription t) {
 		this.t = t;
@@ -22,6 +22,10 @@ public class Task implements Serializable{
 
 	public Object getObject() {
 		return o;
+	}
+	@Override
+	public String toString(){
+		return "Team 5427 - Task " + t.toString();
 	}
 
 }

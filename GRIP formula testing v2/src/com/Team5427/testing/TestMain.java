@@ -1,7 +1,6 @@
 package com.Team5427.testing;
 
 import com.Team5427.Networking.client.NetworkClient;
-import com.Team5427.Networking.server.Server;
 
 public class TestMain {
 

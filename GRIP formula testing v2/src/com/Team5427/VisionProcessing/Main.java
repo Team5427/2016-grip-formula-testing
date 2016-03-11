@@ -1,11 +1,13 @@
 package com.Team5427.VisionProcessing;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import com.Team5427.Networking.GoalData;
 import com.Team5427.Networking.TaskDescription;
-import com.Team5427.Networking.client.NetworkClient;
-import com.Team5427.Networking.server.Server;
+import com.Team5427.Networking.Server;
 
 import edu.wpi.first.wpilibj.networktables.*;
 
@@ -22,9 +24,6 @@ public class Main {
 	 * information that is created by GRIP.
 	 */
 	public static NetworkTable table;
-	public static NetworkClient client; // TODO remove client from the program,
-										// as the client will be on the roborio,
-										// not an object on the server.
 
 	static double[] x1Values = new double[20];
 	static double[] y1Values = new double[20];
@@ -60,22 +59,15 @@ public class Main {
 		NetworkTable.setIPAddress("localhost");
 		table = NetworkTable.getTable("GRIP");
 		vf = new VisionFrame();
-
+		
+		ShootingAssistant.getShootingPower();
+		
 		setValues();
 
 		Server.start();
 
-		// Attempts to connect to the roborio
-		// client = new NetworkClient();
-		// client = new NetworkClient("localhost", NetworkClient.DEFAULT_PORT);
-		// client.start();
-		// if (client.isConnected())
-		// System.out.println("Connection established to the roborio.");
-		// else
-		// System.out.println("Connection not established to the roborio.");
-
 		while (true) {
-			long startTime = System.nanoTime();
+	//		long startTime = System.nanoTime();
 			try {
 
 				setValues();
@@ -306,13 +298,6 @@ public class Main {
 	}
 
 	/**
-	 * There's no apparent use for this.
-	 */
-	/*
-	 * public void filterHorizontalLines() { lines = getHorizontalLines(); }
-	 */
-
-	/**
 	 * Finds the horizontal lines in the list of lines and returns it
 	 *
 	 * @return all horizontal lines in the list
@@ -340,29 +325,4 @@ public class Main {
 		}
 	}
 
-	/**
-	 * Selects the best goal found by the vision processing, then returns it as
-	 * a GoalData
-	 *
-	 * - By default, this chooses the goal with the widest center line of a goal
-	 * TODO: Modify this to select which goal the driver wants to send
-	 *
-	 * @return data of the appropriate goal, null if no goals are found
-	 */
-	public static GoalData getGoalData() {
-		if (goals.size() == 0)
-			return null;
-
-		int goalIndex = 0;
-		double goalWidth = 0;
-		for (int i = 0; i < goals.size(); i++) {
-			double lineWidth = goals.get(i).getCenterLine().getXWidth();
-			if (goalWidth < lineWidth) {
-				goalIndex = 0;
-				goalWidth = lineWidth;
-			}
-		}
-		return null;
-		// return new GoalData(goals.get(goalIndex));
-	}
 }
