@@ -42,7 +42,7 @@ public class Config {
 	 * Angle at which the camera is mounted on the robot, in degrees.
 	 */
 	// public static final double CAMERA_START_ANGLE = 15.45;
-	public static final double CAMERA_START_ANGLE = 15.7;
+	public static double CAMERA_START_ANGLE = 15.7;
 	/**
 	 * Actual width of the goal.
 	 */

@@ -1,6 +1,6 @@
 package com.Team5427.VisionProcessing;
 
-import com.Team5427.Networking.server.Server;
+import com.Team5427.Networking.Server;
 import com.Team5427.res.Config;
 import com.github.sarxos.webcam.Webcam;
 
@@ -112,7 +112,11 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		char key = Character.toLowerCase(e.getKeyChar());
 
+		if (key == 'c') {
+			initializeCalibration();
+		}
 	}
 
 	@Override
@@ -141,7 +145,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 	/**
 	 * Initializes the calibration sequence
-	 * 
+	 *
 	 * @deprecated currently doesn't perform a function.
 	 */
 	@SuppressWarnings("unused")
@@ -188,24 +192,18 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	}
 
 	/**
-	 * @deprecated // TODO: Finish this
-	 *
-	 *             NOTE: Mr. Segura told me(Charlie) that there's no need for
-	 *             calibration since we have encoders. If we do need this code,
-	 *             then finish the method and refactor the method name to
-	 *             something more relevant.
-	 *
-	 *             Calibrates the angle of the robot using angles
-	 * @param goal
-	 * @param distance
-	 * @return
+	 * Calibrates the angle of the robot using angles
+	 * @param goal Goal used as a reference to calculate the camera's angle
+	 * @param distance the actual distance from the camera to the robot
+	 * @return the new starting angle of the camera
 	 */
-	public static double callibrateFOVfromAngle(Goal goal, double distance) {
-		double standardAngle = goal.getCameraAngle();
-
+	public static double callibrateCameraAngle(Goal goal, double distance) {
 		double theta = Math.asin((Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT) / distance);
+		theta -= goal.getCameraAngle();
 
-		return -1;
+		Config.CAMERA_START_ANGLE = Math.toDegrees(theta);
+
+		return Config.CAMERA_START_ANGLE;
 	}
 
 	public static void calculateVerticalFOV() {

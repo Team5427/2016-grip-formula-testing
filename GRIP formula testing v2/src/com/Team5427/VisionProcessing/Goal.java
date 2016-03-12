@@ -78,7 +78,7 @@ public class Goal implements Comparable {
 	 * This does not take in account the starting angle of the camera.
 	 *
 	 * @return Angle from the robot to the top of the camera as viewed by the
-	 *         camera
+	 *         camera in radians
 	 */
 	public double getCameraAngle() {
 		return Math.atan(
