@@ -16,11 +16,6 @@ public class Server {
 	private static ServerSocket serverSocket;
 	private static ObjectInputStream in;
 	private static ObjectOutputStream out;
-	/**
-	 * This is set to true when the server is running, false when it's not. This
-	 * is also used to stop the server when needed
-	 */
-	private static boolean running = false;
 
 	private static final int PORT = 25565;
 
@@ -60,9 +55,38 @@ public class Server {
 		return (connection != null && !connection.isClosed() );
 	}
 
+	private static Thread waitForOpen = new Thread(new Runnable() {
+		@Override
+		public void run() {
+			while (listener != null && listener.isAlive()) {
+				System.out.println("Thread not finished, waiting...");
+				try {
+					Thread.sleep(50);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			if (!listener.isAlive()) {
+				System.out.println("Thread is dead");
+				listener.start();
+			}
+		}
+	});
+
 	public static synchronized void reset() {
-		stop();
-		start();
+		try {
+			connection.close();
+//			serverSocket.close();
+			in.close();
+			out.close();
+			connection = null;
+//			serverSocket = null;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static synchronized void start() {
@@ -75,12 +99,12 @@ public class Server {
 			e.printStackTrace();
 		}
 
-		running = true;
 		listener.start();
 	}
 
 	public static synchronized void stop() {
-		running = false;
+		listener.interrupt();
+
 		try {
 			connection.close();
 			serverSocket.close();
@@ -100,7 +124,7 @@ public class Server {
 		@Override
 		public void run() {
 
-			while (running) {
+			while (!listener.isInterrupted()) {
 				try {
 
 					if (connection == null || connection.isClosed()) {
@@ -110,8 +134,6 @@ public class Server {
 							connection = serverSocket.accept();
 							out = new ObjectOutputStream(connection.getOutputStream());
 							in = new ObjectInputStream(connection.getInputStream());
-
-							sender.start();
 
 							if (connection != null && !connection.isClosed())
 								System.out.println("Connected!");
@@ -140,37 +162,17 @@ public class Server {
 
 				} catch (SocketException e) {
 					System.out.println("\n\tConnection to the client has been lost. Attempting to re-establish connection");
-					// reset();
+					reset();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-
 		}
+
 	}
 
 	);
 
-	private static Thread sender = new Thread(new Runnable() {
-
-		@Override
-		public void run() {
-			while (true) {
-				// TODO send goals here
-				if (hasConnection())
-					System.out.println("sent a goal");
-
-				try {
-					Thread.sleep(25);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-		}
-
-	});
 
 	/**
 	 * TODO remove this method soon, as it is old. Sends an object to the client

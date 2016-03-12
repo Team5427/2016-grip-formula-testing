@@ -9,7 +9,6 @@ import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry;
 import com.github.sarxos.webcam.ds.ipcam.IpCamDriver;
 import com.github.sarxos.webcam.ds.ipcam.IpCamMode;
 
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.*;
 import java.awt.*;
@@ -18,7 +17,6 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
-import javax.swing.text.html.HTMLDocument;
 
 public class VisionPanel extends JPanel implements Runnable, KeyListener {
 

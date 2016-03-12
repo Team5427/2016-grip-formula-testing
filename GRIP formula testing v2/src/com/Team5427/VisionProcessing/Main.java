@@ -1,9 +1,6 @@
 package com.Team5427.VisionProcessing;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import com.Team5427.Networking.GoalData;
 import com.Team5427.Networking.TaskDescription;
@@ -60,7 +57,7 @@ public class Main {
 		table = NetworkTable.getTable("GRIP");
 		vf = new VisionFrame();
 
-		System.out.println("POWER "+ShootingAssistant.getShootingPower(99));
+//		System.out.println("POWER "+ShootingAssistant.getShootingPower(99));
 
 		setValues();
 
