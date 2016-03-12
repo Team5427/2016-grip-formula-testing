@@ -59,15 +59,15 @@ public class Main {
 		NetworkTable.setIPAddress("localhost");
 		table = NetworkTable.getTable("GRIP");
 		vf = new VisionFrame();
-		
-		ShootingAssistant.getShootingPower();
-		
+
+		System.out.println("POWER "+ShootingAssistant.getShootingPower(99));
+
 		setValues();
 
 		Server.start();
 
 		while (true) {
-	//		long startTime = System.nanoTime();
+			// long startTime = System.nanoTime();
 			try {
 
 				setValues();

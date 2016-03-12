@@ -18,10 +18,18 @@ public class ShootingAssistant {
 			String s;
 			while (scan.hasNextLine()) {
 				s = scan.nextLine();
-				if (!s.contains("*")) {
+				if (!s.contains("*") && s.length() > 4) {
 					currentLine = new Scanner(s).useDelimiter("=");
 
+					// System.out.println(Double.parseDouble(currentLine.next())+"
+					// "+Double.parseDouble(currentLine.next()));
+					// double d1 = Double.parseDouble(currentLine.next()), d2 =
+					// Double.parseDouble(currentLine.next());
+
+					// System.out.println(d1+", "+d2);
+
 					distancePower.put(Double.parseDouble(currentLine.next()), Double.parseDouble(currentLine.next()));
+
 				}
 			}
 			System.out.println(distancePower.toString());
@@ -32,11 +40,21 @@ public class ShootingAssistant {
 		}
 	}
 
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param distance
+	 *            the distance from the goal to the robot
+	 * @return
+	 */
 	public static double getShootingPower(double distance) {
-		String s = distance + "";
-		
-
-		return -1;
+		double remainder = ((distance % 2.0))*.5;
+		int roundedDistance = (int)(distance-distance % 2.0);
+		System.out.println("distance"+ roundedDistance);
+				
+		return (distancePower.get(roundedDistance*1.0) * (remainder))
+				+ (distancePower.get(roundedDistance*1.0 + 2) * (1-remainder));
 	}
 
 }
