@@ -62,4 +62,9 @@ public class Config {
 	 * attached to the robot.
 	 */
 	public static final double ROBOT_HEIGHT = 18.5;
+
+	/**
+	 * The distance between the center of the turret to the camera
+	 */
+	public static final double CAMERA_TURRET_DISTANCE = 5;
 }

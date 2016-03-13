@@ -18,10 +18,11 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-public class VisionPanel extends JPanel implements Runnable, KeyListener {
+public class VisionPanel extends JPanel implements KeyListener {
 
 	public static final String IP_CAMERA_URL = "http://10.54.27.11/mjpg/video.mjpg";
 	public static final Dimension RESOLUTION = new Dimension(640, 480);
+
 	public static double pixelsToGoal;
 
 	private int width, height;
@@ -35,10 +36,12 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	private static ArrayList<Color> colorList;
 
 	private int updatesPerSecond = 30;
+
 	private long updateCount = 0;
 	private double previousFrameTime = 0; // Previous System nanotime for last
 	// frame
 
+	private BufferedImage panelImage;
 	private boolean donePainting = false;
 
 	public VisionPanel(int width, int height) {
@@ -121,32 +124,14 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	public void keyReleased(KeyEvent e) {
 		char key = Character.toLowerCase(e.getKeyChar());
 
-/*
 		if (key == 'c') {
 			initializeCalibration();
 		}
-*/
-	}
-
-	/**
-	 * @deprecated
-	 * Attempts to establish connection with the roborio
-	 *
-	 * // TODO: Do something so that the driver will not accidentally reconnect
-	 * to the roborio when connection has already been established. TODO make
-	 * this work without needing main.client
-	 */
-	public void connectToNetwork() {
-		System.out.println("\tAttempting to connect to the roborio\n");
-		// Main.client.start();
 	}
 
 	/**
 	 * Initializes the calibration sequence
-	 *
-	 * @deprecated currently doesn't perform a function.
 	 */
-	@SuppressWarnings("unused")
 	public void initializeCalibration() {
 		System.out.println("===FOV Calibration===");
 
@@ -166,10 +151,16 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 			input = Character.toLowerCase(input);
 
 			if (input == 'y') {
+				System.out.print("Enter the distance from the camera to the goal, NOT the turret to the goal.");
+				try {
+					double distance = new Scanner(System.in).nextDouble();
 
-				System.out.print(
-						"Enter the height of the center of the goal, the distance to the base of the tower, and the distance to the center of the goal.");
-				// TODO put what ever calibration method we are using here.
+					double angle = calibrateCameraAngle(g, distance);
+
+					System.out.println("Calibration completed. The new camera angle is: " + angle);
+				} catch (Exception e) {
+					System.out.println("\n\tInvalid Input. Exiting calibration...");
+				}
 			} else
 				System.out.println("\nExiting calibration.");
 
@@ -195,9 +186,9 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 	 * @param distance the actual distance from the camera to the robot
 	 * @return the new starting angle of the camera
 	 */
-	public static double callibrateCameraAngle(Goal goal, double distance) {
+	public static double calibrateCameraAngle(Goal goal, double distance) {
 		double theta = Math.asin((Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT) / distance);
-		theta -= goal.getCameraAngle();
+		theta -= goal.getCameraAngleY();
 
 		Config.CAMERA_START_ANGLE = Math.toDegrees(theta);
 
@@ -210,39 +201,6 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		Config.verticalFOV = Math.toDegrees(RESOLUTION.getHeight() / 2 / pixelsToGoal) * 2;
 		System.out.println(Config.verticalFOV);
 
-	}
-
-	public void run() {
-		// calculates how many miliseconds to wait for the next update
-		int waitToUpdate = (1000 / updatesPerSecond);
-
-		long startTime = System.nanoTime();
-
-		while (true) {
-			// is true when you update
-			boolean shouldRepaint = false;
-
-			// Finds the current time
-			long currentTime = System.nanoTime();
-
-			// Finds out how many updates are needed
-			long updatesNeeded = (((currentTime - startTime) / 1000000)) / waitToUpdate;
-			for (long x = updateCount; x < updatesNeeded; x++) {
-				shouldRepaint = true;
-				updateCount++;
-			}
-
-			if (shouldRepaint) {
-				// repaint();
-			}
-
-			// sleep so other threads have time to run
-			try {
-				Thread.sleep(5);
-			} catch (Exception e) {
-				System.err.println("Error sleeping in run method: " + e.getMessage());
-			}
-		}
 	}
 
 	public boolean isDonePainting() {
@@ -266,20 +224,26 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		bg.fillRect(0, 0, getWidth(), getHeight());
 
 		// Drawing the panel in the bottom
-		bg.setColor(Color.GRAY);
-		bg.fillRect(0, (int) RESOLUTION.getHeight() + 1, getWidth(), getHeight() - (int) RESOLUTION.getHeight());
+		if (panelImage == null) {
+			panelImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+			Graphics pg = panelImage.getGraphics();
+			pg.setColor(Color.GRAY);
+			pg.fillRect(0, (int) RESOLUTION.getHeight() + 1, getWidth(), getHeight() - (int) RESOLUTION.getHeight());
 
-		bg.setColor(Color.BLACK);
-		for (int i = 0; i < 3; i++) {
-			int xPos = xStart * (i + 1);
-			bg.drawLine(xPos, (int) RESOLUTION.getHeight(), xPos, getHeight());
+			pg.setColor(Color.BLACK);
+			for (int i = 0; i < 3; i++) {
+				int xPos = xStart * (i + 1);
+				pg.drawLine(xPos, (int) RESOLUTION.getHeight(), xPos, getHeight());
 
-			bg.setColor(Color.BLACK);
-			bg.setFont(new Font("Arial", Font.BOLD, 16));
+				pg.setColor(Color.BLACK);
+				pg.setFont(new Font("Arial", Font.BOLD, 16));
 
-			xPos = xStart * i + 10;
-			bg.fillRect(xPos, yStart + 10, 20, 20);
-			bg.drawString("Goal " + (i + 1), xPos + 50, yStart + 27);
+				xPos = xStart * i + 10;
+				pg.fillRect(xPos, yStart + 10, 20, 20);
+				pg.drawString("Goal " + (i + 1), xPos + 50, yStart + 27);
+			}
+		} else {
+			bg.drawImage(panelImage,0,0,null);
 		}
 
 		// Gets image from camera and paints it to the buffer
@@ -338,10 +302,10 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 
 			bg.setColor(Color.BLACK);
 
-			String distance = String.format("%.2f", Main.goals.get(i).getGoalDistance());
-			String distnaceToBase = String.format("%.2f", Main.goals.get(i).getGoalDistance());
+			String distance = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
+			String distnaceToBase = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
 			String angleDegrees = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getAngleOfElevation()));
-			String horizontalAngle = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getHorizontalAngle()));
+			String horizontalAngle = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getCameraXAngle()));
 
 			System.out.println("Distance: " + distance + "in." + "    Elevation Angle: " + angleDegrees + "°"
 					+ "     Horizontal Angle: " + horizontalAngle + "°");
@@ -369,7 +333,7 @@ public class VisionPanel extends JPanel implements Runnable, KeyListener {
 		} else {
 			bg.setColor(Color.RED);
 			bg.fillOval(490, 493, 10, 10);
-			bg.drawString("No Connection", 520, 503);
+			bg.drawString("No Connection", 522, 503);
 		}
 
 		// Draws frame rate

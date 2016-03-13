@@ -317,8 +317,14 @@ public class Main {
 
 		if (Server.hasConnection() && goals.size() > 0) {
 			Goal g = getBestGoal();
-			Server.send(TaskDescription.GOAL_ATTACHED,
-					new GoalData(g.getGoalDistance(), g.getAngleOfElevation(), g.getHorizontalAngle()));
+			GoalData data;
+
+			if (g == null)
+				data = null;
+			else
+				data = new GoalData(g.getGoalDistanceTurret(), g.getAngleOfElevation(), g.getTurretXAngle());
+
+			Server.send(TaskDescription.GOAL_ATTACHED, data);
 		}
 	}
 
