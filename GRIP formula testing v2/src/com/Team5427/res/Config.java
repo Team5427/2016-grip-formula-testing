@@ -67,4 +67,15 @@ public class Config {
 	 * The distance between the center of the turret to the camera
 	 */
 	public static final double CAMERA_TURRET_DISTANCE = 5;
+
+	/**
+	 * Amount of time in autonomous in seconds
+	 */
+	public static final long AUTO_TIME = 15;
+
+	/**
+	 * Amount of time in teleop in seconds
+	 */
+
+	public static final long TELEOP_TIME = 135;
 }

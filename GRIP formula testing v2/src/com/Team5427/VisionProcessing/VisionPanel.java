@@ -1,6 +1,7 @@
 package com.Team5427.VisionProcessing;
 
 import com.Team5427.Networking.Server;
+import com.Team5427.Networking.TaskDescription;
 import com.Team5427.res.Config;
 import com.github.sarxos.webcam.Webcam;
 
@@ -23,25 +24,40 @@ public class VisionPanel extends JPanel implements KeyListener {
 	public static final String IP_CAMERA_URL = "http://10.54.27.11/mjpg/video.mjpg";
 	public static final Dimension RESOLUTION = new Dimension(640, 480);
 
+	// Game info
+	public static final int DEFAULT 	= 0;
+	public static final int AUTONOMOUS  = 1;
+	public static final int TELEOP		= 2;
+
+	public static int gameStatus = DEFAULT;
+	/**
+	 * The time set for countdown
+	 */
+	private static long gameTimerEnd = System.currentTimeMillis();
+
+
 	public static double pixelsToGoal;
 
-	private int width, height;
 
+	private int width, height;
 	private BufferedImage buffer;
 	private Webcam webcam;
+
+
 	private BufferedImage cameraImg;
+
 
 	Scanner scanner;
 
+
 	private static ArrayList<Color> colorList;
-
-	private int updatesPerSecond = 30;
-
-	private long updateCount = 0;
 	private double previousFrameTime = 0; // Previous System nanotime for last
-	// frame
 
+
+	// frame
 	private BufferedImage panelImage;
+
+
 	private boolean donePainting = false;
 
 	public VisionPanel(int width, int height) {
@@ -82,6 +98,25 @@ public class VisionPanel extends JPanel implements KeyListener {
 		colorList.add(Color.GREEN);
 		colorList.add(Color.MAGENTA);
 		colorList.add(Color.CYAN);
+	}
+
+	public static void taskCommand(TaskDescription desc) {
+		System.out.println("Command recieved from roborio...");
+
+		switch (desc) {
+			case DEFAULT_MODE:
+				gameTimerEnd = System.currentTimeMillis();
+				gameStatus = DEFAULT;
+				break;
+			case AUTO_START:
+				gameTimerEnd = System.currentTimeMillis() + Config.AUTO_TIME *1000;
+				gameStatus = AUTONOMOUS;
+				break;
+			case TELEOP_START:
+				gameTimerEnd = System.currentTimeMillis() + Config.TELEOP_TIME*1000;
+				gameStatus = TELEOP;
+				break;
+		}
 	}
 
 	public void initializeCamera() throws MalformedURLException {
@@ -324,7 +359,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 
 		}
 
-//		 Paints data from the roborio if connection is established
+	    // Paints data from the roborio if connection is established
 		bg.setFont(new Font("Arial", Font.BOLD, 12));
 		if (Server.hasConnection()) {
 			bg.setColor(Color.GREEN);
@@ -335,6 +370,46 @@ public class VisionPanel extends JPanel implements KeyListener {
 			bg.fillOval(490, 493, 10, 10);
 			bg.drawString("No Connection", 522, 503);
 		}
+
+		// Paints game status
+		int statusX = 490;
+		int statusY = 520;
+		bg.setFont(new Font("Arial", Font.BOLD, 10));
+		bg.setColor(Color.CYAN);
+		bg.drawString("Game: ", statusX, statusY);
+		statusX += 35;
+
+		if (gameStatus == DEFAULT) {
+			bg.setColor(Color.RED);
+			bg.drawString("Default", statusX, statusY);
+		} else if (gameStatus == AUTONOMOUS) {
+			bg.setColor(Color.YELLOW);
+			bg.drawString("Autonomous", statusX, statusY);
+		} else if (gameStatus == TELEOP) {
+			bg.setColor(Color.GREEN);
+			bg.drawString("Teleop", statusX, statusY);
+		}
+
+		// Paints the timer
+		bg.setColor(Color.CYAN);
+		if (gameTimerEnd > System.currentTimeMillis()) {
+			int timeMinutes = (int) ((gameTimerEnd - System.currentTimeMillis()) / 60000);
+			int timeSecondsOnes = (int)(((gameTimerEnd - System.currentTimeMillis()) / 1000. % 60) + 1);
+			int timeSecondTens = timeSecondsOnes / 10;
+
+			if (timeSecondTens == 6) {
+				timeMinutes++;
+				timeSecondTens = 0;
+			}
+
+			bg.drawString("Time Remaining: " + timeMinutes + ":" + timeSecondTens + (timeSecondsOnes % 10), 509, 600);
+		} else {
+			bg.drawString("Time Remaining: 0:00" , 509, 600);
+
+			if (gameStatus != DEFAULT)
+				gameStatus = DEFAULT;
+		}
+
 
 		// Draws frame rate
 		bg.setColor(Color.GREEN);

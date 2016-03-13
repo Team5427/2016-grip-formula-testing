@@ -2,6 +2,7 @@ package com.Team5427.Networking;
 
 import com.Team5427.Networking.Task;
 import com.Team5427.Networking.TaskDescription;
+import com.Team5427.VisionProcessing.VisionPanel;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -55,24 +56,6 @@ public class Server {
 		return (connection != null && !connection.isClosed() );
 	}
 
-	private static Thread waitForOpen = new Thread(new Runnable() {
-		@Override
-		public void run() {
-			while (listener != null && listener.isAlive()) {
-				System.out.println("Thread not finished, waiting...");
-				try {
-					Thread.sleep(50);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-
-			if (!listener.isAlive()) {
-				System.out.println("Thread is dead");
-				listener.start();
-			}
-		}
-	});
 
 	public static synchronized void reset() {
 		try {
@@ -142,18 +125,28 @@ public class Server {
 					} else {
 						Object o = in.readObject();
 
-						/**
-						 * These won't really be used, as the robot won't really
-						 * be sending data to the grip program. Just there for
-						 * comical effect
-						 */
 						if (o instanceof Task) {
 
-							switch (((Task) o).getTask()) {
-							case GOAL_ATTACHED:
-								break;
-							case LOG:
-								break;
+							Task t = (Task) o;
+
+							switch (t.getTask()) {
+								case GOAL_ATTACHED:
+									break;
+								case LOG:
+									break;
+								case MESSAGE:
+									String message = (String)(t.getObject());
+									System.out.println("ROBORIO replied with message: " + message);
+									break;
+								case AUTO_START:
+									VisionPanel.taskCommand(TaskDescription.AUTO_START);
+									break;
+								case TELEOP_START:
+									VisionPanel.taskCommand(TaskDescription.TELEOP_START);
+									break;
+								case DEFAULT_MODE:
+									VisionPanel.taskCommand(TaskDescription.DEFAULT_MODE);
+									break;
 							}
 
 						}
@@ -172,31 +165,4 @@ public class Server {
 	}
 
 	);
-
-
-	/**
-	 * TODO remove this method soon, as it is old. Sends an object to the client
-	 * 
-	 * @deprecated use the other send method that takes in an object and an enum
-	 *             in order to ensure the proper creation of a task that will be
-	 *             sent to the client.
-	 * 
-	 * @param o
-	 *            object to be sent
-	 * @return true if object has been sent and false if otherwise
-	 */
-	public static boolean send(Object o) {
-		if (hasConnection()) {
-			try {
-				out.writeObject(o);
-				out.flush();
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		return false;
-	}
-
 }
