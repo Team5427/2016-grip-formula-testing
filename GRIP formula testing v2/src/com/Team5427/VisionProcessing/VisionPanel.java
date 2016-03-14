@@ -41,7 +41,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 
 	private int width, height;
 	private BufferedImage buffer;
-	private Webcam webcam;
+	public Webcam webcam;
 
 
 	private BufferedImage cameraImg;
@@ -390,25 +390,49 @@ public class VisionPanel extends JPanel implements KeyListener {
 			bg.drawString("Teleop", statusX, statusY);
 		}
 
+		// Second possible timer
+		int timerWidth = 60, timerHeight = 30;
+		int startTimerX = (int)(RESOLUTION.getWidth()/2 + .5) - timerWidth / 2;
+		int startTimerY = (int)(RESOLUTION.getHeight() + 1) - timerHeight;
+
+		bg.setColor(new Color(255, 0, 41, 150));
+		bg.fillRect(startTimerX, startTimerY, timerWidth, timerHeight);
+
+		// TODO: delete the small timer in the corner
+
 		// Paints the timer
+		int timeMinutes;
+		int timeSecondsTens;
+		int timeSecondsOnes;
 		bg.setColor(Color.CYAN);
 		if (gameTimerEnd > System.currentTimeMillis()) {
-			int timeMinutes = (int) ((gameTimerEnd - System.currentTimeMillis()) / 60000);
-			int timeSecondsOnes = (int)(((gameTimerEnd - System.currentTimeMillis()) / 1000. % 60) + 1);
-			int timeSecondTens = timeSecondsOnes / 10;
+			timeMinutes = (int) ((gameTimerEnd - System.currentTimeMillis()) / 60000);
+			timeSecondsOnes = (int)(((gameTimerEnd - System.currentTimeMillis()) / 1000. % 60) + 1);
+			timeSecondsTens = timeSecondsOnes / 10;
+			timeSecondsOnes %= 10;
 
-			if (timeSecondTens == 6) {
+			if (timeSecondsTens == 6) {
 				timeMinutes++;
-				timeSecondTens = 0;
+				timeSecondsTens = 0;
 			}
 
-			bg.drawString("Time Remaining: " + timeMinutes + ":" + timeSecondTens + (timeSecondsOnes % 10), 509, 600);
+//			bg.drawString("Time Remaining: " + timeMinutes + ":" + timeSecondTens + (timeSecondsOnes % 10), 509, 600);
+
+
 		} else {
-			bg.drawString("Time Remaining: 0:00" , 509, 600);
+//			bg.drawString("Time Remaining: 0:00" , 509, 600);
+
+			timeMinutes = 0;
+			timeSecondsTens = 0;
+			timeSecondsOnes = 0;
 
 			if (gameStatus != DEFAULT)
 				gameStatus = DEFAULT;
 		}
+
+		bg.setFont(new Font("Arial", Font.BOLD, 20));
+		bg.setColor(Color.BLACK);
+		bg.drawString(timeMinutes + ":" + timeSecondsTens + timeSecondsOnes, 300, 475);
 
 
 		// Draws frame rate

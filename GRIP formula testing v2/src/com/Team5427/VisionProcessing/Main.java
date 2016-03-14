@@ -57,7 +57,7 @@ public class Main {
 		table = NetworkTable.getTable("GRIP");
 		vf = new VisionFrame();
 
-//		System.out.println("POWER "+ShootingAssistant.getShootingPower(99));
+		System.out.println("POWER "+ShootingAssistant.getShootingPower(99));
 
 		setValues();
 

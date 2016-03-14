@@ -22,7 +22,6 @@ public class TestMain {
 		while (true) {
 			String caseSelection = scanner.nextLine();
 			String lowSelection = caseSelection.toLowerCase();
-			System.out.println(lowSelection);
 
 			if (lowSelection.equals("exit")) {
 				break;
