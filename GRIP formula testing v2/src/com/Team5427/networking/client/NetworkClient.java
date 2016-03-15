@@ -64,7 +64,8 @@ public class NetworkClient implements Runnable {
 
 			return true;
 		} catch (Exception e) {
-			System.out.println("Connection failed to establish.");
+			//TODO removed due to spam
+			//System.out.println("Connection failed to establish.");
 			return false;
 		}
 	}

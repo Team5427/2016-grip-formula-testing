@@ -2,7 +2,7 @@
  * This file will be used to store all of the data that will be used by the targeting program in our 
  * robot. The program will take the distance from the tower and then compare it to the following table
  * and the determine how fast to set the fly wheels. The purpose of doing this is in order to avoid
- * having to redo complex calculations over and over again in short amounts of time.
+ * having to redo complex calculations over and over again in short amounts of time. all distances are in inches.
 */
 84	 = .5 
 86	 = .5 
@@ -11,8 +11,8 @@
 92	 = .5 
 94	 = .5 
 96	 = .5 
-98	 = 0 
-100	 = 100
+98	 = .5
+100	 = .5
 102	 = .5 
 104	 = .5 
 106	 = .5 
