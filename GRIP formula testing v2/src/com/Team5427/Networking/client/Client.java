@@ -1,11 +1,22 @@
 package com.Team5427.Networking.client;
 
+import com.Team5427.Networking.Task;
+import com.Team5427.res.Log;
+
+/**
+ * READ ME: Everything below the comment line should be copied and pasted to the client
+ * 			on the main repository. Anything above here is to allow compatibility without
+ * 			changing other parts of the code for the robot.
+ */
+
+///////////////////////////////////////////////////////////////////////////////////
+
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-public class NetworkClient implements Runnable {
+public class Client implements Runnable {
 
 	public static final String DEFAULT_IP = "10.54.27.1";
 	public static final int DEFAULT_PORT = 25565;
@@ -20,30 +31,14 @@ public class NetworkClient implements Runnable {
 	private ObjectInputStream is;
 	private ObjectOutputStream os;
 
-	private boolean running = false;
-
-	public NetworkClient() {
+	public Client() {
 		ip = DEFAULT_IP;
 		port = DEFAULT_PORT;
 	}
 
-	public NetworkClient(String ip, int port) {
+	public Client(String ip, int port) {
 		this.ip = ip;
 		this.port = port;
-	}
-
-	/**
-	 * @deprecated Connects to the client server. This will prevent reconnection
-	 *             if connection is already established
-	 *
-	 * @return true if connection is successful, returns false if not or
-	 *         connection has already been established
-	 */
-	public boolean connect() {
-		if (clientSocket == null || clientSocket.isClosed())
-			return reconnect();
-
-		return false;
 	}
 
 	/**
@@ -56,16 +51,17 @@ public class NetworkClient implements Runnable {
 			clientSocket = new Socket(ip, port);
 			is = new ObjectInputStream(clientSocket.getInputStream());
 			os = new ObjectOutputStream(clientSocket.getOutputStream());
-			System.out.println(clientSocket);
-			
+			Log.debug(clientSocket.toString());
+
 			inputStreamData = new ArrayList<>();
 
-			System.out.println("Connection to the server has been established successfully.");
+			Log.info("Connection to the server has been established successfully.");
 
 			return true;
 		} catch (Exception e) {
 			//TODO removed due to spam
 			//System.out.println("Connection failed to establish.");
+			Log.info("Connection failed to establish.");
 			return false;
 		}
 	}
@@ -84,7 +80,7 @@ public class NetworkClient implements Runnable {
 	}
 
 	public static void setIp(String ip) {
-		NetworkClient.ip = ip;
+		Client.ip = ip;
 	}
 
 	public static int getPort() {
@@ -92,7 +88,7 @@ public class NetworkClient implements Runnable {
 	}
 
 	public static void setPort(int port) {
-		NetworkClient.port = port;
+		Client.port = port;
 	}
 
 	public ArrayList<Object> getInputStreamData() {
@@ -102,30 +98,25 @@ public class NetworkClient implements Runnable {
 	/**
 	 * Sends an object to the server
 	 *
-	 * @param o
-	 *            object to be sent to the server
+	 * @param t object to be sent to the server
 	 * @return true if the object is sent successfully, false if otherwise.
 	 */
-	public synchronized boolean send(Serializable o) {
+	public synchronized boolean send(Task t) {
 
-		if (running) {
+		if (networkThread != null && !networkThread.isInterrupted()) {
 			try {
-				if (os == null)
-					System.out.println("The output stream is null");
-				os.writeObject(o); // The error here is that writeObject is null
+				os.writeObject(t);
 				os.reset();
-                return true;
-            } catch (NotSerializableException e) {
-                System.err.println(getClass() + ":: send(Serializable o)\n\tThe object to be sent is not serializable.");
-            } catch (SocketException e) {
-				System.err.println("Socket Exception");
-				reset();
+				return true;
+			} catch (NotSerializableException e) {
+				Log.error(getClass() + ":: send(Serializable o)\n\tThe object to be sent is not serializable.");
+			} catch (SocketException e) {
+				Log.error("Socket Exception");
 			} catch (NullPointerException e) {
-				System.err.println("\n\tThere was an error connecting to the server.");					// This error occurs when the client attempts to connect to a server, but the running
-				stop();																					// server is having a SocketException
+				Log.error("\n\tThere was an error connecting to the server.");					// This error occurs when the client attempts to connect to a server, but the running
 			} catch (Exception e) {
-                e.printStackTrace();
-            }
+				Log.error(e.getMessage());
+			}
 		}
 
 		return false;
@@ -137,9 +128,8 @@ public class NetworkClient implements Runnable {
 	 * @return true if the thread starts successfully, false if otherwise.
 	 */
 	public synchronized boolean start() {
-		if (!running && (clientSocket == null || !clientSocket.isClosed())) {
+		if (networkThread == null && (clientSocket == null || !clientSocket.isClosed())) {
 			networkThread = new Thread(this);
-			running = true;
 			networkThread.start();
 			return true;
 		}
@@ -153,15 +143,14 @@ public class NetworkClient implements Runnable {
 	 * @return true if the thread is stopped successfully, false if otherwise.
 	 */
 	public synchronized boolean stop() {
-		running = false;
-
+		networkThread.interrupt();
 
 		try {
 			clientSocket.close();
 			os.close();
 			is.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.error(e.getMessage());
 		}
 
 		clientSocket = null;
@@ -175,13 +164,6 @@ public class NetworkClient implements Runnable {
 		}
 	}
 
-	public synchronized boolean reset() {
-		stop();
-		start();
-
-		return false;
-	}
-
 	/**
 	 * Running method that receives data from the server.
 	 */
@@ -190,21 +172,29 @@ public class NetworkClient implements Runnable {
 
 		reconnect();
 
-		while (running && clientSocket != null && !clientSocket.isClosed() && is != null) {
-			try {
-				inputStreamData.add(is.readObject());
-				// is.reset();
+		while (!networkThread.isInterrupted()) {
 
-			} catch (SocketException e) {
-				reset();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			if (clientSocket != null && !clientSocket.isClosed() && is != null) {
+				try {
+					inputStreamData.add(is.readObject());
+					is.reset();
 
-			try {
-				networkThread.sleep(10);
-			} catch (Exception e) {
-				e.printStackTrace();
+				} catch (SocketException e) {
+					reconnect();
+				} catch (Exception e) {
+					Log.error(e.getMessage());
+				}
+
+				try {
+					networkThread.sleep(10);
+				} catch (InterruptedException e) {
+					Log.info("Thread has been interrupted, client thread will stop.");
+				} catch (Exception e) {
+					Log.error(e.getMessage());
+				}
+			} else {
+				Log.info("Connection lost, attempting to re-establish with driver station.");
+				reconnect();
 			}
 		}
 	}

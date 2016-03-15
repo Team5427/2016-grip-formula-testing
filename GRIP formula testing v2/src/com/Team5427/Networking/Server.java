@@ -2,6 +2,7 @@ package com.Team5427.Networking;
 
 import com.Team5427.Networking.Task;
 import com.Team5427.Networking.TaskDescription;
+import com.Team5427.VisionProcessing.VisionPanel;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -16,11 +17,6 @@ public class Server {
 	private static ServerSocket serverSocket;
 	private static ObjectInputStream in;
 	private static ObjectOutputStream out;
-	/**
-	 * This is set to true when the server is running, false when it's not. This
-	 * is also used to stop the server when needed
-	 */
-	private static boolean running = false;
 
 	private static final int PORT = 25565;
 
@@ -60,9 +56,20 @@ public class Server {
 		return (connection != null && !connection.isClosed() );
 	}
 
+
 	public static synchronized void reset() {
-		stop();
-		start();
+		try {
+			connection.close();
+//			serverSocket.close();
+			in.close();
+			out.close();
+			connection = null;
+//			serverSocket = null;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static synchronized void start() {
@@ -75,12 +82,12 @@ public class Server {
 			e.printStackTrace();
 		}
 
-		running = true;
 		listener.start();
 	}
 
 	public static synchronized void stop() {
-		running = false;
+		listener.interrupt();
+
 		try {
 			connection.close();
 			serverSocket.close();
@@ -100,7 +107,7 @@ public class Server {
 		@Override
 		public void run() {
 
-			while (running) {
+			while (!listener.isInterrupted()) {
 				try {
 
 					if (connection == null || connection.isClosed()) {
@@ -111,8 +118,6 @@ public class Server {
 							out = new ObjectOutputStream(connection.getOutputStream());
 							in = new ObjectInputStream(connection.getInputStream());
 
-							sender.start();
-
 							if (connection != null && !connection.isClosed())
 								System.out.println("Connected!");
 						} catch (Exception e) {
@@ -120,18 +125,28 @@ public class Server {
 					} else {
 						Object o = in.readObject();
 
-						/**
-						 * These won't really be used, as the robot won't really
-						 * be sending data to the grip program. Just there for
-						 * comical effect
-						 */
 						if (o instanceof Task) {
 
-							switch (((Task) o).getTask()) {
-							case GOAL_ATTACHED:
-								break;
-							case LOG:
-								break;
+							Task t = (Task) o;
+
+							switch (t.getTask()) {
+								case GOAL_ATTACHED:
+									break;
+								case LOG:
+									break;
+								case MESSAGE:
+									String message = (String)(t.getObject());
+									System.out.println("ROBORIO replied with message: " + message);
+									break;
+								case AUTO_START:
+									VisionPanel.taskCommand(TaskDescription.AUTO_START);
+									break;
+								case TELEOP_START:
+									VisionPanel.taskCommand(TaskDescription.TELEOP_START);
+									break;
+								case DEFAULT_MODE:
+									VisionPanel.taskCommand(TaskDescription.DEFAULT_MODE);
+									break;
 							}
 
 						}
@@ -140,61 +155,14 @@ public class Server {
 
 				} catch (SocketException e) {
 					System.out.println("\n\tConnection to the client has been lost. Attempting to re-establish connection");
-					// reset();
+					reset();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-
 		}
+
 	}
 
 	);
-
-	private static Thread sender = new Thread(new Runnable() {
-
-		@Override
-		public void run() {
-			while (true) {
-				// TODO send goals here
-				if (hasConnection())
-					System.out.println("sent a goal");
-
-				try {
-					Thread.sleep(25);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-		}
-
-	});
-
-	/**
-	 * TODO remove this method soon, as it is old. Sends an object to the client
-	 * 
-	 * @deprecated use the other send method that takes in an object and an enum
-	 *             in order to ensure the proper creation of a task that will be
-	 *             sent to the client.
-	 * 
-	 * @param o
-	 *            object to be sent
-	 * @return true if object has been sent and false if otherwise
-	 */
-	public static boolean send(Object o) {
-		if (hasConnection()) {
-			try {
-				out.writeObject(o);
-				out.flush();
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		return false;
-	}
-
 }
