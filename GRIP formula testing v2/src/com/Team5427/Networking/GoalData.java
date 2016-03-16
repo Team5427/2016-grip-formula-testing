@@ -24,12 +24,16 @@ public class GoalData implements Serializable {
 	 * The horizontal angle from the camera to the
 	 */
 	private double horizontalAngle;
+	/**
+	 * The value that the motor needs to be set at for the given distance
+	 */
+	private double motorValue;
 
-
-	public GoalData(double distance, double angleOfElevation, double horizontalAngle) {
+	public GoalData(double distance, double angleOfElevation, double horizontalAngle, double motorValue) {
 		this.distance = distance;
 		this.angleOfElevation = angleOfElevation;
 		this.horizontalAngle = horizontalAngle;
+		this.motorValue = motorValue;
 	}
 
 	public double getDistance() {
@@ -54,6 +58,10 @@ public class GoalData implements Serializable {
 
 	public void setHorizontalAngle(double horizontalAngle) {
 		this.horizontalAngle = horizontalAngle;
+	}
+
+	public double getMotorValue() {
+		return motorValue;
 	}
 
 	/**
