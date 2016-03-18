@@ -7,12 +7,12 @@ public class Goal implements Comparable {
 
 	private Line leftLine, centerLine, rightLine;
 
-	private double cameraDistanceToGoal  = Double.MIN_VALUE;
+	private double cameraDistanceToGoal = Double.MIN_VALUE;
 	private double cameraDistanceToTower = Double.MIN_VALUE;
-	private double angleOfElevation      = Double.MIN_VALUE;
-	private double cameraXAngle          = Double.MIN_VALUE;
-	private double turretDistanceToGoal  = Double.MIN_VALUE;
-	private double turretXAngle          = Double.MIN_VALUE;
+	private double angleOfElevation = Double.MIN_VALUE;
+	private double cameraXAngle = Double.MIN_VALUE;
+	private double turretDistanceToGoal = Double.MIN_VALUE;
+	private double turretXAngle = Double.MIN_VALUE;
 	private double area = -1;
 
 	private boolean goalCompleted = false;
@@ -31,7 +31,6 @@ public class Goal implements Comparable {
 	 *            An array of three lines that will comprise the goal.
 	 */
 	public Goal(Line[] lines) {
-
 		Line[] vertLines = new Line[2];
 
 		int index = 0;
@@ -105,10 +104,10 @@ public class Goal implements Comparable {
 		 */
 
 		if (angleOfElevation == Double.MIN_VALUE)
-			angleOfElevation = Math.atan((VisionPanel.RESOLUTION.getHeight() / 2
-					- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2) / VisionPanel.pixelsToGoal)
+			angleOfElevation = Math
+					.atan((VisionPanel.RESOLUTION.getHeight() / 2
+							- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2) / VisionPanel.pixelsToGoal)
 					+ Math.toRadians(Config.CAMERA_START_ANGLE);
-
 
 		return angleOfElevation;
 
@@ -127,7 +126,8 @@ public class Goal implements Comparable {
 	 * the bounds of the left and right lines of the goal that was given to it
 	 * when called.
 	 * 
-	 * @param g The goal which is potentially outside of the current goal.
+	 * @param g
+	 *            The goal which is potentially outside of the current goal.
 	 *
 	 * @return Whether or not the current goal is inside of the goal passed
 	 *         through the parameters.
@@ -161,33 +161,33 @@ public class Goal implements Comparable {
 	 *
 	 * Gets the angle the robot has to aim in the x axis in radians
 	 *
-	 * @return x angle in radians from the center of the robot to the
-	 *         goal. A negative angle represents that the goal is to the left
-	 *         from the center of the robot. A positive angle represents that
-	 *         the goal is to the right from the center of the robot.
+	 * @return x angle in radians from the center of the robot to the goal. A
+	 *         negative angle represents that the goal is to the left from the
+	 *         center of the robot. A positive angle represents that the goal is
+	 *         to the right from the center of the robot.
 	 */
 	protected double getCameraXAngle() {
 		if (cameraXAngle == Double.MIN_VALUE)
-			Math.atan((centerLine.getMidpointX() - VisionPanel.RESOLUTION.getWidth() / 2)
-					/ VisionPanel.pixelsToGoal);
+			cameraXAngle = Math.atan((centerLine.getMidpointX() - VisionPanel.RESOLUTION.getWidth() / 2) / VisionPanel.pixelsToGoal);
+		
 
 		return cameraXAngle;
 	}
 
 	/**
-	 * Returns the angle from the center of the turret to the goal in radians in the
-	 * x axis
+	 * Returns the angle from the center of the turret to the goal in radians in
+	 * the x axis
 	 *
-	 * @return Returns the angle from the center of the turret to the goal in radians
-	 * 			in the x axis
-     */
+	 * @return Returns the angle from the center of the turret to the goal in
+	 *         radians in the x axis
+	 */
 	public double getTurretXAngle() {
 		if (Config.CAMERA_TURRET_DISTANCE == 0) {
 			return getCameraXAngle();
 		} else if (turretXAngle == Double.MIN_VALUE) {
-			double B = Math.acos((Math.pow(getGoalDistanceCamera(),2) - Math.pow(Config.CAMERA_TURRET_DISTANCE, 2)
-					- Math.pow(getGoalDistanceTurret(),2)) / (-2 * Config.CAMERA_TURRET_DISTANCE
-					* getGoalDistanceTurret()));
+			double B = Math.acos((Math.pow(getGoalDistanceCamera(), 2) - Math.pow(Config.CAMERA_TURRET_DISTANCE, 2)
+					- Math.pow(getGoalDistanceTurret(), 2))
+					/ (-2 * Config.CAMERA_TURRET_DISTANCE * getGoalDistanceTurret()));
 
 			turretXAngle = Math.PI / 2 - B;
 		}
@@ -228,18 +228,19 @@ public class Goal implements Comparable {
 	}
 
 	/**
-	 * Returns the distance between the turret to the center of the goal in inches
+	 * Returns the distance between the turret to the center of the goal in
+	 * inches
 	 *
-	 * @return Returns the distance between the turret to the center of the goal in
-	 * 			inches
-     */
+	 * @return Returns the distance between the turret to the center of the goal
+	 *         in inches
+	 */
 	public double getGoalDistanceTurret() {
 		if (Config.CAMERA_TURRET_DISTANCE == 0) {
 			return getGoalDistanceCamera();
 		} else if (turretDistanceToGoal == Double.MIN_VALUE) {
 			turretDistanceToGoal = Math.sqrt(Math.pow(Config.CAMERA_TURRET_DISTANCE, 2)
-					+ Math.pow(getGoalDistanceCamera(), 2) - 2 * Config.CAMERA_TURRET_DISTANCE
-					* getGoalDistanceCamera() * Math.cos(getCameraXAngle() + Math.PI / 2));
+					+ Math.pow(getGoalDistanceCamera(), 2) - 2 * Config.CAMERA_TURRET_DISTANCE * getGoalDistanceCamera()
+							* Math.cos(getCameraXAngle() + Math.PI / 2));
 		}
 
 		return turretDistanceToGoal;
@@ -251,13 +252,14 @@ public class Goal implements Comparable {
 	 * Returns the distance between the camera to the center of the goal in
 	 * inches
 	 * 
-	 * @return Returns the camera between the robot to the center of the goal
-	 *         in inches
+	 * @return Returns the camera between the robot to the center of the goal in
+	 *         inches
 	 */
 	protected double getGoalDistanceCamera() {
 
-		if (cameraDistanceToGoal == Double.MAX_VALUE)
-			cameraDistanceToGoal = (Config.TRUE_GOAL_HEIGHT + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT) / Math.sin(getAngleOfElevation());
+		if (cameraDistanceToGoal == Double.MIN_VALUE)
+			cameraDistanceToGoal = (Config.TRUE_GOAL_HEIGHT + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT)
+					/ Math.sin(getAngleOfElevation());
 
 		return cameraDistanceToGoal;
 	}
@@ -271,7 +273,8 @@ public class Goal implements Comparable {
 	/**
 	 * used to compare the area of two goals to each other.
 	 * 
-	 * @param o a goal to be compared to the current goal.
+	 * @param o
+	 *            a goal to be compared to the current goal.
 	 * 
 	 * @return 1 if the current goal is larger than the one given, 0 if it is
 	 *         not, and -1 if the object given is n ot an instance of a goal.
@@ -286,6 +289,5 @@ public class Goal implements Comparable {
 		}
 		return -1;
 	}
-
 
 }

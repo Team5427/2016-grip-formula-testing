@@ -57,7 +57,7 @@ public class Main {
 		table = NetworkTable.getTable("GRIP");
 		vf = new VisionFrame();
 
-//		System.out.println("POWER "+ShootingAssistant.getShootingPower(99));
+		// System.out.println("POWER "+ShootingAssistant.getShootingPower(99));
 
 		setValues();
 
@@ -322,7 +322,8 @@ public class Main {
 			if (g == null)
 				data = null;
 			else
-				data = new GoalData(g.getGoalDistanceTurret(), g.getAngleOfElevation(), g.getTurretXAngle());
+				data = new GoalData(g.getGoalDistanceTurret(), g.getAngleOfElevation(), g.getTurretXAngle(),
+						ShootingAssistant.getShootingPower(g.getGoalDistanceTurret()));
 
 			Server.send(TaskDescription.GOAL_ATTACHED, data);
 		}

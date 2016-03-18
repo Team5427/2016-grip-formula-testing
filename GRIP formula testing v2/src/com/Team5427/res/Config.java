@@ -42,7 +42,7 @@ public class Config {
 	 * Angle at which the camera is mounted on the robot, in degrees.
 	 */
 	// public static final double CAMERA_START_ANGLE = 15.45;
-	public static double CAMERA_START_ANGLE = 15.7;
+	public static double CAMERA_START_ANGLE = 19.5;
 	/**
 	 * Actual width of the goal.
 	 */
@@ -55,13 +55,13 @@ public class Config {
 	 * Elevation of the goal from the bottom of the reflective tape to the
 	 * carpet.
 	 */
-	// public static final double TOWER_HEIGHT = 85;
-	public static final double TOWER_HEIGHT = 76;
+	public static final double TOWER_HEIGHT = 85;
+//	public static final double TOWER_HEIGHT = 76;
 	/**
 	 * Elevation of the camera from the carpet, at the point where it is
 	 * attached to the robot.
 	 */
-	public static final double ROBOT_HEIGHT = 18.5;
+	public static final double ROBOT_HEIGHT = 14.75;
 
 	/**
 	 * The distance between the center of the turret to the camera
