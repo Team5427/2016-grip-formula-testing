@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Scanner;
 
 public class Server {
 
@@ -30,6 +31,9 @@ public class Server {
 	 *            an enum from the class TaskDescription, used to tell the
 	 *            client what to do with the received information.
 	 * @return whether or not the operation was successful.
+	 * 
+	 * @deprecated sending objects over the stream wasn't working for some
+	 *             reason, so now only strings will be sent
 	 */
 	public static boolean send(TaskDescription t, Object o) {
 		if (hasConnection()) {
@@ -46,6 +50,20 @@ public class Server {
 		return false;
 	}
 
+	public static boolean send(String s) {
+		if (hasConnection()) {
+			try {
+				out.writeObject(s);
+				out.flush();
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return false;
+	}
+
 	/**
 	 * Call whenever sending something to the client in order to check whether
 	 * or not it is connected to the server.
@@ -53,18 +71,17 @@ public class Server {
 	 * @return whether the client is connected.
 	 */
 	public static boolean hasConnection() {
-		return (connection != null && !connection.isClosed() );
+		return (connection != null && !connection.isClosed());
 	}
-
 
 	public static synchronized void reset() {
 		try {
 			connection.close();
-//			serverSocket.close();
+			// serverSocket.close();
 			in.close();
 			out.close();
 			connection = null;
-//			serverSocket = null;
+			// serverSocket = null;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -104,6 +121,8 @@ public class Server {
 
 	private static Thread listener = new Thread(new Runnable() {
 
+		Scanner taskReader;
+
 		@Override
 		public void run() {
 
@@ -123,38 +142,46 @@ public class Server {
 						} catch (Exception e) {
 						}
 					} else {
-						Object o = in.readObject();
+						String s = in.readUTF();
 
-						if (o instanceof Task) {
+						// TODO make sure that these are all working
 
-							Task t = (Task) o;
+						if (s.contains(StringDictionary.TASK)) {
 
-							switch (t.getTask()) {
-								case GOAL_ATTACHED:
-									break;
-								case LOG:
-									break;
-								case MESSAGE:
-									String message = (String)(t.getObject());
-									System.out.println("ROBORIO replied with message: " + message);
-									break;
-								case AUTO_START:
-									VisionPanel.taskCommand(TaskDescription.AUTO_START);
-									break;
-								case TELEOP_START:
-									VisionPanel.taskCommand(TaskDescription.TELEOP_START);
-									break;
-								case DEFAULT_MODE:
-									VisionPanel.taskCommand(TaskDescription.DEFAULT_MODE);
-									break;
+							s = s.substring(StringDictionary.TASK.length(), s.length() - 1);
+
+							if (s.contains(StringDictionary.GOAL_ATTACHED)) {
+
+							} else if (s.contains(StringDictionary.LOG)) {
+
+								send(StringDictionary.TASK + StringDictionary.LOG
+										+ "roborio told the driverstation to log something, it should be the other way around.");
+
+							} else if (s.contains(StringDictionary.MESSAGE)) {
+
+								System.out.println("ROBORIO replied with message: " + s);
+
+							} else if (s.contains(StringDictionary.TELEOP_START)) {
+
+								VisionPanel.taskCommand(TaskDescription.TELEOP_START);
+
+							} else if (s.contains(StringDictionary.AUTO_START)) {
+
+								VisionPanel.taskCommand(TaskDescription.AUTO_START);
+
+							} else {
+								System.out.println("Valid task was recieved, but with unrecognized contents.");
 							}
 
+						} else {
+							System.out.println("unrecognized task");
 						}
 
 					}
 
 				} catch (SocketException e) {
-					System.out.println("\n\tConnection to the client has been lost. Attempting to re-establish connection");
+					System.out.println(
+							"\n\tConnection to the client has been lost. Attempting to re-establish connection");
 					reset();
 				} catch (Exception e) {
 					e.printStackTrace();

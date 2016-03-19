@@ -2,9 +2,8 @@ package com.Team5427.VisionProcessing;
 
 import java.util.ArrayList;
 
-import com.Team5427.Networking.GoalData;
-import com.Team5427.Networking.TaskDescription;
 import com.Team5427.Networking.Server;
+import com.Team5427.Networking.StringDictionary;
 
 import edu.wpi.first.wpilibj.networktables.*;
 
@@ -317,15 +316,13 @@ public class Main {
 
 		if (Server.hasConnection() && goals.size() > 0) {
 			Goal g = getBestGoal();
-			GoalData data;
 
-			if (g == null)
-				data = null;
-			else
-				data = new GoalData(g.getGoalDistanceTurret(), g.getAngleOfElevation(), g.getTurretXAngle(),
-						ShootingAssistant.getShootingPower(g.getGoalDistanceTurret()));
+			if (g != null) {
+				// TODO verify that the getGoalDistanceTurret is working
+				Server.send(StringDictionary.TASK + StringDictionary.GOAL_ATTACHED + g.getGoalDistanceTurret() + " "
+						+ g.getAngleOfElevation() + " "+ g.getTurretXAngle() + " " + ShootingAssistant.getShootingPower(g.getGoalDistanceTurret()));
 
-			Server.send(TaskDescription.GOAL_ATTACHED, data);
+			}
 		}
 	}
 
