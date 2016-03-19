@@ -1,7 +1,5 @@
 package com.Team5427.Networking;
 
-import com.Team5427.Networking.Task;
-import com.Team5427.Networking.TaskDescription;
 import com.Team5427.VisionProcessing.VisionPanel;
 
 import java.io.IOException;
@@ -20,35 +18,6 @@ public class Server {
 	private static ObjectOutputStream out;
 
 	private static final int PORT = 25565;
-
-	/**
-	 * Always use this method to send anything to the client, as it will ensure
-	 * that the proper thing is sent in order to avoid any unnecessary errors.
-	 * 
-	 * @param o
-	 *            Object to be sent to the client
-	 * @param t
-	 *            an enum from the class TaskDescription, used to tell the
-	 *            client what to do with the received information.
-	 * @return whether or not the operation was successful.
-	 * 
-	 * @deprecated sending objects over the stream wasn't working for some
-	 *             reason, so now only strings will be sent
-	 */
-	public static boolean send(TaskDescription t, Object o) {
-		if (hasConnection()) {
-			try {
-				out.writeObject(new Task(t, o));
-				out.flush(); // is reset needed? No, we need to flush it I
-								// believe
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		return false;
-	}
 
 	public static boolean send(String s) {
 		if (hasConnection()) {
@@ -121,8 +90,6 @@ public class Server {
 
 	private static Thread listener = new Thread(new Runnable() {
 
-		Scanner taskReader;
-
 		@Override
 		public void run() {
 
@@ -163,11 +130,11 @@ public class Server {
 
 							} else if (s.contains(StringDictionary.TELEOP_START)) {
 
-								VisionPanel.taskCommand(TaskDescription.TELEOP_START);
+								VisionPanel.taskCommand(s);
 
 							} else if (s.contains(StringDictionary.AUTO_START)) {
 
-								VisionPanel.taskCommand(TaskDescription.AUTO_START);
+								VisionPanel.taskCommand(s);
 
 							} else {
 								System.out.println("Valid task was recieved, but with unrecognized contents.");

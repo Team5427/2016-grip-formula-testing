@@ -1,6 +1,5 @@
 package com.Team5427.Networking.client;
 
-import com.Team5427.Networking.Task;
 import com.Team5427.res.Log;
 
 /**
@@ -37,8 +36,8 @@ public class Client implements Runnable {
 	}
 
 	public Client(String ip, int port) {
-		this.ip = ip;
-		this.port = port;
+		Client.ip = ip;
+		Client.port = port;
 	}
 
 	/**
@@ -59,8 +58,8 @@ public class Client implements Runnable {
 
 			return true;
 		} catch (Exception e) {
-			//TODO removed due to spam
-			//System.out.println("Connection failed to establish.");
+			// TODO removed due to spam
+			// System.out.println("Connection failed to establish.");
 			Log.info("Connection failed to establish.");
 			return false;
 		}
@@ -98,29 +97,25 @@ public class Client implements Runnable {
 	/**
 	 * Sends an object to the server
 	 *
-	 * @param t object to be sent to the server
+	 * @param t
+	 *            object to be sent to the server
 	 * @return true if the object is sent successfully, false if otherwise.
 	 */
-	public synchronized boolean send(Task t) {
-
-		if (networkThread != null && !networkThread.isInterrupted()) {
-			try {
-				os.writeObject(t);
-				os.reset();
-				return true;
-			} catch (NotSerializableException e) {
-				Log.error(getClass() + ":: send(Serializable o)\n\tThe object to be sent is not serializable.");
-			} catch (SocketException e) {
-				Log.error("Socket Exception");
-			} catch (NullPointerException e) {
-				Log.error("\n\tThere was an error connecting to the server.");					// This error occurs when the client attempts to connect to a server, but the running
-			} catch (Exception e) {
-				Log.error(e.getMessage());
-			}
-		}
-
-		return false;
-	}
+	/*
+	 * public synchronized boolean send(Task t) {
+	 * 
+	 * if (networkThread != null && !networkThread.isInterrupted()) { try {
+	 * os.writeObject(t); os.reset(); return true; } catch
+	 * (NotSerializableException e) { Log.error(getClass() +
+	 * ":: send(Serializable o)\n\tThe object to be sent is not serializable.");
+	 * } catch (SocketException e) { Log.error("Socket Exception"); } catch
+	 * (NullPointerException e) { Log.error(
+	 * "\n\tThere was an error connecting to the server."); // This error occurs
+	 * when the client attempts to connect to a server, but the running } catch
+	 * (Exception e) { Log.error(e.getMessage()); } }
+	 * 
+	 * return false; }
+	 */
 
 	/**
 	 * Enables the thread to start receiving data from a network
@@ -157,9 +152,10 @@ public class Client implements Runnable {
 		os = null;
 		is = null;
 
-		if (!networkThread.isAlive()) {		 	// The thread is found running and is told to stop
+		if (!networkThread.isAlive()) { // The thread is found running and is
+										// told to stop
 			return true;
-		} else {								// The thread is not running in the first place
+		} else { // The thread is not running in the first place
 			return false;
 		}
 	}

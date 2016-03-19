@@ -1,7 +1,7 @@
 package com.Team5427.VisionProcessing;
 
 import com.Team5427.Networking.Server;
-import com.Team5427.Networking.TaskDescription;
+import com.Team5427.Networking.StringDictionary;
 import com.Team5427.res.Config;
 import com.github.sarxos.webcam.Webcam;
 
@@ -25,9 +25,9 @@ public class VisionPanel extends JPanel implements KeyListener {
 	public static final Dimension RESOLUTION = new Dimension(640, 480);
 
 	// Game info
-	public static final int DEFAULT 	= 0;
-	public static final int AUTONOMOUS  = 1;
-	public static final int TELEOP		= 2;
+	public static final int DEFAULT = 0;
+	public static final int AUTONOMOUS = 1;
+	public static final int TELEOP = 2;
 
 	public static int gameStatus = DEFAULT;
 	/**
@@ -35,28 +35,21 @@ public class VisionPanel extends JPanel implements KeyListener {
 	 */
 	private static long gameTimerEnd = System.currentTimeMillis();
 
-
 	public static double pixelsToGoal;
-
 
 	private int width, height;
 	private BufferedImage buffer;
 	public Webcam webcam;
 
-
 	private BufferedImage cameraImg;
 
-
 	Scanner scanner;
-
 
 	private static ArrayList<Color> colorList;
 	private double previousFrameTime = 0; // Previous System nanotime for last
 
-
 	// frame
 	private BufferedImage panelImage;
-
 
 	private boolean donePainting = false;
 
@@ -100,23 +93,29 @@ public class VisionPanel extends JPanel implements KeyListener {
 		colorList.add(Color.CYAN);
 	}
 
-	public static void taskCommand(TaskDescription desc) {
+	public static void taskCommand(String s) {
 		System.out.println("Command recieved from roborio...");
 
-		switch (desc) {
-			case DEFAULT_MODE:
-				gameTimerEnd = System.currentTimeMillis();
-				gameStatus = DEFAULT;
-				break;
-			case AUTO_START:
-				gameTimerEnd = System.currentTimeMillis() + Config.AUTO_TIME *1000;
-				gameStatus = AUTONOMOUS;
-				break;
-			case TELEOP_START:
-				gameTimerEnd = System.currentTimeMillis() + Config.TELEOP_TIME*1000;
-				gameStatus = TELEOP;
-				break;
+		if (s.contains(StringDictionary.AUTO_START)) {
+			gameTimerEnd = System.currentTimeMillis() + Config.AUTO_TIME * 1000;
+			gameStatus = AUTONOMOUS;
+		} else if (s.contains(StringDictionary.TELEOP_START)) {
+			gameTimerEnd = System.currentTimeMillis() + Config.TELEOP_TIME * 1000;
+			gameStatus = TELEOP;
 		}
+
+		// TODO default mode was not implemented because t was the default for
+		// the switch loop. I don't really know what you were trying to do there
+		// Charlie.
+
+		/*
+		 * switch (desc) { case DEFAULT_MODE: gameTimerEnd =
+		 * System.currentTimeMillis(); gameStatus = DEFAULT; break; case
+		 * AUTO_START: gameTimerEnd = System.currentTimeMillis() +
+		 * Config.AUTO_TIME * 1000; gameStatus = AUTONOMOUS; break; case
+		 * TELEOP_START: gameTimerEnd = System.currentTimeMillis() +
+		 * Config.TELEOP_TIME * 1000; gameStatus = TELEOP; break; }
+		 */
 	}
 
 	public void initializeCamera() throws MalformedURLException {
@@ -217,8 +216,11 @@ public class VisionPanel extends JPanel implements KeyListener {
 
 	/**
 	 * Calibrates the angle of the robot using angles
-	 * @param goal Goal used as a reference to calculate the camera's angle
-	 * @param distance the actual distance from the camera to the robot
+	 * 
+	 * @param goal
+	 *            Goal used as a reference to calculate the camera's angle
+	 * @param distance
+	 *            the actual distance from the camera to the robot
 	 * @return the new starting angle of the camera
 	 */
 	public static double calibrateCameraAngle(Goal goal, double distance) {
@@ -278,7 +280,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 				pg.drawString("Goal " + (i + 1), xPos + 50, yStart + 27);
 			}
 		} else {
-			bg.drawImage(panelImage,0,0,null);
+			bg.drawImage(panelImage, 0, 0, null);
 		}
 
 		// Gets image from camera and paints it to the buffer
@@ -359,7 +361,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 
 		}
 
-	    // Paints data from the roborio if connection is established
+		// Paints data from the roborio if connection is established
 		bg.setFont(new Font("Arial", Font.BOLD, 12));
 		if (Server.hasConnection()) {
 			bg.setColor(Color.GREEN);
@@ -392,8 +394,8 @@ public class VisionPanel extends JPanel implements KeyListener {
 
 		// Second possible timer
 		int timerWidth = 60, timerHeight = 30;
-		int startTimerX = (int)(RESOLUTION.getWidth()/2 + .5) - timerWidth / 2;
-		int startTimerY = (int)(RESOLUTION.getHeight() + 1) - timerHeight;
+		int startTimerX = (int) (RESOLUTION.getWidth() / 2 + .5) - timerWidth / 2;
+		int startTimerY = (int) (RESOLUTION.getHeight() + 1) - timerHeight;
 
 		bg.setColor(new Color(255, 0, 41, 150));
 		bg.fillRect(startTimerX, startTimerY, timerWidth, timerHeight);
@@ -407,7 +409,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 		bg.setColor(Color.CYAN);
 		if (gameTimerEnd > System.currentTimeMillis()) {
 			timeMinutes = (int) ((gameTimerEnd - System.currentTimeMillis()) / 60000);
-			timeSecondsOnes = (int)(((gameTimerEnd - System.currentTimeMillis()) / 1000. % 60) + 1);
+			timeSecondsOnes = (int) (((gameTimerEnd - System.currentTimeMillis()) / 1000. % 60) + 1);
 			timeSecondsTens = timeSecondsOnes / 10;
 			timeSecondsOnes %= 10;
 
@@ -416,11 +418,11 @@ public class VisionPanel extends JPanel implements KeyListener {
 				timeSecondsTens = 0;
 			}
 
-//			bg.drawString("Time Remaining: " + timeMinutes + ":" + timeSecondTens + (timeSecondsOnes % 10), 509, 600);
-
+			// bg.drawString("Time Remaining: " + timeMinutes + ":" +
+			// timeSecondTens + (timeSecondsOnes % 10), 509, 600);
 
 		} else {
-//			bg.drawString("Time Remaining: 0:00" , 509, 600);
+			// bg.drawString("Time Remaining: 0:00" , 509, 600);
 
 			timeMinutes = 0;
 			timeSecondsTens = 0;
@@ -433,7 +435,6 @@ public class VisionPanel extends JPanel implements KeyListener {
 		bg.setFont(new Font("Arial", Font.BOLD, 20));
 		bg.setColor(Color.BLACK);
 		bg.drawString(timeMinutes + ":" + timeSecondsTens + timeSecondsOnes, 300, 475);
-
 
 		// Draws frame rate
 		bg.setColor(Color.GREEN);
