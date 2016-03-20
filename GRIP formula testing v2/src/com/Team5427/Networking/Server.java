@@ -2,9 +2,7 @@ package com.Team5427.Networking;
 
 import com.Team5427.VisionProcessing.VisionPanel;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -16,8 +14,24 @@ public class Server {
 	private static ServerSocket serverSocket;
 	private static ObjectInputStream in;
 	private static ObjectOutputStream out;
+	private static OutputStream byteOutStream;
+	private static InputStream byteInputStream;
 
 	private static final int PORT = 25565;
+
+	public static boolean send(byte[] buff) {
+		if (hasConnection()) {
+			try {
+				out.write(buff);
+				out.flush();
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return false;
+	}
 
 	public static boolean send(String s) {
 		if (hasConnection()) {
