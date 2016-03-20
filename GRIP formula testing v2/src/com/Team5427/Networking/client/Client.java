@@ -94,6 +94,20 @@ public class Client implements Runnable {
 		return inputStreamData;
 	}
 
+	public synchronized boolean send(String s) {
+		if (isConnected()) {
+			try {
+				os.writeChars(s);
+				os.reset();
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return false;
+	}
+
 	/**
 	 * Sends an object to the server
 	 *

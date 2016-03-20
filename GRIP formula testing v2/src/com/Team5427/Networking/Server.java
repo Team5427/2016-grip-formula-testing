@@ -123,7 +123,9 @@ public class Server {
 						} catch (Exception e) {
 						}
 					} else {
+						System.out.println("else reached");
 						String s = in.readUTF();
+						System.out.println("Message recieved: " + s);
 
 						// TODO make sure that these are all working
 
