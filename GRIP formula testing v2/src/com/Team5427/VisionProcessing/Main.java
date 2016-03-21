@@ -319,8 +319,9 @@ public class Main {
 
 			if (g != null) {
 				// TODO verify that the getGoalDistanceTurret is working
-				Server.send(StringDictionary.TASK + StringDictionary.GOAL_ATTACHED + g.getGoalDistanceTurret() + " "
-						+ g.getAngleOfElevation() + " "+ g.getTurretXAngle() + " " + ShootingAssistant.getShootingPower(g.getGoalDistanceTurret()));
+				Server.send(g.getByteBuffer(ShootingAssistant.getShootingPower(g.getGoalDistanceTurret())));
+//				Server.send(StringDictionary.TASK + StringDictionary.GOAL_ATTACHED + g.getGoalDistanceTurret() + " "
+//						+ g.getAngleOfElevation() + " "+ g.getTurretXAngle() + " " + ShootingAssistant.getShootingPower(g.getGoalDistanceTurret()));
 
 			}
 		}

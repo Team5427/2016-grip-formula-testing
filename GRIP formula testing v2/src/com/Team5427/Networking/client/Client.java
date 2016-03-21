@@ -1,5 +1,6 @@
 package com.Team5427.Networking.client;
 
+import com.Team5427.Networking.GoalData;
 import com.Team5427.res.Log;
 
 /**
@@ -207,7 +208,14 @@ public class Client implements Runnable {
 
 			if (clientSocket != null && !clientSocket.isClosed() && is != null) {
 				try {
-					inputStreamData.add(is.readObject());
+					byte buffer[] = new byte[MAX_BYTE_BUFFER];
+
+					int numFromStream = is.read(buffer, 0, buffer.length);
+					GoalData g = new GoalData(buffer);
+					Log.debug("num from stream: " + numFromStream);
+					Log.debug("Data from goal: Motor Value-" + g.getMotorValue()
+							+ " X Angle-" + g.getVerticalAngle());
+
 					is.reset();
 
 				} catch (SocketException e) {

@@ -1,10 +1,10 @@
 package com.Team5427.Networking;
 
-import java.io.Serializable;
-
 import com.Team5427.VisionProcessing.Goal;
 
 import java.io.Serializable;
+
+import java.nio.ByteBuffer;
 
 /**
  * The object that will be sent from the driver station and will be received by
@@ -23,17 +23,44 @@ public class GoalData implements Serializable {
 	/**
 	 * The horizontal angle from the camera to the
 	 */
-	private double horizontalAngle;
+	private double verticalAngle;
 	/**
 	 * The value that the motor needs to be set at for the given distance
 	 */
 	private double motorValue;
 
-	public GoalData(double distance, double angleOfElevation, double horizontalAngle, double motorValue) {
+	public GoalData(double distance, double angleOfElevation, double verticalAngle, double motorValue) {
 		this.distance = distance;
 		this.angleOfElevation = angleOfElevation;
-		this.horizontalAngle = horizontalAngle;
+		this.verticalAngle = verticalAngle;
 		this.motorValue = motorValue;
+	}
+
+	public GoalData(byte[] buff) {
+		setByteBuffer(buff);
+	}
+
+	/**
+	 * TODO: Change hardcode of index 1 to use with ByteDictionary
+	 *
+	 * Scans the received byte buffer. If the data can be used and is successfully
+	 * set accordingly, then this method will return true. If the byte array is
+	 * scanned to be an incorrect type as indicated in the ByteDictionary for a
+	 * goal data, then the method will return false.
+	 *
+	 * The buffer is required to have a size of 17 (index 0 for type, 1-8 for
+	 * speed, and 9-16 for the x angle).
+	 *
+	 * @param buff array to be used for setting the data
+	 * @return true if data is valid and set according. False if otherwise
+     */
+	public boolean setByteBuffer(byte[] buff) {
+		if (buff.length == 17 && buff[0] == 1) {
+			motorValue = ByteBuffer.wrap(buff, 1, 8).getDouble();
+			verticalAngle = ByteBuffer.wrap(buff, 9, 8).getDouble();
+		}
+
+		return false;
 	}
 
 	public double getDistance() {
@@ -52,12 +79,12 @@ public class GoalData implements Serializable {
 		this.angleOfElevation = angleOfElevation;
 	}
 
-	public double getHorizontalAngle() {
-		return horizontalAngle;
+	public double getVerticalAngle() {
+		return verticalAngle;
 	}
 
-	public void setHorizontalAngle(double horizontalAngle) {
-		this.horizontalAngle = horizontalAngle;
+	public void setVerticalAngle(double verticalAngle) {
+		this.verticalAngle = verticalAngle;
 	}
 
 	public double getMotorValue() {
