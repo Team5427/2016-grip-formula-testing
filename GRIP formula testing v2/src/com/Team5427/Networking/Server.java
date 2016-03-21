@@ -123,7 +123,37 @@ public class Server {
 						} catch (Exception e) {
 						}
 					} else {
-						System.out.println("else reached");
+
+						System.out.println("Reached");
+/*
+						byte b = in.readByte();
+
+						System.out.println("Byte: " + b);*/
+
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						byte buffer[] = new byte[2];
+
+						int numFromStream = in.read(buffer, 0, 2);
+						System.out.println("num from stream: " + numFromStream);
+						System.out.print("Data from stream: ");
+						printByteArray(buffer);
+
+						in.close();
+						in = new ObjectInputStream(connection.getInputStream());
+
+
+						/*ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						byte buffer[] = new byte[1024];
+						for(int s; (s=in.read(buffer, 0, buffer.length)) != -1; )
+						{
+							baos.write(buffer, 0, s);
+							System.out.println("Write to buffer");
+						}
+						byte result[] = baos.toByteArray();*/
+
+//						System.out.println("Byte array recieved: " + result);
+
+						/*System.out.println("else reached");
 						String s = in.readUTF();
 						System.out.println("Message recieved: " + s);
 
@@ -158,7 +188,7 @@ public class Server {
 
 						} else {
 							System.out.println("unrecognized task");
-						}
+						}*/
 
 					}
 
@@ -166,7 +196,10 @@ public class Server {
 					System.out.println(
 							"\n\tConnection to the client has been lost. Attempting to re-establish connection");
 					reset();
-				} catch (Exception e) {
+				} catch (EOFException e) {
+					System.exit(1);
+				}
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -175,4 +208,16 @@ public class Server {
 	}
 
 	);
+
+	public static void printByteArray(byte[] arr) {
+
+		String str = "[";
+
+		for (int i = 0; i < arr.length; i++)
+			str += arr[i] + ",";
+
+		str.substring(0, str.length() - 2);
+
+		System.out.println(str + "]");
+	}
 }

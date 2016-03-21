@@ -3,6 +3,8 @@ package com.Team5427.testing;
 
 import com.Team5427.Networking.client.Client;
 
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TestMain {
@@ -58,6 +60,33 @@ public class TestMain {
                 boolean sent = client.send(message);
 
                 System.out.println("Messaged has been sent successfully?: " + sent);
+            }
+
+            else if (caseSelection.equals("sendByte")) {
+                // TODO: Fix the issue mentioned below
+                System.out.println("WARNING! Bytes has to be sent or the program will crash");
+
+                ArrayList<Byte> byteArrayList = new ArrayList<>();
+
+                byte b;
+
+                while (true) {
+                    b = scanner.nextByte();
+
+                    if (b != -128)
+                        byteArrayList.add(b);
+                    else
+                        break;
+                }
+
+                // Converts array list to regular byte array
+                byte[] buff = new byte[byteArrayList.size()];
+                for (int i = 0; i < byteArrayList.size(); i++)
+                    buff[i] = byteArrayList.get(i);
+
+                boolean sent = client.send(buff);
+
+                System.out.println("Byte array sent successfully?: " + sent);
             }
 
             else {

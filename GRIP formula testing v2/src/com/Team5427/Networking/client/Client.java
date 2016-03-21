@@ -94,6 +94,26 @@ public class Client implements Runnable {
 		return inputStreamData;
 	}
 
+	public synchronized boolean send(byte[] buff) {
+
+		if (isConnected()) {
+
+
+			try {
+				os = new ObjectOutputStream(clientSocket.getOutputStream());
+				os.write(buff);
+				os.flush();
+				os.reset();
+				os.close();
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return false;
+	}
+
 	public synchronized boolean send(String s) {
 		if (isConnected()) {
 			try {
