@@ -215,8 +215,8 @@ public class Client implements Runnable {
 					Log.debug("num from stream: " + numFromStream);
 					Log.debug("Data from goal: Motor Value-" + g.getMotorValue()
 							+ " X Angle-" + g.getVerticalAngle());
-
-					is.reset();
+					Log.debug("Data from received bytes: " + getStringByteBuffer(buffer));
+					Log.debug("\n===========================\n");
 
 				} catch (SocketException e) {
 					reconnect();
@@ -236,6 +236,15 @@ public class Client implements Runnable {
 				reconnect();
 			}
 		}
+	}
+
+	public static String getStringByteBuffer(byte[] buff) {
+		String str = "[";
+
+		for (int i = 0; i < buff.length; i++)
+			str += buff[i] + ",";
+
+		return str + "]";
 	}
 
 }

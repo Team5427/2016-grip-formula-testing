@@ -153,7 +153,6 @@ public class Server {
 						System.out.println("num from stream: " + numFromStream);
 						System.out.print("Data from stream: ");
 						printByteArray(buffer);
-						in.reset();						// TODO: Do we need this? (Not really a todo, using this to highlight)
 /*
 						in.close();
 						in = new ObjectInputStream(connection.getInputStream());*/
