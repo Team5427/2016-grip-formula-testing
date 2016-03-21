@@ -55,7 +55,7 @@ public class GoalData implements Serializable {
 	 * @return true if data is valid and set according. False if otherwise
      */
 	public boolean setByteBuffer(byte[] buff) {
-		if (buff.length == 17 && buff[0] == 1) {
+		if (buff[0] == 1) {
 			motorValue = ByteBuffer.wrap(buff, 1, 8).getDouble();
 			verticalAngle = ByteBuffer.wrap(buff, 9, 8).getDouble();
 		}

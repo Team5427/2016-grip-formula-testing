@@ -318,6 +318,7 @@ public class Main {
 			Goal g = getBestGoal();
 
 			if (g != null) {
+				System.err.println(ShootingAssistant.getShootingPower(g.getGoalDistanceTurret()));
 				// TODO verify that the getGoalDistanceTurret is working
 				Server.send(g.getByteBuffer(ShootingAssistant.getShootingPower(g.getGoalDistanceTurret())));
 //				Server.send(StringDictionary.TASK + StringDictionary.GOAL_ATTACHED + g.getGoalDistanceTurret() + " "
