@@ -124,22 +124,22 @@ public class Server {
 						}
 					} else {
 
-						System.out.println("Reached");
+//						System.out.println("Reached");
 /*
 						byte b = in.readByte();
 
 						System.out.println("Byte: " + b);*/
 
-						ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						byte buffer[] = new byte[2];
+//						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						byte buffer[] = new byte[1024];
 
-						int numFromStream = in.read(buffer, 0, 2);
+						int numFromStream = in.read(buffer, 0, buffer.length);
 						System.out.println("num from stream: " + numFromStream);
 						System.out.print("Data from stream: ");
 						printByteArray(buffer);
-
+/*
 						in.close();
-						in = new ObjectInputStream(connection.getInputStream());
+						in = new ObjectInputStream(connection.getInputStream());*/
 
 
 						/*ByteArrayOutputStream baos = new ByteArrayOutputStream();

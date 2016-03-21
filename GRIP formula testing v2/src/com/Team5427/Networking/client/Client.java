@@ -100,11 +100,11 @@ public class Client implements Runnable {
 
 
 			try {
-				os = new ObjectOutputStream(clientSocket.getOutputStream());
+//				os = new ObjectOutputStream(clientSocket.getOutputStream());
 				os.write(buff);
 				os.flush();
 				os.reset();
-				os.close();
+//				os.close();
 				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
