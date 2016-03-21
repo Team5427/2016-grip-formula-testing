@@ -19,6 +19,7 @@ public class Client implements Runnable {
 
 	public static final String DEFAULT_IP = "10.54.27.236";
 	public static final int DEFAULT_PORT = 25565;
+	public static int MAX_BYTE_BUFFER = 256;
 
 	public static String ip;
 	public static int port;
@@ -102,8 +103,8 @@ public class Client implements Runnable {
 			try {
 //				os = new ObjectOutputStream(clientSocket.getOutputStream());
 				os.write(buff);
-				os.flush();
 				os.reset();
+				os.flush();
 //				os.close();
 				return true;
 			} catch (Exception e) {

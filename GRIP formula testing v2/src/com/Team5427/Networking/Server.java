@@ -17,12 +17,20 @@ public class Server {
 	private static OutputStream byteOutStream;
 	private static InputStream byteInputStream;
 
-	private static final int PORT = 25565;
+	private static final int PORT     = 25565;
+	public static int MAX_BYTE_BUFFER = 256;
 
-	public static boolean send(byte[] buff) {
+	/**
+	 * Sends a byte array over the network
+	 *
+	 * @param buff The buffer to be send
+	 * @return true if sent successfully, false if otherwise
+     */
+	public static synchronized boolean send(byte[] buff) {
 		if (hasConnection()) {
 			try {
 				out.write(buff);
+				out.reset();
 				out.flush();
 				return true;
 			} catch (Exception e) {
@@ -33,10 +41,17 @@ public class Server {
 		return false;
 	}
 
-	public static boolean send(String s) {
+	/**
+	 * Sends String over the network
+	 *
+	 * @param s The string to be sent over the network
+	 * @return true if sent successfully, false if otherwise
+     */
+	public static synchronized boolean send(String s) {
 		if (hasConnection()) {
 			try {
 				out.writeObject(s);
+				out.reset();
 				out.flush();
 				return true;
 			} catch (Exception e) {
@@ -46,6 +61,7 @@ public class Server {
 
 		return false;
 	}
+
 
 	/**
 	 * Call whenever sending something to the client in order to check whether
@@ -131,7 +147,7 @@ public class Server {
 						System.out.println("Byte: " + b);*/
 
 //						ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						byte buffer[] = new byte[1024];
+						byte buffer[] = new byte[MAX_BYTE_BUFFER];
 
 						int numFromStream = in.read(buffer, 0, buffer.length);
 						System.out.println("num from stream: " + numFromStream);
