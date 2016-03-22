@@ -214,7 +214,7 @@ public class Client implements Runnable {
 					GoalData g = new GoalData(buffer);
 					Log.debug("num from stream: " + numFromStream);
 					Log.debug("Data from goal: Motor Value-" + g.getMotorValue()
-							+ " X Angle-" + g.getVerticalAngle());
+							+ " X Angle-" + Math.toDegrees(g.getVerticalAngle()));
 					Log.debug("Data from received bytes: " + getStringByteBuffer(buffer));
 					Log.debug("\n===========================\n");
 

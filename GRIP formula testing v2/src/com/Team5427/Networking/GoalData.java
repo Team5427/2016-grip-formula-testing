@@ -43,24 +43,43 @@ public class GoalData implements Serializable {
 	/**
 	 * TODO: Change hardcode of index 1 to use with ByteDictionary
 	 *
-	 * Scans the received byte buffer. If the data can be used and is successfully
-	 * set accordingly, then this method will return true. If the byte array is
-	 * scanned to be an incorrect type as indicated in the ByteDictionary for a
-	 * goal data, then the method will return false.
+	 * Scans the received byte buffer. If the data can be used and is
+	 * successfully set accordingly, then this method will return true. If the
+	 * byte array is scanned to be an incorrect type as indicated in the
+	 * ByteDictionary for a goal data, then the method will return false.
 	 *
 	 * The buffer is required to have a size of 17 (index 0 for type, 1-8 for
 	 * speed, and 9-16 for the x angle).
 	 *
-	 * @param buff array to be used for setting the data
+	 * @param buff
+	 *            array to be used for setting the data
 	 * @return true if data is valid and set according. False if otherwise
-     */
+	 */
 	public boolean setByteBuffer(byte[] buff) {
+		System.out.println(buff.toString());
 		if (buff[0] == 1) {
+			System.out.println(printBuff(buff));
 			motorValue = ByteBuffer.wrap(buff, 1, 8).getDouble();
+			System.out.println(printBuff(buff));
 			verticalAngle = ByteBuffer.wrap(buff, 9, 8).getDouble();
 		}
 
 		return false;
+	}
+
+	/**
+	 * TODO, temp remove when working
+	 * 
+	 * @return
+	 */
+	public String printBuff(byte[] buff) {
+
+		String s = "";
+
+		for (byte b : buff) {
+			s += b + ", ";
+		}
+		return s;
 	}
 
 	public double getDistance() {

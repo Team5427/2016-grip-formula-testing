@@ -286,6 +286,7 @@ public class Goal implements Comparable {
 		// Converts vertical angle to byte array
 		ByteBuffer.wrap(buff, 9, 8).putDouble(getTurretXAngle());
 
+
 		return buff;
 	}
 

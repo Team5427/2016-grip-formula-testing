@@ -70,7 +70,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 
 		// Creates a new webcam
 		try {
-			// initializeCamera();
+			initializeCamera();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -251,6 +251,9 @@ public class VisionPanel extends JPanel implements KeyListener {
 	@Override
 	public synchronized void paint(Graphics g) {
 		Graphics bg = buffer.getGraphics();
+		
+		
+		
 
 		int xStart = getWidth() / 4;
 		int yStart = (int) RESOLUTION.getHeight();
@@ -342,7 +345,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 			String distance = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
 			String distnaceToBase = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
 			String angleDegrees = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getAngleOfElevation()));
-			String horizontalAngle = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getCameraXAngle()));
+			String horizontalAngle = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getTurretXAngle()));
 
 			System.out.println("Distance: " + distance + "in." + "    Elevation Angle: " + angleDegrees + "°"
 					+ "     Horizontal Angle: " + horizontalAngle + "°");
@@ -443,6 +446,12 @@ public class VisionPanel extends JPanel implements KeyListener {
 		 * double FPS = 1000000000 / timeDifference; String fpsOutput =
 		 * String.format("%.2f", FPS);
 		 */
+		
+		//testing
+		
+	//			bg.setColor(Color.white);
+		//		bg.fillRect(getWidth()/2-5, getWidth()/2+5, 0,getHeight());
+				
 
 		bg.drawString("FPS: " + Main.FPS, 2, 14);
 
