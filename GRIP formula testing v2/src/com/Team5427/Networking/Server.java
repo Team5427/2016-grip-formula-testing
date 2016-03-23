@@ -17,15 +17,16 @@ public class Server {
 	private static OutputStream byteOutStream;
 	private static InputStream byteInputStream;
 
-	private static final int PORT     = 25565;
+	private static final int PORT = 25565;
 	public static int MAX_BYTE_BUFFER = 256;
 
 	/**
 	 * Sends a byte array over the network
 	 *
-	 * @param buff The buffer to be send
+	 * @param buff
+	 *            The buffer to be send
 	 * @return true if sent successfully, false if otherwise
-     */
+	 */
 	public static synchronized boolean send(byte[] buff) {
 		if (hasConnection()) {
 			try {
@@ -41,27 +42,15 @@ public class Server {
 		return false;
 	}
 
-	/**
-	 * Sends String over the network
-	 *
-	 * @param s The string to be sent over the network
-	 * @return true if sent successfully, false if otherwise
-     */
-	public static synchronized boolean send(String s) {
-		if (hasConnection()) {
-			try {
-				out.writeObject(s);
-				out.reset();
-				out.flush();
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+	public static synchronized boolean sendLog() {
 
 		return false;
 	}
 
+	public static synchronized boolean sendMessage() {
+
+		return false;
+	}
 
 	/**
 	 * Call whenever sending something to the client in order to check whether
@@ -140,71 +129,77 @@ public class Server {
 						}
 					} else {
 
-//						System.out.println("Reached");
-/*
-						byte b = in.readByte();
+						// System.out.println("Reached");
+						/*
+						 * byte b = in.readByte();
+						 * 
+						 * System.out.println("Byte: " + b);
+						 */
 
-						System.out.println("Byte: " + b);*/
-
-//						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						// ByteArrayOutputStream baos = new
+						// ByteArrayOutputStream();
 						byte buffer[] = new byte[MAX_BYTE_BUFFER];
 
 						int numFromStream = in.read(buffer, 0, buffer.length);
 						System.out.println("num from stream: " + numFromStream);
 						System.out.print("Data from stream: ");
 						printByteArray(buffer);
-/*
-						in.close();
-						in = new ObjectInputStream(connection.getInputStream());*/
+						/*
+						 * in.close(); in = new
+						 * ObjectInputStream(connection.getInputStream());
+						 */
 
+						/*
+						 * ByteArrayOutputStream baos = new
+						 * ByteArrayOutputStream(); byte buffer[] = new
+						 * byte[1024]; for(int s; (s=in.read(buffer, 0,
+						 * buffer.length)) != -1; ) { baos.write(buffer, 0, s);
+						 * System.out.println("Write to buffer"); } byte
+						 * result[] = baos.toByteArray();
+						 */
 
-						/*ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						byte buffer[] = new byte[1024];
-						for(int s; (s=in.read(buffer, 0, buffer.length)) != -1; )
-						{
-							baos.write(buffer, 0, s);
-							System.out.println("Write to buffer");
-						}
-						byte result[] = baos.toByteArray();*/
+						// System.out.println("Byte array recieved: " + result);
 
-//						System.out.println("Byte array recieved: " + result);
-
-						/*System.out.println("else reached");
-						String s = in.readUTF();
-						System.out.println("Message recieved: " + s);
-
-						// TODO make sure that these are all working
-
-						if (s.contains(StringDictionary.TASK)) {
-
-							s = s.substring(StringDictionary.TASK.length(), s.length() - 1);
-
-							if (s.contains(StringDictionary.GOAL_ATTACHED)) {
-
-							} else if (s.contains(StringDictionary.LOG)) {
-
-								send(StringDictionary.TASK + StringDictionary.LOG
-										+ "roborio told the driverstation to log something, it should be the other way around.");
-
-							} else if (s.contains(StringDictionary.MESSAGE)) {
-
-								System.out.println("ROBORIO replied with message: " + s);
-
-							} else if (s.contains(StringDictionary.TELEOP_START)) {
-
-								VisionPanel.taskCommand(s);
-
-							} else if (s.contains(StringDictionary.AUTO_START)) {
-
-								VisionPanel.taskCommand(s);
-
-							} else {
-								System.out.println("Valid task was recieved, but with unrecognized contents.");
-							}
-
-						} else {
-							System.out.println("unrecognized task");
-						}*/
+						/*
+						 * System.out.println("else reached"); String s =
+						 * in.readUTF(); System.out.println("Message recieved: "
+						 * + s);
+						 * 
+						 * // TODO make sure that these are all working
+						 * 
+						 * if (s.contains(StringDictionary.TASK)) {
+						 * 
+						 * s = s.substring(StringDictionary.TASK.length(),
+						 * s.length() - 1);
+						 * 
+						 * if (s.contains(StringDictionary.GOAL_ATTACHED)) {
+						 * 
+						 * } else if (s.contains(StringDictionary.LOG)) {
+						 * 
+						 * send(StringDictionary.TASK + StringDictionary.LOG +
+						 * "roborio told the driverstation to log something, it should be the other way around."
+						 * );
+						 * 
+						 * } else if (s.contains(StringDictionary.MESSAGE)) {
+						 * 
+						 * System.out.println("ROBORIO replied with message: " +
+						 * s);
+						 * 
+						 * } else if (s.contains(StringDictionary.TELEOP_START))
+						 * {
+						 * 
+						 * VisionPanel.taskCommand(s);
+						 * 
+						 * } else if (s.contains(StringDictionary.AUTO_START)) {
+						 * 
+						 * VisionPanel.taskCommand(s);
+						 * 
+						 * } else { System.out.println(
+						 * "Valid task was recieved, but with unrecognized contents."
+						 * ); }
+						 * 
+						 * } else { System.out.println("unrecognized task"); }
+						 */
 
 					}
 
@@ -214,8 +209,7 @@ public class Server {
 					reset();
 				} catch (EOFException e) {
 					System.exit(1);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}

@@ -1,7 +1,7 @@
 package com.Team5427.VisionProcessing;
 
 import com.Team5427.Networking.Server;
-import com.Team5427.Networking.StringDictionary;
+import com.Team5427.Networking.ByteDictionary;
 import com.Team5427.res.Config;
 import com.github.sarxos.webcam.Webcam;
 
@@ -95,27 +95,19 @@ public class VisionPanel extends JPanel implements KeyListener {
 
 	public static void taskCommand(String s) {
 		System.out.println("Command recieved from roborio...");
-
-		if (s.contains(StringDictionary.AUTO_START)) {
-			gameTimerEnd = System.currentTimeMillis() + Config.AUTO_TIME * 1000;
-			gameStatus = AUTONOMOUS;
-		} else if (s.contains(StringDictionary.TELEOP_START)) {
-			gameTimerEnd = System.currentTimeMillis() + Config.TELEOP_TIME * 1000;
-			gameStatus = TELEOP;
-		}
+//
+//		TODO uncomment this when it works with Bytes
+//		if (s.contains(ByteDictionary.AUTO_START)) {
+//			gameTimerEnd = System.currentTimeMillis() + Config.AUTO_TIME * 1000;
+//			gameStatus = AUTONOMOUS;
+//		} else if (s.contains(ByteDictionary.TELEOP_START)) {
+//			gameTimerEnd = System.currentTimeMillis() + Config.TELEOP_TIME * 1000;
+//			gameStatus = TELEOP;
+//		}
 
 		// TODO default mode was not implemented because t was the default for
 		// the switch loop. I don't really know what you were trying to do there
 		// Charlie.
-
-		/*
-		 * switch (desc) { case DEFAULT_MODE: gameTimerEnd =
-		 * System.currentTimeMillis(); gameStatus = DEFAULT; break; case
-		 * AUTO_START: gameTimerEnd = System.currentTimeMillis() +
-		 * Config.AUTO_TIME * 1000; gameStatus = AUTONOMOUS; break; case
-		 * TELEOP_START: gameTimerEnd = System.currentTimeMillis() +
-		 * Config.TELEOP_TIME * 1000; gameStatus = TELEOP; break; }
-		 */
 	}
 
 	public void initializeCamera() throws MalformedURLException {
@@ -166,6 +158,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 	/**
 	 * Initializes the calibration sequence
 	 */
+	@SuppressWarnings({ "unused", "resource" })
 	public void initializeCalibration() {
 		System.out.println("===FOV Calibration===");
 
