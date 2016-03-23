@@ -56,11 +56,8 @@ public class GoalData implements Serializable {
 	 * @return true if data is valid and set according. False if otherwise
 	 */
 	public boolean setByteBuffer(byte[] buff) {
-		System.out.println(buff.toString());
 		if (buff[0] == 1) {
-			System.out.println(printBuff(buff));
 			motorValue = ByteBuffer.wrap(buff, 1, 8).getDouble();
-			System.out.println(printBuff(buff));
 			verticalAngle = ByteBuffer.wrap(buff, 9, 8).getDouble();
 		}
 

@@ -102,11 +102,9 @@ public class Client implements Runnable {
 
 
 			try {
-//				os = new ObjectOutputStream(clientSocket.getOutputStream());
 				os.write(buff);
 				os.reset();
 				os.flush();
-//				os.close();
 				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -129,29 +127,6 @@ public class Client implements Runnable {
 
 		return false;
 	}
-
-	/**
-	 * Sends an object to the server
-	 *
-	 * @param t
-	 *            object to be sent to the server
-	 * @return true if the object is sent successfully, false if otherwise.
-	 */
-	/*
-	 * public synchronized boolean send(Task t) {
-	 * 
-	 * if (networkThread != null && !networkThread.isInterrupted()) { try {
-	 * os.writeObject(t); os.reset(); return true; } catch
-	 * (NotSerializableException e) { Log.error(getClass() +
-	 * ":: send(Serializable o)\n\tThe object to be sent is not serializable.");
-	 * } catch (SocketException e) { Log.error("Socket Exception"); } catch
-	 * (NullPointerException e) { Log.error(
-	 * "\n\tThere was an error connecting to the server."); // This error occurs
-	 * when the client attempts to connect to a server, but the running } catch
-	 * (Exception e) { Log.error(e.getMessage()); } }
-	 * 
-	 * return false; }
-	 */
 
 	/**
 	 * Enables the thread to start receiving data from a network
@@ -215,7 +190,7 @@ public class Client implements Runnable {
 					Log.debug("num from stream: " + numFromStream);
 					Log.debug("Data from goal: Motor Value-" + g.getMotorValue()
 							+ " X Angle-" + Math.toDegrees(g.getVerticalAngle()));
-					Log.debug("Data from received bytes: " + getStringByteBuffer(buffer));
+//					Log.debug("Data from received bytes: " + getStringByteBuffer(buffer));
 					Log.debug("\n===========================\n");
 
 				} catch (SocketException e) {

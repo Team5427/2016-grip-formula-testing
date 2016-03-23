@@ -345,7 +345,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 			String distance = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
 			String distnaceToBase = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
 			String angleDegrees = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getAngleOfElevation()));
-			String horizontalAngle = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getTurretXAngle()));
+			String horizontalAngle = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getTurretXAngle())); //used to be getCameraAngle, damn it Charlie
 
 			System.out.println("Distance: " + distance + "in." + "    Elevation Angle: " + angleDegrees + "°"
 					+ "     Horizontal Angle: " + horizontalAngle + "°");
