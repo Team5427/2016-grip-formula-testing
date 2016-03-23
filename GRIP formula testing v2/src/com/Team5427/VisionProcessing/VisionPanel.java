@@ -70,7 +70,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 
 		// Creates a new webcam
 		try {
-			initializeCamera();
+//			initializeCamera();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
