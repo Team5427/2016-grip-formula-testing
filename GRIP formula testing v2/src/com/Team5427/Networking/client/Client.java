@@ -26,8 +26,9 @@ public class Client implements Runnable {
 	public static String ip;
 	public static int port;
 
+	public static GoalData lastRecievedGoal;
+
 	Thread networkThread;
-	public ArrayList<Object> inputStreamData = null;
 
 	private Socket clientSocket;
 	private ObjectInputStream is;
@@ -54,8 +55,6 @@ public class Client implements Runnable {
 			is = new ObjectInputStream(clientSocket.getInputStream());
 			os = new ObjectOutputStream(clientSocket.getOutputStream());
 			Log.debug(clientSocket.toString());
-
-			inputStreamData = new ArrayList<>();
 
 			Log.info("Connection to the server has been established successfully.");
 
@@ -94,15 +93,6 @@ public class Client implements Runnable {
 	}
 
 	/**
-	 * Gets the input stream data from the client
-	 *
-	 * @return ArrayList of objects recieved from the server
-     */
-	public ArrayList<Object> getInputStreamData() {
-		return inputStreamData;
-	}
-
-	/**
 	 * Sends a command to the server
 	 *
 	 * @param byteType the command from ByteDictionary
@@ -122,7 +112,6 @@ public class Client implements Runnable {
 	public synchronized boolean send(byte[] buff) {
 
 		if (isConnected()) {
-
 
 			try {
 				os.write(buff);
@@ -194,6 +183,10 @@ public class Client implements Runnable {
 		}
 	}
 
+	public void interpretData() {
+
+	}
+
 	/**
 	 * Running method that receives data from the server.
 	 */
@@ -209,11 +202,11 @@ public class Client implements Runnable {
 					byte buffer[] = new byte[MAX_BYTE_BUFFER];
 
 					int numFromStream = is.read(buffer, 0, buffer.length);
-					GoalData g = new GoalData(buffer);
+					lastRecievedGoal = new GoalData(buffer);
 					Log.debug("num from stream: " + numFromStream);
-					Log.debug("Data from goal: Motor Value-" + g.getMotorValue()
-							+ " X Angle-" + Math.toDegrees(g.getVerticalAngle()));
-//					Log.debug("Data from received bytes: " + getStringByteBuffer(buffer));
+					Log.debug("Data from goal: Motor Value-" + lastRecievedGoal.getMotorValue() + " X Angle-"
+							+ Math.toDegrees(lastRecievedGoal.getVerticalAngle()));
+					Log.debug("Data from received bytes: " + getStringByteBuffer(buffer));
 					Log.debug("\n===========================\n");
 
 				} catch (SocketException e) {
