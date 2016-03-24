@@ -393,6 +393,9 @@ public class VisionPanel extends JPanel implements KeyListener {
 		int startTimerX = (int) (RESOLUTION.getWidth() / 2 + .5) - timerWidth / 2;
 		int startTimerY = (int) (RESOLUTION.getHeight() + 1) - timerHeight;
 
+		bg.setColor(new Color(207, 255, 184, 122));
+		bg.fillRect(getWidth()/2-5, 0, 10,(int) RESOLUTION.getHeight());
+
 		bg.setColor(new Color(255, 0, 41, 150));
 		bg.fillRect(startTimerX, startTimerY, timerWidth, timerHeight);
 
@@ -441,9 +444,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 		 */
 		
 		//testing
-		
-			bg.setColor(Color.white);
-			bg.fillRect(getWidth()/2-5, 0, 10,getHeight());
+
 				
 
 		bg.drawString("FPS: " + Main.FPS, 2, 14);
