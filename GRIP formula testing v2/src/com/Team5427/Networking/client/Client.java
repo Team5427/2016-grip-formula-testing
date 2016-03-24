@@ -14,7 +14,6 @@ import com.Team5427.res.Log;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
 
 public class Client implements Runnable {
 
