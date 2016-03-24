@@ -56,7 +56,7 @@ public class Config {
 	 * carpet.
 	 */
 	public static final double TOWER_HEIGHT = 85;
-//	public static final double TOWER_HEIGHT = 76;
+	// public static final double TOWER_HEIGHT = 76;
 	/**
 	 * Elevation of the camera from the carpet, at the point where it is
 	 * attached to the robot.
@@ -78,4 +78,12 @@ public class Config {
 	 */
 
 	public static final long TELEOP_TIME = 135;
+
+	// MISC
+	public static final String NAME = "Team5427RoboCode";
+	public static final boolean DEBUG_MODE = true; // displays 'Log.debug' in
+													// console
+	public static final boolean LOGGING = true; // only logs errors and fatals
+												// with this false
+
 }

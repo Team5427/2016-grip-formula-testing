@@ -44,7 +44,7 @@ public class Server {
 
 	public static synchronized boolean sendLog(String s) {
 
-		byte buff[] = new byte[256];
+		byte buff[] = new byte[s.getBytes().length +1];
 
 		buff[0] = ByteDictionary.LOG;
 
