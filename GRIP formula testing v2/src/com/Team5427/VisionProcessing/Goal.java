@@ -1,5 +1,6 @@
 package com.Team5427.VisionProcessing;
 
+import com.Team5427.Networking.ByteDictionary;
 import com.Team5427.res.Config;
 
 import java.nio.ByteBuffer;
@@ -278,7 +279,7 @@ public class Goal implements Comparable {
 
 		/* Begin writing the data */
 		// Indicates the data type
-		buff[0] = 1;
+		buff[0] = ByteDictionary.GOAL_ATTACHED;
 
 		// Converts distance to byte array
 		ByteBuffer.wrap(buff, 1, 8).putDouble(motorValue);

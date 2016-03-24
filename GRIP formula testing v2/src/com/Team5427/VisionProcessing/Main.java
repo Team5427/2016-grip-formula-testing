@@ -10,12 +10,6 @@ import edu.wpi.first.wpilibj.networktables.*;
 public class Main {
 
 	/**
-	 * The FOV of the attached webcam. It is used in calculating the distance to
-	 * the goals.
-	 */
-	// public static final double CAMERA_FOV = 59;
-
-	/**
 	 * The object from WPILib that allows the program to retrieve all of the
 	 * information that is created by GRIP.
 	 */

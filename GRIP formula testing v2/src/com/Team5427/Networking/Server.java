@@ -6,7 +6,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Scanner;
+import java.nio.ByteBuffer;
 
 public class Server {
 
@@ -42,14 +42,27 @@ public class Server {
 		return false;
 	}
 
-	public static synchronized boolean sendLog() {
+	public static synchronized boolean sendLog(String s) {
 
-		return false;
+		byte buff[] = new byte[256];
+
+		buff[0] = ByteDictionary.LOG;
+
+		ByteBuffer.wrap(buff, 1, s.getBytes().length).put(s.getBytes());
+
+		return send(buff);
+
 	}
 
-	public static synchronized boolean sendMessage() {
+	public static synchronized boolean sendMessage(String s) {
 
-		return false;
+		byte buff[] = new byte[256];
+
+		buff[0] = ByteDictionary.LOG;
+
+		ByteBuffer.wrap(buff, 1, s.getBytes().length).put(s.getBytes());
+
+		return send(buff);
 	}
 
 	/**
@@ -129,77 +142,13 @@ public class Server {
 						}
 					} else {
 
-						// System.out.println("Reached");
-						/*
-						 * byte b = in.readByte();
-						 * 
-						 * System.out.println("Byte: " + b);
-						 */
-
-						// ByteArrayOutputStream baos = new
-						// ByteArrayOutputStream();
 						byte buffer[] = new byte[MAX_BYTE_BUFFER];
 
 						int numFromStream = in.read(buffer, 0, buffer.length);
 						System.out.println("num from stream: " + numFromStream);
 						System.out.print("Data from stream: ");
 						printByteArray(buffer);
-						/*
-						 * in.close(); in = new
-						 * ObjectInputStream(connection.getInputStream());
-						 */
-
-						/*
-						 * ByteArrayOutputStream baos = new
-						 * ByteArrayOutputStream(); byte buffer[] = new
-						 * byte[1024]; for(int s; (s=in.read(buffer, 0,
-						 * buffer.length)) != -1; ) { baos.write(buffer, 0, s);
-						 * System.out.println("Write to buffer"); } byte
-						 * result[] = baos.toByteArray();
-						 */
-
-						// System.out.println("Byte array recieved: " + result);
-
-						/*
-						 * System.out.println("else reached"); String s =
-						 * in.readUTF(); System.out.println("Message recieved: "
-						 * + s);
-						 * 
-						 * // TODO make sure that these are all working
-						 * 
-						 * if (s.contains(StringDictionary.TASK)) {
-						 * 
-						 * s = s.substring(StringDictionary.TASK.length(),
-						 * s.length() - 1);
-						 * 
-						 * if (s.contains(StringDictionary.GOAL_ATTACHED)) {
-						 * 
-						 * } else if (s.contains(StringDictionary.LOG)) {
-						 * 
-						 * send(StringDictionary.TASK + StringDictionary.LOG +
-						 * "roborio told the driverstation to log something, it should be the other way around."
-						 * );
-						 * 
-						 * } else if (s.contains(StringDictionary.MESSAGE)) {
-						 * 
-						 * System.out.println("ROBORIO replied with message: " +
-						 * s);
-						 * 
-						 * } else if (s.contains(StringDictionary.TELEOP_START))
-						 * {
-						 * 
-						 * VisionPanel.taskCommand(s);
-						 * 
-						 * } else if (s.contains(StringDictionary.AUTO_START)) {
-						 * 
-						 * VisionPanel.taskCommand(s);
-						 * 
-						 * } else { System.out.println(
-						 * "Valid task was recieved, but with unrecognized contents."
-						 * ); }
-						 * 
-						 * } else { System.out.println("unrecognized task"); }
-						 */
+						
 
 					}
 

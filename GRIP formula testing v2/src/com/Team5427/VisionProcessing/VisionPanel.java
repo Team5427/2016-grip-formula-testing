@@ -70,12 +70,12 @@ public class VisionPanel extends JPanel implements KeyListener {
 
 		// Creates a new webcam
 		try {
-//			initializeCamera();
+		initializeCamera();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		// ne w Thread(this).start();
+		// new Thread(this).start();
 	}
 
 	/**
@@ -442,8 +442,8 @@ public class VisionPanel extends JPanel implements KeyListener {
 		
 		//testing
 		
-	//			bg.setColor(Color.white);
-		//		bg.fillRect(getWidth()/2-5, getWidth()/2+5, 0,getHeight());
+			bg.setColor(Color.white);
+			bg.fillRect(getWidth()/2-5, 0, 10,getHeight());
 				
 
 		bg.drawString("FPS: " + Main.FPS, 2, 14);
