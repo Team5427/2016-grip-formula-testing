@@ -89,6 +89,14 @@ public class TestMain {
                 System.out.println("Byte array sent successfully?: " + sent);
             }
 
+            // TODO: Finish this
+            else if (caseSelection.equals("sendCommand")) {
+                System.out.println("WARNING! Bytes has to be sent or the program will crash");
+                System.out.print("Enter the byte command you want to send");
+
+//                client.
+            }
+
             else {
                 System.err.println("\tInvalid command");
             }
