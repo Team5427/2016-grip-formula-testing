@@ -1,5 +1,6 @@
 package com.Team5427.Networking.client;
 
+import com.Team5427.Networking.ByteDictionary;
 import com.Team5427.Networking.GoalData;
 import com.Team5427.res.Log;
 
@@ -88,6 +89,23 @@ public class Client implements Runnable {
 
 	public static void setPort(int port) {
 		Client.port = port;
+	}
+
+	/**
+	 * Sends a command to the server
+	 *
+	 * @param byteType the command from ByteDictionary
+	 * @return true if byte sent successfully, false if otherwise
+     */
+	public synchronized boolean sendCommand(byte byteType) {
+		if (byteType == ByteDictionary.TELEOP_START
+				|| byteType == ByteDictionary.AUTO_START) {
+			byte[] buff = new byte[1];
+			buff[0] = byteType;
+			send(buff);
+		}
+
+		return false;
 	}
 
 	public synchronized boolean send(byte[] buff) {
