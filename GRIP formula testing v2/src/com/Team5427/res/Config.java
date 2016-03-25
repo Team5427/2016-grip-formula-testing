@@ -18,11 +18,11 @@ public class Config {
 	/**
 	 * Minimum slope of a line in a goal for it to be considered as horizontal.
 	 */
-	public static final double MIN_HORIZONTAL_SLOPE = -1;
+	public static final double MIN_HORIZONTAL_SLOPE = -.6;
 	/**
 	 * Maximum slope of a line in a goal for it to be considered as horizontal.
 	 */
-	public static final double MAX_HORIZONTAL_SLOPE = 1;
+	public static final double MAX_HORIZONTAL_SLOPE = .6;
 
 	/**
 	 * Determines whether or not the user will be able to calibrate the camera

@@ -1,5 +1,7 @@
 package com.Team5427.VisionProcessing;
 
+import com.Team5427.res.Config;
+
 /**
  * 
  * A simple class that is used to store all of the data from a line, including
@@ -36,7 +38,7 @@ public class Line {
 		this.y2 = y2;
 		this.length = length;
 
-		if (getSlope() > -.3 && getSlope() < .3)
+		if (getSlope() > Config.MIN_HORIZONTAL_SLOPE && getSlope() < Config.MAX_HORIZONTAL_SLOPE)
 			horizontal = true;
 		else
 			vertical = true;
