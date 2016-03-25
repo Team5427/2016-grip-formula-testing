@@ -94,12 +94,12 @@ public class Client implements Runnable {
 	/**
 	 * Sends a command to the server
 	 *
-	 * @param byteType the command from ByteDictionary
+	 * @param byteType
+	 *            the command from ByteDictionary
 	 * @return true if byte sent successfully, false if otherwise
-     */
+	 */
 	public synchronized boolean sendCommand(byte byteType) {
-		if (byteType == ByteDictionary.TELEOP_START
-				|| byteType == ByteDictionary.AUTO_START) {
+		if (byteType == ByteDictionary.TELEOP_START || byteType == ByteDictionary.AUTO_START) {
 			byte[] buff = new byte[1];
 			buff[0] = byteType;
 			send(buff);
@@ -182,7 +182,26 @@ public class Client implements Runnable {
 		}
 	}
 
-	public void interpretData() {
+	public void interpretData(byte[] buff, int numFromStream) {
+
+		switch (buff[0]) {
+		case ByteDictionary.GOAL_ATTACHED:
+
+			lastRecievedGoal = new GoalData(buff);
+			Log.debug("Data from goal: Motor Value-" + lastRecievedGoal.getMotorValue() + " X Angle-"
+					+ Math.toDegrees(lastRecievedGoal.getVerticalAngle()));
+			Log.debug("Data from received bytes: " + getStringByteBuffer(buff));
+
+			break;
+
+		case ByteDictionary.LOG:
+
+
+			Log.vision(new String(getBufferedSegment(buff, 1, numFromStream-1)));
+
+			break;
+
+		}
 
 	}
 
@@ -199,13 +218,10 @@ public class Client implements Runnable {
 			if (clientSocket != null && !clientSocket.isClosed() && is != null) {
 				try {
 					byte buffer[] = new byte[MAX_BYTE_BUFFER];
-
 					int numFromStream = is.read(buffer, 0, buffer.length);
-					lastRecievedGoal = new GoalData(buffer);
+
 					Log.debug("num from stream: " + numFromStream);
-					Log.debug("Data from goal: Motor Value-" + lastRecievedGoal.getMotorValue() + " X Angle-"
-							+ Math.toDegrees(lastRecievedGoal.getVerticalAngle()));
-					Log.debug("Data from received bytes: " + getStringByteBuffer(buffer));
+					interpretData(buffer, numFromStream);
 					Log.debug("\n===========================\n");
 
 				} catch (SocketException e) {
@@ -235,6 +251,17 @@ public class Client implements Runnable {
 			str += buff[i] + ",";
 
 		return str + "]";
+	}
+
+	public static byte[] getBufferedSegment(byte[] buff, int startPos, int length) {
+		byte[] temp = new byte[length];
+
+		for (int i = 0; i < length; i++) {
+			System.out.println("buffereing");
+			temp[i] = buff[startPos + i];
+		}
+		return temp;
+
 	}
 
 }
