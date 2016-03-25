@@ -6,7 +6,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.nio.ByteBuffer;
+import java.util.Scanner;
 
 public class Server {
 
@@ -18,20 +18,11 @@ public class Server {
 	private static InputStream byteInputStream;
 
 	private static final int PORT = 25565;
-	public static int MAX_BYTE_BUFFER = 256;
 
-	/**
-	 * Sends a byte array over the network
-	 *
-	 * @param buff
-	 *            The buffer to be send
-	 * @return true if sent successfully, false if otherwise
-	 */
-	public static synchronized boolean send(byte[] buff) {
+	public static boolean send(byte[] buff) {
 		if (hasConnection()) {
 			try {
 				out.write(buff);
-				out.reset();
 				out.flush();
 				return true;
 			} catch (Exception e) {
@@ -42,27 +33,18 @@ public class Server {
 		return false;
 	}
 
-	public static synchronized boolean sendLog(String s) {
+	public static boolean send(String s) {
+		if (hasConnection()) {
+			try {
+				out.writeObject(s);
+				out.flush();
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 
-		byte buff[] = new byte[s.getBytes().length +1];
-
-		buff[0] = ByteDictionary.LOG;
-
-		ByteBuffer.wrap(buff, 1, s.getBytes().length).put(s.getBytes());
-
-		return send(buff);
-
-	}
-
-	public static synchronized boolean sendMessage(String s) {
-
-		byte buff[] = new byte[256];
-
-		buff[0] = ByteDictionary.LOG;
-
-		ByteBuffer.wrap(buff, 1, s.getBytes().length).put(s.getBytes());
-
-		return send(buff);
+		return false;
 	}
 
 	/**
@@ -141,14 +123,40 @@ public class Server {
 						} catch (Exception e) {
 						}
 					} else {
+						String s = in.readUTF();
 
-						byte buffer[] = new byte[MAX_BYTE_BUFFER];
+						// TODO make sure that these are all working
 
-						int numFromStream = in.read(buffer, 0, buffer.length);
-						System.out.println("num from stream: " + numFromStream);
-						System.out.print("Data from stream: ");
-						printByteArray(buffer);
-						
+						if (s.contains(StringDictionary.TASK)) {
+
+							s = s.substring(StringDictionary.TASK.length(), s.length() - 1);
+
+							if (s.contains(StringDictionary.GOAL_ATTACHED)) {
+
+							} else if (s.contains(StringDictionary.LOG)) {
+
+								send(StringDictionary.TASK + StringDictionary.LOG
+										+ "roborio told the driverstation to log something, it should be the other way around.");
+
+							} else if (s.contains(StringDictionary.MESSAGE)) {
+
+								System.out.println("ROBORIO replied with message: " + s);
+
+							} else if (s.contains(StringDictionary.TELEOP_START)) {
+
+								VisionPanel.taskCommand(s);
+
+							} else if (s.contains(StringDictionary.AUTO_START)) {
+
+								VisionPanel.taskCommand(s);
+
+							} else {
+								System.out.println("Valid task was recieved, but with unrecognized contents.");
+							}
+
+						} else {
+							System.out.println("unrecognized task");
+						}
 
 					}
 
@@ -156,8 +164,6 @@ public class Server {
 					System.out.println(
 							"\n\tConnection to the client has been lost. Attempting to re-establish connection");
 					reset();
-				} catch (EOFException e) {
-					System.exit(1);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -167,16 +173,4 @@ public class Server {
 	}
 
 	);
-
-	public static void printByteArray(byte[] arr) {
-
-		String str = "[";
-
-		for (int i = 0; i < arr.length; i++)
-			str += arr[i] + ",";
-
-		str.substring(0, str.length() - 2);
-
-		System.out.println(str + "]");
-	}
 }
