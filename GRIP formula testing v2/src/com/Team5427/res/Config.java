@@ -7,6 +7,11 @@ package com.Team5427.res;
  */
 public class Config {
 
+	public static final String NAME = "Team5427RoboCode";
+	public static final boolean DEBUG_MODE = false; // displays 'Log.debug' in
+													// console
+	public static final boolean LOGGING = true;
+
 	/**
 	 * Minimum slope of a line in a goal for it to be considered as vertical.
 	 */
@@ -56,7 +61,7 @@ public class Config {
 	 * carpet.
 	 */
 	public static final double TOWER_HEIGHT = 85;
-//	public static final double TOWER_HEIGHT = 76;
+	// public static final double TOWER_HEIGHT = 76;
 	/**
 	 * Elevation of the camera from the carpet, at the point where it is
 	 * attached to the robot.
