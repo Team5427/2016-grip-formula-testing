@@ -189,15 +189,14 @@ public class Client implements Runnable {
 
 			lastRecievedGoal = new GoalData(buff);
 			Log.debug("Data from goal: Motor Value-" + lastRecievedGoal.getMotorValue() + " X Angle-"
-					+ Math.toDegrees(lastRecievedGoal.getVerticalAngle()));
+					+ Math.toDegrees(lastRecievedGoal.getHorizontalAngle()));
 			Log.debug("Data from received bytes: " + getStringByteBuffer(buff));
 
 			break;
 
 		case ByteDictionary.LOG:
 
-
-			Log.vision(new String(getBufferedSegment(buff, 1, numFromStream-1)));
+			Log.vision(new String(getBufferedSegment(buff, 1, numFromStream - 1)));
 
 			break;
 
@@ -222,6 +221,7 @@ public class Client implements Runnable {
 
 					Log.debug("num from stream: " + numFromStream);
 					interpretData(buffer, numFromStream);
+					System.out.println(lastRecievedGoal.toString());
 					Log.debug("\n===========================\n");
 
 				} catch (SocketException e) {

@@ -68,9 +68,9 @@ public class Main {
 
 				filterGoals();
 
-	//			sendData();
-				
-				Server.sendLog("SPAM");
+				sendData();
+
+				// Server.sendLog("SPAM");
 
 				Thread.sleep(10);
 

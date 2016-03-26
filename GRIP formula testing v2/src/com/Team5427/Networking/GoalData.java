@@ -23,16 +23,16 @@ public class GoalData implements Serializable {
 	/**
 	 * The horizontal angle from the camera to the
 	 */
-	private double verticalAngle;
+	private double horizontalAngle;
 	/**
 	 * The value that the motor needs to be set at for the given distance
 	 */
 	private double motorValue;
 
-	public GoalData(double distance, double angleOfElevation, double verticalAngle, double motorValue) {
+	public GoalData(double distance, double angleOfElevation, double horiztonalAngle, double motorValue) {
 		this.distance = distance;
 		this.angleOfElevation = angleOfElevation;
-		this.verticalAngle = verticalAngle;
+		this.horizontalAngle = horiztonalAngle;
 		this.motorValue = motorValue;
 	}
 
@@ -58,7 +58,7 @@ public class GoalData implements Serializable {
 	public boolean setByteBuffer(byte[] buff) {
 		if (buff[0] == 1) {
 			motorValue = ByteBuffer.wrap(buff, 1, 8).getDouble();
-			verticalAngle = ByteBuffer.wrap(buff, 9, 8).getDouble();
+			horizontalAngle = ByteBuffer.wrap(buff, 9, 8).getDouble();
 		}
 
 		return false;
@@ -95,12 +95,12 @@ public class GoalData implements Serializable {
 		this.angleOfElevation = angleOfElevation;
 	}
 
-	public double getVerticalAngle() {
-		return verticalAngle;
+	public double getHorizontalAngle() {
+		return horizontalAngle;
 	}
 
-	public void setVerticalAngle(double verticalAngle) {
-		this.verticalAngle = verticalAngle;
+	public void setHorizontalAngle(double verticalAngle) {
+		this.horizontalAngle = verticalAngle;
 	}
 
 	public double getMotorValue() {
@@ -113,6 +113,6 @@ public class GoalData implements Serializable {
 	 * @return the class type for networking use
 	 */
 	public String toString() {
-		return "Team 5427 - GoalData";
+		return "Team 5427 - GoalData " + motorValue + "  " + Math.toDegrees(horizontalAngle);
 	}
 }
