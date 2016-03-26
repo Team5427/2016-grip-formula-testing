@@ -15,6 +15,7 @@ import com.Team5427.res.Log;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 public class Client implements Runnable {
 
@@ -25,9 +26,10 @@ public class Client implements Runnable {
 	public static String ip;
 	public static int port;
 
-	public static GoalData lastRecievedGoal;
-
 	Thread networkThread;
+	public ArrayList<Object> inputStreamData = null;
+
+	public static GoalData lastRecievedGoal = null;
 
 	private Socket clientSocket;
 	private ObjectInputStream is;
@@ -54,6 +56,8 @@ public class Client implements Runnable {
 			is = new ObjectInputStream(clientSocket.getInputStream());
 			os = new ObjectOutputStream(clientSocket.getOutputStream());
 			Log.debug(clientSocket.toString());
+
+			inputStreamData = new ArrayList<>();
 
 			Log.info("Connection to the server has been established successfully.");
 
@@ -91,53 +95,32 @@ public class Client implements Runnable {
 		Client.port = port;
 	}
 
+	public ArrayList<Object> getInputStreamData() {
+		return inputStreamData;
+	}
+
 	/**
-	 * Sends a command to the server
+	 * Sends an object to the server
 	 *
-	 * @param byteType
-	 *            the command from ByteDictionary
-	 * @return true if byte sent successfully, false if otherwise
+	 * @param t
+	 *            object to be sent to the server
+	 * @return true if the object is sent successfully, false if otherwise.
 	 */
-	public synchronized boolean sendCommand(byte byteType) {
-		if (byteType == ByteDictionary.TELEOP_START || byteType == ByteDictionary.AUTO_START) {
-			byte[] buff = new byte[1];
-			buff[0] = byteType;
-			send(buff);
-		}
-
-		return false;
-	}
-
-	public synchronized boolean send(byte[] buff) {
-
-		if (isConnected()) {
-
-			try {
-				os.write(buff);
-				os.reset();
-				os.flush();
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		return false;
-	}
-
-	public synchronized boolean send(String s) {
-		if (isConnected()) {
-			try {
-				os.writeChars(s);
-				os.reset();
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		return false;
-	}
+	/*
+	 * public synchronized boolean send(Task t) {
+	 * 
+	 * if (networkThread != null && !networkThread.isInterrupted()) { try {
+	 * os.writeObject(t); os.reset(); return true; } catch
+	 * (NotSerializableException e) { Log.error(getClass() +
+	 * ":: send(Serializable o)\n\tThe object to be sent is not serializable.");
+	 * } catch (SocketException e) { Log.error("Socket Exception"); } catch
+	 * (NullPointerException e) { Log.error(
+	 * "\n\tThere was an error connecting to the server."); // This error occurs
+	 * when the client attempts to connect to a server, but the running } catch
+	 * (Exception e) { Log.error(e.getMessage()); } }
+	 * 
+	 * return false; }
+	 */
 
 	/**
 	 * Enables the thread to start receiving data from a network

@@ -52,8 +52,7 @@ public class ShootingAssistant {
 		double remainder = ((distance % 2.0))*.5;
 		int roundedDistance = (int)(distance-distance % 2.0);
 		System.out.println("distance"+ roundedDistance);
-
-		
+				
 		return (distancePower.get(roundedDistance*1.0) * (remainder))
 				+ (distancePower.get(roundedDistance*1.0 + 2) * (1-remainder));
 	}

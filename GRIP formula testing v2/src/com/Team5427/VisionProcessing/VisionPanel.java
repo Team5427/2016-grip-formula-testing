@@ -10,6 +10,7 @@ import com.github.sarxos.webcam.ds.ipcam.IpCamDeviceRegistry;
 import com.github.sarxos.webcam.ds.ipcam.IpCamDriver;
 import com.github.sarxos.webcam.ds.ipcam.IpCamMode;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.util.*;
 import java.awt.*;
@@ -17,6 +18,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class VisionPanel extends JPanel implements KeyListener {
@@ -209,7 +211,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 
 	/**
 	 * Calibrates the angle of the robot using angles
-	 * 
+	 *
 	 * @param goal
 	 *            Goal used as a reference to calculate the camera's angle
 	 * @param distance
@@ -244,9 +246,9 @@ public class VisionPanel extends JPanel implements KeyListener {
 	@Override
 	public synchronized void paint(Graphics g) {
 		Graphics bg = buffer.getGraphics();
-		
-		
-		
+
+
+
 
 		int xStart = getWidth() / 4;
 		int yStart = (int) RESOLUTION.getHeight();
@@ -393,6 +395,12 @@ public class VisionPanel extends JPanel implements KeyListener {
 		int startTimerX = (int) (RESOLUTION.getWidth() / 2 + .5) - timerWidth / 2;
 		int startTimerY = (int) (RESOLUTION.getHeight() + 1) - timerHeight;
 
+		bg.setColor(new Color(207, 255, 184, 122));
+//		bg.fillRect(getWidth()/2-5, 0, 10,(int) RESOLUTION.getHeight());
+
+		bg.fillRect(getWidth()/2+4, 0, 10,(int) RESOLUTION.getHeight());
+		bg.fillRect(0, 16, (int) RESOLUTION.getWidth(), 10);
+
 		bg.setColor(new Color(255, 0, 41, 150));
 		bg.fillRect(startTimerX, startTimerY, timerWidth, timerHeight);
 
@@ -439,16 +447,28 @@ public class VisionPanel extends JPanel implements KeyListener {
 		 * double FPS = 1000000000 / timeDifference; String fpsOutput =
 		 * String.format("%.2f", FPS);
 		 */
-		
+
 		//testing
-		
-			bg.setColor(Color.white);
-			bg.fillRect(getWidth()/2-5, 0, 10,getHeight());
-				
+
+
 
 		bg.drawString("FPS: " + Main.FPS, 2, 14);
 
+
+		////////////////////TEMP///////////////////
+//		BufferedImage testImg = null;
+//		try {
+//			testImg = ImageIO.read(new File("C:/Users/Blackhawk/Desktop/newimg.png"));
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		bg.drawImage(testImg,-2, 0, null);
+//
+//		bg.setColor(new Color(255, 234, 0, 122));
+
+
 		g.drawImage(buffer, 0, 0, null);
+
 
 		donePainting = true;
 	}

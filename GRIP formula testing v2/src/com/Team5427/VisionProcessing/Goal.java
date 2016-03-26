@@ -1,9 +1,6 @@
 package com.Team5427.VisionProcessing;
 
-import com.Team5427.Networking.ByteDictionary;
 import com.Team5427.res.Config;
-
-import java.nio.ByteBuffer;
 
 @SuppressWarnings("rawtypes")
 public class Goal implements Comparable {
@@ -265,30 +262,6 @@ public class Goal implements Comparable {
 					/ Math.sin(getAngleOfElevation());
 
 		return cameraDistanceToGoal;
-	}
-
-	/**
-	 * TODO: Replace hard code, index 0 to indicate data type is probably wrong
-	 * 		 Replace index 0 with whatever value is in the ByteDictionary.
-	 * Returns a byte array of the goal data
-	 *
-	 * @return byte array of goal data
-     */
-	public byte[] getByteBuffer(double motorValue) {
-		byte[] buff = new byte[17];
-
-		/* Begin writing the data */
-		// Indicates the data type
-		buff[0] = ByteDictionary.GOAL_ATTACHED;
-
-		// Converts distance to byte array
-		ByteBuffer.wrap(buff, 1, 8).putDouble(motorValue);
-
-		// Converts vertical angle to byte array
-		ByteBuffer.wrap(buff, 9, 8).putDouble(getTurretXAngle());
-
-
-		return buff;
 	}
 
 	// TODO make this print out values to make a new goalData.

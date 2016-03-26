@@ -1,10 +1,11 @@
 package com.Team5427.Networking;
 
+import java.io.Serializable;
+import java.nio.ByteBuffer;
+
 import com.Team5427.VisionProcessing.Goal;
 
 import java.io.Serializable;
-
-import java.nio.ByteBuffer;
 
 /**
  * The object that will be sent from the driver station and will be received by
@@ -99,8 +100,8 @@ public class GoalData implements Serializable {
 		return horizontalAngle;
 	}
 
-	public void setHorizontalAngle(double verticalAngle) {
-		this.horizontalAngle = verticalAngle;
+	public void setHorizontalAngle(double horizontalAngle) {
+		this.horizontalAngle = horizontalAngle;
 	}
 
 	public double getMotorValue() {

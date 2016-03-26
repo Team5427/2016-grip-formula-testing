@@ -3,11 +3,17 @@ package com.Team5427.VisionProcessing;
 import java.util.ArrayList;
 
 import com.Team5427.Networking.Server;
-import com.Team5427.Networking.ByteDictionary;
+import com.Team5427.Networking.StringDictionary;
 
 import edu.wpi.first.wpilibj.networktables.*;
 
 public class Main {
+
+	/**
+	 * The FOV of the attached webcam. It is used in calculating the distance to
+	 * the goals.
+	 */
+	// public static final double CAMERA_FOV = 59;
 
 	/**
 	 * The object from WPILib that allows the program to retrieve all of the
@@ -70,7 +76,6 @@ public class Main {
 
 				sendData();
 
-				// Server.sendLog("SPAM");
 
 				Thread.sleep(10);
 
@@ -315,7 +320,8 @@ public class Main {
 
 			if (g != null) {
 				// TODO verify that the getGoalDistanceTurret is working
-				Server.send(g.getByteBuffer(ShootingAssistant.getShootingPower(g.getGoalDistanceTurret())));
+				Server.send(StringDictionary.TASK + StringDictionary.GOAL_ATTACHED + g.getGoalDistanceTurret() + " "
+						+ g.getAngleOfElevation() + " "+ g.getTurretXAngle() + " " + ShootingAssistant.getShootingPower(g.getGoalDistanceTurret()));
 
 			}
 		}
