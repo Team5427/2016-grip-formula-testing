@@ -1,6 +1,9 @@
 package com.Team5427.VisionProcessing;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class VisionFrame extends JFrame {
@@ -15,10 +18,15 @@ public class VisionFrame extends JFrame {
 	public static final int width = 632;
 	public static final int height = 600;
 
+	public static final ImageIcon icon = getIcon();
+
 	private GraphicsPanel graphicsPanel;
 
 	public VisionFrame() {
 		super(title);
+
+		if (icon != null)
+			setIconImage(icon.getImage());
 
 		pack();
 
@@ -45,5 +53,16 @@ public class VisionFrame extends JFrame {
 
 	public GraphicsPanel getPanel() {
 		return graphicsPanel;
+	}
+
+	public static ImageIcon getIcon() {
+		try {
+			Image img = ImageIO.read(new File("resources/images/icon/oths.png"));
+			return new ImageIcon(img);
+		} catch (Exception e) {
+			System.err.println("Error loading image");
+		}
+
+		return null;
 	}
 }
