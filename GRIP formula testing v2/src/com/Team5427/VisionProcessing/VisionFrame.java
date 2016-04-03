@@ -15,7 +15,7 @@ public class VisionFrame extends JFrame {
 	public static final int width = 632;
 	public static final int height = 600;
 
-	private VisionPanel p;
+	private GraphicsPanel graphicsPanel;
 
 	public VisionFrame() {
 		super(title);
@@ -28,11 +28,11 @@ public class VisionFrame extends JFrame {
 		int fWidth = insect.left + insect.right + width;
 		int fHeight = insect.top + insect.bottom + height;
 
-		p = new VisionPanel(fWidth, fHeight);
+		graphicsPanel = new GraphicsPanel(fWidth, fHeight);
 
 		setPreferredSize(new Dimension(fWidth, fHeight));
 
-		add(p);
+		add(graphicsPanel);
 
 		// May change this later
 		setResizable(false);
@@ -43,7 +43,7 @@ public class VisionFrame extends JFrame {
 
 	}
 
-	public VisionPanel getPanel() {
-		return p;
+	public GraphicsPanel getPanel() {
+		return graphicsPanel;
 	}
 }

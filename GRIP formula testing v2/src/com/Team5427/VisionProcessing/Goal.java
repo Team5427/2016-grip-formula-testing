@@ -86,8 +86,8 @@ public class Goal implements Comparable {
 	 */
 	protected double getCameraAngleY() {
 		return Math.atan(
-				(VisionPanel.RESOLUTION.getHeight() / 2 - (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2)
-						/ VisionPanel.pixelsToGoal);
+				(GraphicsPanel.RESOLUTION.getHeight() / 2 - (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2)
+						/ GraphicsPanel.pixelsToGoal);
 	}
 
 	/**
@@ -99,22 +99,22 @@ public class Goal implements Comparable {
 	 */
 	public double getAngleOfElevation() {
 		/*
-		 * System.out.println((VisionPanel.RESOLUTION.getHeight() / 2 -
+		 * System.out.println((GraphicsPanel.RESOLUTION.getHeight() / 2 -
 		 * (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2));
 		 */
 
 		if (angleOfElevation == Double.MIN_VALUE)
 			angleOfElevation = Math
-					.atan((VisionPanel.RESOLUTION.getHeight() / 2
-							- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2) / VisionPanel.pixelsToGoal)
+					.atan((GraphicsPanel.RESOLUTION.getHeight() / 2
+							- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2) / GraphicsPanel.pixelsToGoal)
 					+ Math.toRadians(Config.CAMERA_START_ANGLE);
 
 		return angleOfElevation;
 
 		/*
 		 * return Math .atan(((leftLine.getMidpointY() +
-		 * rightLine.getMidpointY()) / 2 - VisionPanel.RESOLUTION.getHeight() /
-		 * 2) / VisionPanel.pixelsToGoal) +
+		 * rightLine.getMidpointY()) / 2 - GraphicsPanel.RESOLUTION.getHeight() /
+		 * 2) / GraphicsPanel.pixelsToGoal) +
 		 * Math.toRadians(Config.CAMERA_START_ANGLE);
 		 */
 	}
@@ -168,7 +168,7 @@ public class Goal implements Comparable {
 	 */
 	protected double getCameraXAngle() {
 		if (cameraXAngle == Double.MIN_VALUE)
-			cameraXAngle = Math.atan((centerLine.getMidpointX() - VisionPanel.RESOLUTION.getWidth() / 2) / VisionPanel.pixelsToGoal);
+			cameraXAngle = Math.atan((centerLine.getMidpointX() - GraphicsPanel.RESOLUTION.getWidth() / 2) / GraphicsPanel.pixelsToGoal);
 		
 
 		return cameraXAngle;

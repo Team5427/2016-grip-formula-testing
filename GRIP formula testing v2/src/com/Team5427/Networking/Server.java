@@ -1,12 +1,11 @@
 package com.Team5427.Networking;
 
-import com.Team5427.VisionProcessing.VisionPanel;
+import com.Team5427.VisionProcessing.GraphicsPanel;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Scanner;
 
 public class Server {
 
@@ -144,11 +143,11 @@ public class Server {
 
 							} else if (s.contains(StringDictionary.TELEOP_START)) {
 
-								VisionPanel.taskCommand(s);
+								GraphicsPanel.taskCommand(s);
 
 							} else if (s.contains(StringDictionary.AUTO_START)) {
 
-								VisionPanel.taskCommand(s);
+								GraphicsPanel.taskCommand(s);
 
 							} else {
 								System.out.println("Valid task was recieved, but with unrecognized contents.");

@@ -21,7 +21,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-public class VisionPanel extends JPanel implements KeyListener {
+public class GraphicsPanel extends JPanel implements KeyListener {
 
 	public static final String IP_CAMERA_URL = "http://10.54.27.11/mjpg/video.mjpg";
 	public static final Dimension RESOLUTION = new Dimension(640, 480);
@@ -55,7 +55,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 
 	private boolean donePainting = false;
 
-	public VisionPanel(int width, int height) {
+	public GraphicsPanel(int width, int height) {
 
 		super();
 
@@ -122,7 +122,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 			webcam.open(); // I think this "opens" the camera. This line is
 			// needed
 		} catch (NoClassDefFoundError e) {
-			System.err.println("Cannot find usb camera");
+			System.err.println("Cannot find IP camera");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -151,10 +151,6 @@ public class VisionPanel extends JPanel implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		char key = Character.toLowerCase(e.getKeyChar());
-
-		if (key == 'c') {
-			initializeCalibration();
-		}
 	}
 
 	/**
