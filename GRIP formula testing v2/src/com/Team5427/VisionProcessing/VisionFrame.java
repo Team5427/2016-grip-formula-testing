@@ -18,7 +18,7 @@ public class VisionFrame extends JFrame {
 	public static final int width = 632;
 	public static final int height = 600;
 
-	public static final ImageIcon icon = getIcon();
+	public final ImageIcon icon = getIcon();
 
 	private GraphicsPanel graphicsPanel;
 
@@ -55,7 +55,13 @@ public class VisionFrame extends JFrame {
 		return graphicsPanel;
 	}
 
-	public static ImageIcon getIcon() {
+	public ImageIcon getIcon() {
+		try {
+			ImageIcon img = new ImageIcon(getClass().getResource("resources/images/icon/oths.png"));
+		} catch (Exception e) {
+			System.err.println("Image not found in jar");
+		}
+
 		try {
 			Image img = ImageIO.read(new File("resources/images/icon/oths.png"));
 			return new ImageIcon(img);

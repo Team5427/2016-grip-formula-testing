@@ -96,11 +96,6 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 	}
 
 	public static void taskCommand(String s) {
-		System.out.println("Command recieved from roborio...");
-//
-//		TODO uncomment this when it works with Bytes
-//		if (s.contains(ByteDictionary.AUTO_START)) {
-//			gameTimerEnd = System.currentTimeMillis() + Config.AUTO_TIME * 1000;
 //			gameStatus = AUTONOMOUS;
 //		} else if (s.contains(ByteDictionary.TELEOP_START)) {
 //			gameTimerEnd = System.currentTimeMillis() + Config.TELEOP_TIME * 1000;
@@ -118,6 +113,11 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 
 		try {
 			webcam = Webcam.getWebcams().get(0);
+			System.out.println("Command recieved from roborio...");
+//
+//		TODO uncomment this when it works with Bytes
+//		if (s.contains(ByteDictionary.AUTO_START)) {
+//			gameTimerEnd = System.currentTimeMillis() + Config.AUTO_TIME * 1000;
 			webcam.setViewSize(RESOLUTION); // Sets the correct RESOLUTION
 			webcam.open(); // I think this "opens" the camera. This line is
 			// needed
