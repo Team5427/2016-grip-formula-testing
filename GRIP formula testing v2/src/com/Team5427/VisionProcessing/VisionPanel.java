@@ -248,7 +248,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 		Graphics bg = buffer.getGraphics();
 
 
-
+		
 
 		int xStart = getWidth() / 4;
 		int yStart = (int) RESOLUTION.getHeight();
@@ -398,7 +398,7 @@ public class VisionPanel extends JPanel implements KeyListener {
 		bg.setColor(new Color(207, 255, 184, 122));
 //		bg.fillRect(getWidth()/2-5, 0, 10,(int) RESOLUTION.getHeight());
 
-		bg.fillRect(getWidth()/2+4, 0, 10,(int) RESOLUTION.getHeight());
+		bg.fillRect(getWidth()/2-10, 0, 8,(int) RESOLUTION.getHeight());
 		bg.fillRect(0, 16, (int) RESOLUTION.getWidth(), 10);
 
 		bg.setColor(new Color(255, 0, 41, 150));

@@ -63,7 +63,7 @@ public class Main {
 		Server.start();
 
 		while (true) {
-			// long startTime = System.nanoTime();
+			long startTime = System.nanoTime();
 			try {
 
 				setValues();
@@ -76,13 +76,10 @@ public class Main {
 
 				sendData();
 
-
-				Thread.sleep(10);
-
 				vf.getPanel().repaint();
 
 				do {
-					Thread.sleep(5);
+					Thread.sleep(1);
 				} while (!vf.getPanel().isDonePainting());
 
 				vf.getPanel().setDonePainting(false);
@@ -90,7 +87,7 @@ public class Main {
 				lines.clear();
 				goals.clear();
 
-				// System.out.println((System.nanoTime()-startTime)/1000000);
+				System.out.println((System.nanoTime() - startTime) / 1000000);
 
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -321,7 +318,8 @@ public class Main {
 			if (g != null) {
 				// TODO verify that the getGoalDistanceTurret is working
 				Server.send(StringDictionary.TASK + StringDictionary.GOAL_ATTACHED + g.getGoalDistanceTurret() + " "
-						+ g.getAngleOfElevation() + " "+ g.getTurretXAngle() + " " + ShootingAssistant.getShootingPower(g.getGoalDistanceTurret()));
+						+ g.getAngleOfElevation() + " " + g.getTurretXAngle() + " "
+						+ ShootingAssistant.getShootingPower(g.getGoalDistanceTurret()));
 
 			}
 		}

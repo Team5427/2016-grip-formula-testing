@@ -1,5 +1,9 @@
 package com.Team5427.testing;
 
+
+public class TestMain{
+	
+}
 //
 // import com.Team5427.Networking.client.Client;
 //
