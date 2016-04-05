@@ -37,7 +37,7 @@ public class Main {
 	private final static int lowestAcceptableValue = 9;
 
 	/**
-	 * A frame created just to hold a VisionPanel.
+	 * A frame created just to hold a GraphicsPanel.
 	 */
 	static VisionFrame vf;
 

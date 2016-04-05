@@ -31,7 +31,7 @@ public class Config {
 
 	/**
 	 * Determines whether or not the user will be able to calibrate the camera
-	 * from the VisionPanel.
+	 * from the GraphicsPanel.
 	 */
 	public static final boolean ENABLE_FOV_CALIBRATION = false;
 	/**
