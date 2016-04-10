@@ -11,6 +11,7 @@ import com.github.sarxos.webcam.ds.ipcam.IpCamDriver;
 import com.github.sarxos.webcam.ds.ipcam.IpCamMode;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.*;
 import java.awt.*;
@@ -23,7 +24,12 @@ import javax.swing.JPanel;
 
 public class GraphicsPanel extends JPanel implements KeyListener {
 
-	public static final String IP_CAMERA_URL = "http://10.54.27.11/mjpg/video.mjpg";
+	public static String IP_CAMERA_URL = getIPFromText();
+//	public static String IP_CAMERA_URL = "http://10.54.27.13/mjpg/video.mjpg";
+//	public static final String IP_CAMERA_URL = "http://169.254.9.94/mjpg/video.mjpg";
+//	public static final String IP_CAMERA_URL = "http://10.54.27.11/mjpg/video.mjpg";
+//	public static final String IP_CAMERA_URL = "http://10.54.27.21/mjpg/video.mjpg";
+//	public static final String IP_CAMERA_URL = "http://axis-camera5427.local/mjpg/video.mjpg";
 	public static final Dimension RESOLUTION = new Dimension(640, 480);
 
 	// Game info
@@ -354,7 +360,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			}
 
 		}
-
+		
 		// Paints data from the roborio if connection is established
 		bg.setFont(new Font("Arial", Font.BOLD, 12));
 		if (Server.hasConnection()) {
@@ -469,4 +475,20 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		donePainting = true;
 	}
 
+	public static String getIPFromText() {
+		String address = "";
+		Scanner scanner = null;
+		
+		try {
+			scanner = new Scanner(new File("IPaddress.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		address = scanner.nextLine();
+		System.out.println("IP Address: " + address);
+		
+		return address;
+	}
 }
