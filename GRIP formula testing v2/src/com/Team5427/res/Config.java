@@ -7,6 +7,12 @@ package com.Team5427.res;
  */
 public class Config {
 
+	//vals for auto shoot
+	public static final double SHOOT_MIN_SLOPE=-1;
+	public static final double SHOOT_MAX_SLOPE=-1;
+
+	
+	
 	public static final String NAME = "Team5427RoboCode";
 	public static final boolean DEBUG_MODE = false; // displays 'Log.debug' in
 													// console

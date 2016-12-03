@@ -14,7 +14,8 @@ public class Goal implements Comparable {
 	private double turretDistanceToGoal = Double.MIN_VALUE;
 	private double turretXAngle = Double.MIN_VALUE;
 	private double area = -1;
-
+	public static final int MOVE_LEFT=-1, SPOT_ON=0, MOVE_RIGHT=1;
+	private int rangeStatus=Integer.MIN_VALUE;
 	private boolean goalCompleted = false;
 
 	/**
@@ -84,6 +85,32 @@ public class Goal implements Comparable {
 	 * @return Angle from the robot to the top of the camera as viewed by the
 	 *         camera in radians
 	 */
+	
+	public void updateAngleStatus()
+	{
+		if(centerLine.getSlope()<Config.SHOOT_MIN_SLOPE)
+			rangeStatus= MOVE_LEFT;
+		else if(centerLine.getSlope()>Config.SHOOT_MAX_SLOPE)
+			rangeStatus= MOVE_RIGHT;
+		else if(centerLine.getSlope()<Config.SHOOT_MAX_SLOPE&&centerLine.getSlope()>Config.SHOOT_MIN_SLOPE)
+			rangeStatus=SPOT_ON;
+		else
+			rangeStatus=Integer.MIN_VALUE;
+	}
+	
+	public String getAngleStatus()
+	{
+		if(1==rangeStatus)
+			return "Move Right!";
+		else if(-1==rangeStatus)
+			return "Move Left!";
+		else if(0==rangeStatus)
+			return "Spot On!";
+		else
+			return "Scrub";
+	}
+	
+	
 	protected double getCameraAngleY() {
 		return Math.atan(
 				(GraphicsPanel.RESOLUTION.getHeight() / 2 - (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2)
