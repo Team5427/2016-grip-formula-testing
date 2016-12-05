@@ -351,6 +351,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			bg.drawString("Distance: " + distance + "in.", x, y);
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
+			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
 //			bg.drawString("Whatever: " + goal.getAngleStatus(), x, y += interval);
 
 			try {

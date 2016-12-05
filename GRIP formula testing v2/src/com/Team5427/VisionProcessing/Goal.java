@@ -85,7 +85,6 @@ public class Goal implements Comparable {
 	 * @return Angle from the robot to the top of the camera as viewed by the
 	 *         camera in radians
 	 */
-	
 	public void updateAngleStatus()
 	{
 		if(centerLine.getSlope()<Config.SHOOT_MIN_SLOPE)
@@ -246,6 +245,11 @@ public class Goal implements Comparable {
 		this.rightLine = rightLine;
 	}
 
+	/**
+	 * Returns the area of the goal
+	 *
+	 * @return area of the goal
+	 */
 	public double getArea() {
 		return area;
 	}

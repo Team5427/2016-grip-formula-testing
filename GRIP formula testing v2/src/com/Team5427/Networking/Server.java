@@ -18,6 +18,11 @@ public class Server {
 
 	private static final int PORT = 25565;
 
+	/**
+	 * Sends a byte array over the network
+	 * @param buff byte array to send over the network
+	 * @return true if sent successfully, false otherwise
+	 */
 	public static boolean send(byte[] buff) {
 		if (hasConnection()) {
 			try {
@@ -32,6 +37,7 @@ public class Server {
 		return false;
 	}
 
+	@Deprecated
 	public static boolean send(String s) {
 		if (hasConnection()) {
 			try {
@@ -71,6 +77,9 @@ public class Server {
 		}
 	}
 
+	/**
+	 * Starts server thread
+	 */
 	public static synchronized void start() {
 
 		try {
@@ -84,6 +93,10 @@ public class Server {
 		listener.start();
 	}
 
+	/**
+	 * Stops server thread
+	 * WARNING: New server class might be needed if thread is stopped
+	 */
 	public static synchronized void stop() {
 		listener.interrupt();
 
