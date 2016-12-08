@@ -12,10 +12,14 @@ public class Goal implements Comparable {
 	private double angleOfElevation = Double.MIN_VALUE;
 	private double cameraXAngle = Double.MIN_VALUE;
 	private double turretDistanceToGoal = Double.MIN_VALUE;
+	private double turretDistanceToTower = Double.MIN_VALUE;
 	private double turretXAngle = Double.MIN_VALUE;
 	private double area = -1;
 	public static final int MOVE_LEFT=-1, SPOT_ON=0, MOVE_RIGHT=1;
 	private int rangeStatus=Integer.MIN_VALUE;
+	public static final int MIN_DISTANCE = 50, MAX_DISTANCE = 100;  // not actual range, temp
+	public static final int MOVE_BACK=-1, MOVE_FORWARD=1;
+	private int distanceStatus = Integer.MIN_VALUE;
 	private boolean goalCompleted = false;
 
 	/**
@@ -73,8 +77,6 @@ public class Goal implements Comparable {
 			getGoalDistanceCamera();
 		} else
 			goalCompleted = false;
-		
-		updateAngleStatus();
 
 	}
 
@@ -264,6 +266,51 @@ public class Goal implements Comparable {
 		return goalCompleted;
 	}
 
+	/**
+	 * Returns if the robot has to move in order to be in range of the goal
+	 * 
+	 * @return if the robot has to move in order to be a in range of the goal
+	 */
+	public void updateDistanceStatus()	{
+		if(getTowerDistanceTurret() < MIN_DISTANCE)
+			distanceStatus = MOVE_BACK;
+		else if(getTowerDistanceTurret() > MAX_DISTANCE)
+			distanceStatus = MOVE_FORWARD;
+		else if(getTowerDistanceTurret() > MIN_DISTANCE && getTowerDistanceTurret() < MAX_DISTANCE)
+			distanceStatus = SPOT_ON;
+		else
+			distanceStatus = Integer.MIN_VALUE;
+	}
+	
+	public int getDistanceStatusInt()	{
+		return distanceStatus;
+	}
+	
+	public String getDistanceStatus()	{
+		if(MOVE_BACK==distanceStatus)
+			return "Move Back!";
+		else if(MOVE_FORWARD==distanceStatus)
+			return "Move Foward!";
+		else if(SPOT_ON==distanceStatus)
+			return "Spot On!";
+		else
+			return "";
+					
+	}
+	/**
+	 * Returns the distance between the turret and tower in inches
+	 * 
+	 * @return the distance between the turret and tower in inches
+	 */
+	public double getTowerDistanceTurret()	{
+		
+		if(turretDistanceToTower == Double.MIN_VALUE)	{
+			turretDistanceToTower = getGoalDistanceTurret() * Math.cos(getAngleOfElevation());
+		}
+		
+		return turretDistanceToTower;
+	}
+	
 	/**
 	 * Returns the distance between the turret to the center of the goal in
 	 * inches
