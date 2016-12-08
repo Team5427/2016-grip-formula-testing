@@ -320,6 +320,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 		// is temporary for readability
 		bg.setFont(new Font("Arial", Font.BOLD, 12));
 
+		// Printing data for each goal
 		for (int i = 0; i < Main.goals.size(); i++) {
 
 			// bg.setColor(new Color(255, 255, 255, 150));
@@ -352,8 +353,9 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			bg.drawString("Elevation Angle: " + angleDegrees + "°", x, y += interval);
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
-//			bg.drawString("Whatever: " + goal.getAngleStatus(), x, y += interval);
-
+			bg.drawString("Shooting Range: ", x, y);
+			bg.drawString("                " + Main.goals.get(i).getAngleStatus(), x, y += interval);
+			
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {

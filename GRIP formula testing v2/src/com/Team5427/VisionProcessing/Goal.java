@@ -96,7 +96,11 @@ public class Goal implements Comparable {
 		else
 			rangeStatus=Integer.MIN_VALUE;
 	}
-	
+
+	public int getAngleStatusInt() {
+		return rangeStatus;
+	}
+
 	public String getAngleStatus()
 	{
 		if(1==rangeStatus)
