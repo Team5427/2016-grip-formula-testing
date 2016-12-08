@@ -73,6 +73,8 @@ public class Goal implements Comparable {
 			getGoalDistanceCamera();
 		} else
 			goalCompleted = false;
+		
+		updateAngleStatus();
 
 	}
 
