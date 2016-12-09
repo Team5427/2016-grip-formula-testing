@@ -339,7 +339,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			bg.setColor(Color.BLACK);
 
 			String distance = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
-			String distnaceToBase = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
+			String distanceToBase = String.format("%.2f", Main.goals.get(i).getGoalDistanceCamera());
 			String angleDegrees = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getAngleOfElevation()));
 			String horizontalAngle = String.format("%.2f", Math.toDegrees(Main.goals.get(i).getTurretXAngle())); //used to be getCameraAngle, damn it Charlie
 
@@ -352,6 +352,7 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
 			bg.drawString("Horizontal Angle: " + horizontalAngle + "°", x, y += interval);
 			bg.drawString("Angle Check: " + Main.goals.get(i).getAngleStatus() , x, y+=interval);
+			bg.drawString("Distance Check: " + Main.goals.get(i).getDistanceStatus() , x, y+=interval);
 
 			try {
 				Thread.sleep(100);

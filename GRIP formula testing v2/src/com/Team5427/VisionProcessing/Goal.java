@@ -77,7 +77,9 @@ public class Goal implements Comparable {
 			getGoalDistanceCamera();
 		} else
 			goalCompleted = false;
-
+		
+		updateAngleStatus();
+		updateDistanceStatus();
 	}
 
 	/**
@@ -288,11 +290,11 @@ public class Goal implements Comparable {
 	
 	public String getDistanceStatus()	{
 		if(MOVE_BACK==distanceStatus)
-			return "Move Back!";
+			return "Back";
 		else if(MOVE_FORWARD==distanceStatus)
-			return "Move Foward!";
+			return "Foward";
 		else if(SPOT_ON==distanceStatus)
-			return "Spot On!";
+			return "Spot On";
 		else
 			return "";
 					
