@@ -296,9 +296,29 @@ public class Goal implements Comparable {
 		else if(SPOT_ON==distanceStatus)
 			return "Spot On";
 		else
-			return "";
-					
+			return "";				
 	}
+	/**
+	 * Returns the time the robot has to move at ? speed
+	 * in order to be in the correct distance range to shoot
+	 * 
+	 * @return Returns the time the robot has to move at ? speed
+	 *  in order to be in the correct distance range to shoot
+	 */
+	// we weren't sure what the speed should be
+/*	public double getDistanceStatusTime()	{
+		double distanceToTravel = 0;
+		double speed;
+		
+		if(getDistanceStatusInt() == MOVE_FORWARD)	{
+			distanceToTravel = getTowerDistanceTurret() - MAX_DISTANCE;
+		} else if(getDistanceStatusInt() == MOVE_BACK)	{
+			distanceToTravel = MIN_DISTANCE - getTowerDistanceTurret();
+		}
+		
+		return distanceToTravel / speed;
+		
+	}*/
 	/**
 	 * Returns the distance between the turret and tower in inches
 	 * 
