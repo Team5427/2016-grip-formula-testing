@@ -14,9 +14,14 @@ public class Config {
 	
 	
 	public static final String NAME = "Team5427RoboCode";
+
 	public static final boolean DEBUG_MODE = false; // displays 'Log.debug' in
 													// console
 	public static final boolean LOGGING = true;
+
+	public static final boolean BYTE_SENDER_THREAD_ENABLE = true;
+
+	public static final String DEFAULT_CAMERA_IP = "http://10.54.27.13/mjpg/video.mjpg";
 
 	/**
 	 * Minimum slope of a line in a goal for it to be considered as vertical.

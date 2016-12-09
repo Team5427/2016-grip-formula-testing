@@ -2,16 +2,16 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/Frian/Programming/Java/grip-formula-testing/Test Client/lib/bridj-0.7-20131007.003529-54.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Frian/Programming/Java/grip-formula-testing/Test Client/lib/commons-codec-1.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Frian/Programming/Java/grip-formula-testing/Test Client/lib/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Frian/Programming/Java/grip-formula-testing/Test Client/lib/httpclient-4.2.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Frian/Programming/Java/grip-formula-testing/Test Client/lib/httpcore-4.2.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Frian/Programming/Java/grip-formula-testing/Test Client/lib/httpmime-4.2.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Frian/Programming/Java/grip-formula-testing/Test Client/lib/Network table- needed for grip.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Frian/Programming/Java/grip-formula-testing/Test Client/lib/slf4j-api-1.7.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Frian/Programming/Java/grip-formula-testing/Test Client/lib/webcam-capture-0.3.10.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Frian/Programming/Java/grip-formula-testing/Test Client/lib/webcam-capture-0.3.10-RC6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Frian/Programming/Java/grip-formula-testing/Test Client/lib/webcam-capture-driver-ipcam-0.3.10-RC6.jar"/>
+	<classpathentry kind="lib" path="D:/Users/Frian/Programming/School/Robotics/2015-16/grip-formula-testing/Test Client/lib/bridj-0.7-20131007.003529-54.jar"/>
+	<classpathentry kind="lib" path="D:/Users/Frian/Programming/School/Robotics/2015-16/grip-formula-testing/Test Client/lib/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="D:/Users/Frian/Programming/School/Robotics/2015-16/grip-formula-testing/Test Client/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="D:/Users/Frian/Programming/School/Robotics/2015-16/grip-formula-testing/Test Client/lib/httpclient-4.2.3.jar"/>
+	<classpathentry kind="lib" path="D:/Users/Frian/Programming/School/Robotics/2015-16/grip-formula-testing/Test Client/lib/httpcore-4.2.2.jar"/>
+	<classpathentry kind="lib" path="D:/Users/Frian/Programming/School/Robotics/2015-16/grip-formula-testing/Test Client/lib/httpmime-4.2.3.jar"/>
+	<classpathentry kind="lib" path="D:/Users/Frian/Programming/School/Robotics/2015-16/grip-formula-testing/Test Client/lib/Network table- needed for grip.jar"/>
+	<classpathentry kind="lib" path="D:/Users/Frian/Programming/School/Robotics/2015-16/grip-formula-testing/Test Client/lib/slf4j-api-1.7.2.jar"/>
+	<classpathentry kind="lib" path="D:/Users/Frian/Programming/School/Robotics/2015-16/grip-formula-testing/Test Client/lib/webcam-capture-0.3.10.jar"/>
+	<classpathentry kind="lib" path="D:/Users/Frian/Programming/School/Robotics/2015-16/grip-formula-testing/Test Client/lib/webcam-capture-0.3.10-RC6.jar"/>
+	<classpathentry kind="lib" path="D:/Users/Frian/Programming/School/Robotics/2015-16/grip-formula-testing/Test Client/lib/webcam-capture-driver-ipcam-0.3.10-RC6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

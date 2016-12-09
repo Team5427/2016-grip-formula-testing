@@ -1,7 +1,6 @@
 package com.Team5427.VisionProcessing;
 
 import com.Team5427.Networking.Server;
-import com.Team5427.Networking.ByteDictionary;
 import com.Team5427.res.Config;
 import com.github.sarxos.webcam.Webcam;
 
@@ -19,7 +18,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class GraphicsPanel extends JPanel implements KeyListener {
@@ -488,8 +486,9 @@ public class GraphicsPanel extends JPanel implements KeyListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		address = scanner.nextLine();
+
 		System.out.println("IP Address: " + address);
 		
 		return address;

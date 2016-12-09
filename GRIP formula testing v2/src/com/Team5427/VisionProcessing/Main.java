@@ -62,6 +62,11 @@ public class Main {
 
 		Server.start();
 
+		// Starts the ByteSender class. Set BYTE_SENDER_THREAD_ENABLE in com.Team5427.res.Config to enable/disable
+		Thread byteSender = new Thread(new ByteSender());
+		byteSender.start();
+
+
 		while (true) {
 			long startTime = System.nanoTime();
 			try {
@@ -87,7 +92,7 @@ public class Main {
 				lines.clear();
 				goals.clear();
 
-				System.out.println((System.nanoTime() - startTime) / 1000000);
+				// System.out.println((System.nanoTime() - startTime) / 1000000);
 
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

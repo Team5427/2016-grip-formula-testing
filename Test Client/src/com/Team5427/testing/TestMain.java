@@ -1,10 +1,31 @@
 package com.Team5427.testing;
 
+import java.util.Scanner;
+
+import com.Team5427.Networking.client.*;
+import com.Team5427.Networking.*;
 
 public class TestMain{
 	
+	public static String IP_ADDRESS = "192.168.1.144";		// Change this to correct ipv4 assigned by the router
+	public static int PORT = 25565;
+	
 	public static void main(String[] args) {
+		Client client = new Client(IP_ADDRESS, PORT);
+		Scanner scanner = new Scanner(System.in);
 		
+		client.start();
+		
+		while (true) {
+			
+			if (client.isConnected()) {
+				// TODO: Find a way to send code to server
+			}
+			else {
+				System.out.println("Waiting connection from " + IP_ADDRESS + " at port " + PORT + ".");
+			}
+			
+		}
 	}
 	
 }
