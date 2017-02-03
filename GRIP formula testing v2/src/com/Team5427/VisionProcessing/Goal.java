@@ -1,37 +1,37 @@
 package com.Team5427.VisionProcessing;
 
-public class Goal {
 
-	public static final double MIN_VERTICAL_SLOPE = -5;
-	public static final double MAX_VERTICAL_SLOPE = 5;
-	public static final double MIN_HORIZONTAL_SLOPE = -1;
-	public static final double MAX_HORIZONTAL_SLOPE = 1;
+import com.Team5427.res.Config;
 
-	public static final double FOV = 51.5;
-
-	// Measurements are in inches
-	public static final double TRUE_GOAL_WIDTH = 20;
-	public static final double TRUE_GOAL_HEIGHT = 14;
-	// public static final double TOWER_HEIGHT = 97; // TOWER_HEIGHT is actually
-	// the distance from the carpet to the center of the entire target, not the
-	// bottom edge of the tape
-	public static final double TOWER_HEIGHT = 83; // TOWER_HEIGHT is distance
-													// from carpet to tape
-	public static final double ROBOT_HEIGHT = 0; // Height of the robot has to
-													// be accounted during angle
-													// of elevation calculation
+@SuppressWarnings("rawtypes")
+public class Goal implements Comparable {
 
 	private Line leftLine, centerLine, rightLine;
 
-	private double distanceToGoal = -1;
-	private double distanceToTower = -1;
-	private double angleOfElevation = -1;
+	private double cameraDistanceToGoal = Double.MIN_VALUE;
+	private double cameraDistanceToTower = Double.MIN_VALUE;
+	private double angleOfElevation = Double.MIN_VALUE;
+	private double cameraXAngle = Double.MIN_VALUE;
+	private double turretDistanceToGoal = Double.MIN_VALUE;
+	private double turretXAngle = Double.MIN_VALUE;
 	private double area = -1;
 
 	private boolean goalCompleted = false;
 
+	/**
+	 * Receives an Array of three lines, then determines which of the three
+	 * lines is horizontal line, sets it as the horizontal line, and then
+	 * proceeds to remove it from the Array. The remaining two lines then have
+	 * their X values compared in order to determine which of the remaining
+	 * lines is the left and which is the right. By the end of this constructor,
+	 * there is no longer an Array of lines, but instead the left, right, and
+	 * center lines are all set, in addition to the approximate area being
+	 * calculated.
+	 * 
+	 * @param lines
+	 *            An array of three lines that will comprise the goal.
+	 */
 	public Goal(Line[] lines) {
-
 		Line[] vertLines = new Line[2];
 
 		int index = 0;
@@ -61,12 +61,64 @@ public class Goal {
 
 		}
 
-		if (setCenter = false)
+		// System.out.println(getAngleOfELevation());
+
+		if (!setCenter)
 			goalCompleted = false;
 		else
 			goalCompleted = true;
 
-		area = leftLine.getLength() * centerLine.getLength();
+
+		if ((goalCompleted && (rightLine.getLargestX() - leftLine.getLargestX()) > centerLine.getLength() / 1.5)) {
+			area = leftLine.getLength() * centerLine.getLength();
+			getGoalDistanceCamera();
+		} else
+			goalCompleted = false;
+
+	}
+
+	/**
+	 * NOTE: This should not be used outside of the goal class
+	 *
+	 * Calculates the angle of the goal from the robot to the top of the goal.
+	 * This does not take in account the starting angle of the camera.
+	 *
+	 * @return Angle from the robot to the top of the camera as viewed by the
+	 *         camera in radians
+	 */
+	protected double getCameraAngleY() {
+		return Math.atan(
+				(GraphicsPanel.RESOLUTION.getHeight() / 2 - (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2)
+						/ GraphicsPanel.pixelsToGoal);
+	}
+
+	/**
+	 * Calculates the angle of elevation from the robot to the top of the goal.
+	 * It utilizes the vertical FOV in order to determine the angle.
+	 * 
+	 * @return the angle from the camera mounted on the robot, to the top of the
+	 *         goal.
+	 */
+	public double getAngleOfElevation() {
+		/*
+		 * System.out.println((GraphicsPanel.RESOLUTION.getHeight() / 2 -
+		 * (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2));
+		 */
+
+		if (angleOfElevation == Double.MIN_VALUE)
+			angleOfElevation = Math
+					.atan((GraphicsPanel.RESOLUTION.getHeight() / 2
+							- (leftLine.getTopPointY() + rightLine.getTopPointY()) / 2) / GraphicsPanel.pixelsToGoal)
+					+ Math.toRadians(Config.CAMERA_START_ANGLE);
+
+		return angleOfElevation;
+
+		/*
+		 * return Math .atan(((leftLine.getMidpointY() +
+		 * rightLine.getMidpointY()) / 2 - GraphicsPanel.RESOLUTION.getHeight() /
+		 * 2) / GraphicsPanel.pixelsToGoal) +
+		 * Math.toRadians(Config.CAMERA_START_ANGLE);
+		 */
 	}
 
 	/**
@@ -78,12 +130,13 @@ public class Goal {
 	 * 
 	 * @param g
 	 *            The goal which is potentially outside of the current goal.
+	 *
 	 * @return Whether or not the current goal is inside of the goal passed
 	 *         through the parameters.
 	 */
 	public boolean isInsideGoal(Goal g) {
 		if (g.leftLine.getSmallestX() > leftLine.getSmallestX()
-				&& g.rightLine.getLargestY() < rightLine.getLargestX()) {
+				&& g.rightLine.getLargestX() < rightLine.getLargestX()) {
 
 			return true;
 
@@ -92,10 +145,58 @@ public class Goal {
 	}
 
 	/**
-	 * Method to access the horizontal line in the goal that
-	 * 
-	 * @return The center line of the goal.
+	 * Returns the length between the pixel length of the top side of the goal
+	 *
+	 * @return pixel length of the the top side of the goal
 	 */
+	public double getTopLength() {
+		double x1 = leftLine.getTopPointX();
+		double y1 = leftLine.getTopPointY();
+		double x2 = rightLine.getTopPointX();
+		double y2 = rightLine.getTopPointY();
+
+		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+	}
+
+	/**
+	 * Note: This should not be used outside of the goal class
+	 *
+	 * Gets the angle the robot has to aim in the x axis in radians
+	 *
+	 * @return x angle in radians from the center of the robot to the goal. A
+	 *         negative angle represents that the goal is to the left from the
+	 *         center of the robot. A positive angle represents that the goal is
+	 *         to the right from the center of the robot.
+	 */
+	protected double getCameraXAngle() {
+		if (cameraXAngle == Double.MIN_VALUE)
+			cameraXAngle = Math.atan((centerLine.getMidpointX() - GraphicsPanel.RESOLUTION.getWidth() / 2) / GraphicsPanel.pixelsToGoal);
+		
+
+		return cameraXAngle;
+	}
+
+	/**
+	 * Returns the angle from the center of the turret to the goal in radians in
+	 * the x axis
+	 *
+	 * @return Returns the angle from the center of the turret to the goal in
+	 *         radians in the x axis
+	 */
+	public double getTurretXAngle() {
+		if (Config.CAMERA_TURRET_DISTANCE == 0) {
+			return getCameraXAngle();
+		} else if (turretXAngle == Double.MIN_VALUE) {
+			double B = Math.acos((Math.pow(getGoalDistanceCamera(), 2) - Math.pow(Config.CAMERA_TURRET_DISTANCE, 2)
+					- Math.pow(getGoalDistanceTurret(), 2))
+					/ (-2 * Config.CAMERA_TURRET_DISTANCE * getGoalDistanceTurret()));
+
+			turretXAngle = Math.PI / 2 - B;
+		}
+
+		return turretXAngle;
+	}
+
 	public Line getCenterLine() {
 		return centerLine;
 	}
@@ -124,57 +225,71 @@ public class Goal {
 		return area;
 	}
 
-	public boolean isGoalCompleted() {
+	public boolean isComplete() {
 		return goalCompleted;
 	}
 
-	public void setGoalCompleted(boolean goalCompleted) {
-		this.goalCompleted = goalCompleted;
-	}
+	/**
+	 * Returns the distance between the turret to the center of the goal in
+	 * inches
+	 *
+	 * @return Returns the distance between the turret to the center of the goal
+	 *         in inches
+	 */
+	public double getGoalDistanceTurret() {
+		if (Config.CAMERA_TURRET_DISTANCE == 0) {
+			return getGoalDistanceCamera();
+		} else if (turretDistanceToGoal == Double.MIN_VALUE) {
+			turretDistanceToGoal = Math.sqrt(Math.pow(Config.CAMERA_TURRET_DISTANCE, 2)
+					+ Math.pow(getGoalDistanceCamera(), 2) - 2 * Config.CAMERA_TURRET_DISTANCE * getGoalDistanceCamera()
+							* Math.cos(getCameraXAngle() + Math.PI / 2));
+		}
 
-	public double getDistanceToRobot() {
-
-		if (distanceToGoal > 0)
-			return distanceToGoal;
-
-		double verticalAvg = (leftLine.getLength() + rightLine.getLength()) / 2; // Averages
-																					// vertical
-																					// lengths
-		double radAngle = Math.toRadians(FOV / 2);
-		double pixelWidth = verticalAvg * TRUE_GOAL_WIDTH / TRUE_GOAL_HEIGHT;
-		double verticalDistance = (VisionFrame.width / 2) * TRUE_GOAL_WIDTH / pixelWidth;
-
-		distanceToGoal = verticalDistance / Math.tan(radAngle);
-
-		return distanceToGoal;
-	}
-
-	public double getDistanceToTower() {
-		if (distanceToTower > 0)
-			return distanceToTower;
-
-		distanceToTower = (TOWER_HEIGHT - ROBOT_HEIGHT) / Math.tan(getAngleOfELevationInRadians());
-
-		return distanceToTower;
+		return turretDistanceToGoal;
 	}
 
 	/**
-	 * @return The angle of the robot to the goal in radians
+	 * NOTE: This should not be used outside of the goal class
+	 *
+	 * Returns the distance between the camera to the center of the goal in
+	 * inches
+	 * 
+	 * @return Returns the camera between the robot to the center of the goal in
+	 *         inches
 	 */
-	public double getAngleOfELevationInRadians() {
+	protected double getGoalDistanceCamera() {
 
-		if (angleOfElevation > 0)
-			return angleOfElevation;
+		if (cameraDistanceToGoal == Double.MIN_VALUE)
+			cameraDistanceToGoal = (Config.TRUE_GOAL_HEIGHT + Config.TOWER_HEIGHT - Config.ROBOT_HEIGHT)
+					/ Math.sin(getAngleOfElevation());
 
-		angleOfElevation = Math.asin((TOWER_HEIGHT - ROBOT_HEIGHT) / getDistanceToRobot());
+		return cameraDistanceToGoal;
+	}
 
-		return angleOfElevation;
+	// TODO make this print out values to make a new goalData.
+	public String toString() {
+		return null;
+
 	}
 
 	/**
-	 * @return the angle of the robot to the goal in degrees
+	 * used to compare the area of two goals to each other.
+	 * 
+	 * @param o
+	 *            a goal to be compared to the current goal.
+	 * 
+	 * @return 1 if the current goal is larger than the one given, 0 if it is
+	 *         not, and -1 if the object given is n ot an instance of a goal.
 	 */
-	public double getAngleOfElevationInDegrees() {
-		return Math.toDegrees(getAngleOfELevationInRadians());
+	@Override
+	public int compareTo(Object o) {
+		if (o instanceof Goal) {
+			if (area > ((Goal) o).getArea())
+				return 1;
+			else
+				return 0;
+		}
+		return -1;
 	}
+
 }

@@ -1,0 +1,4 @@
+Distances from camera to top of goal:
+1. 195.0107556
+2. 177.50777
+3. 145.82
